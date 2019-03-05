@@ -53,12 +53,11 @@ function validateForm() {
 			$location = $pc;
 		}
 		else {
-			$location = $building.",".$pc;
+			$location = ($building.",".$pc);
 		}
 
-		$query = "
-		INSERT INTO incidentTbl(name, contact, location, assistanceType, description, ins_name,upd_name) 
-			VALUES ($name, $contact, $location, $respondent, $description, $username, $username)";
+		$query = "INSERT INTO incidentTbl (name, contact, location, assistanceType, description, ins_name,upd_name) 
+		VALUES ($name, $contact, $location, $respondent, $description, $username, $username)";
 	
 		if(mysqli_query($conn, $query)) {
 	    		echo "Records added successfully.";
