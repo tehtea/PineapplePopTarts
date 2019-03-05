@@ -1,4 +1,7 @@
-
+<?php 
+	include_once 'db_connect.php'; //need to add the path for this file
+?>
+	
 loadUsername();
 
 function logout() {
