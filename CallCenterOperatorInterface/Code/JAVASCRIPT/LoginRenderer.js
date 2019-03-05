@@ -1,5 +1,8 @@
 //Return false to prevent redirect
-
+<?php 
+	include_once 'db_connect.php'; //need to add the path for this file
+?>
+	
 function validateForm() {
 		// Check that all fields are present.
 		var userID = document.forms["loginForm"]["userid"].value;
@@ -34,10 +37,23 @@ function validateForm() {
 
 // Need database
 function getAccounts() {
-	var accountDetails =[												// Assume that the account details stores username as small-casing 
+	// get all accounts in database
+	<?php 
+		$query = "select * from accountTbl";
+		$results = mysqli_query($conn, $query);
+		$data = array();
+
+		while ($row = mysqli_fetch_assoc($result)){
+		$data[]=$row;
+		}
+			?>
+				
+	/*var accountDetails =[					// Assume that the account details stores username as small-casing 
 		{username: "ted", password: "TED", sessionKey:"CCO-1"},
 		{username: "cheese", password:"Pie", sessionKey:"CCO-1"},
-		{username: "shark", password: "chicken", sessionKey:"CCO-1"}];
+		{username: "shark", password: "chicken", sessionKey:"CCO-1"}];*/
+				
+	var accountDetails = <?php echo json_encode($data);?> 			
 	return accountDetails;
 }
 
