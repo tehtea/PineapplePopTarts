@@ -43,7 +43,7 @@ function getAccounts() {
 		$results = mysqli_query($conn, $query);
 		$data = array();
 
-		while ($row = mysqli_fetch_assoc($result)){
+		while ($row = mysqli_fetch_assoc($results)){
 		$data[]=$row;
 		}
 			?>
