@@ -36,6 +36,8 @@ function validateForm() {
 		respondent: respondent,
 		description: description
 		};
+	var username = getUsername(sessionKey);
+	
 	<?php
 		// form renderer
 
@@ -55,9 +57,10 @@ function validateForm() {
 		else {
 			$location = ($building.",".$pc);
 		}
-
-		$query = "INSERT INTO incidentTbl (name, contact, location, assistanceType, description, ins_name,upd_name) 
-		VALUES ($name, $contact, $location, $respondent, $description, $username, $username)";
+		
+		//idk why it keeps having a red highlight 
+		$query = "INSERT INTO incidentTbl (name, contact, location, assistanceType, description, ins_name, upd_name)
+			VALUES ($name, $contact, $location, $respondent, $description, $username, $username)";
 	
 		if(mysqli_query($conn, $query)) {
 	    		echo "Records added successfully.";
