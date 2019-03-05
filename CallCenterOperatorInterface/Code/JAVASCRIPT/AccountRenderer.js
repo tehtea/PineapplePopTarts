@@ -14,5 +14,15 @@ function loadUsername() {
 
 // Need database
 function getUsername(sessionKey) {
-	return "TED";
+	<?php 
+		//account renderer 
+		//assuming only returning one username 
+		$var1 = $_POST['sessionKey'];
+		$query = "select username from accountTbl where sessionKey = $var1";
+		$results = mysqli_query($conn, $query);	
+	?>
+
+	var username = <?php echo json_encode($results); ?>
+	return username; 
+	//return "TED";
 }
