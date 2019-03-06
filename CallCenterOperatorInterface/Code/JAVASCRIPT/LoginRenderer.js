@@ -1,5 +1,4 @@
 //Return false to prevent redirect
-
 	
 function validateForm() {
 		// Check that all fields are present.
@@ -10,6 +9,7 @@ function validateForm() {
 		if (val == false) {
 			return false;
 		}
+
 		
 		// Compare to database and check whether account is valid
 		var accountDetails = getAccounts();
@@ -44,14 +44,15 @@ function getAccounts() {
 				
 	var accountDetails = 
 		$.ajax({
-
-			type: "POST",
 			url: "login_handler.php",
+			dataType: "json",
 			success: function(results){
 				alert(results);
+				console.log(results);
 			}
 		});	
 	
+		
 	return accountDetails;
 }
 

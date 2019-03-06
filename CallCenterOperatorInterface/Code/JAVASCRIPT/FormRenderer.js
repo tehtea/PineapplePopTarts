@@ -1,4 +1,3 @@
-
 /* For form validation,
 		1. Ensure that the format of inputs are correct
 		2. If correct, save all inputs into database 
@@ -28,28 +27,32 @@ function validateForm() {
 	}
 	
 	// IF CORRECT, ADD TO DATABASE
+	var username = getUsername(sessionKey);
+	
 	var incident = {
 		name: name,
 		mobileNum: mobileNum,
 		postalCode: postalCode,
 		building: building,
 		respondent: respondent,
-		description: description
+		description: description,
+		username: username
 		};
 	
-	var username = getUsername(sessionKey);
+	
+	
 	$.ajax({
 		type:"post",
 		url:"form_handler.php",
 		data: {
-			name: name,
-			mobileNum: mobileNum,
-			postalCode: postalCode,
-			building: building,
-			respondent: respondent,
-			description: description
-			username: username
-			},
+		name: name,
+		mobileNum: mobileNum,
+		postalCode: postalCode,
+		building: building,
+		respondent: respondent,
+		description: description,
+		username: username
+		},
 		success: function(results){
 			alert(results);
 		}
