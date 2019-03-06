@@ -13,17 +13,18 @@ function loadUsername() {
 
 // Need database
 function getUsername(sessionKey) {
-	<?php 
-		//account renderer 
-		//assuming only returning one username 
-		include_once 'db_connect.php'; //need to add the path for this file	
+	
+	var username = 
+		$.ajax({
 
-		$var1 = $_POST['sessionKey'];
-		$query = "select username from accountTbl where sessionKey = $var1";
-		$results = mysqli_query($conn, $query);	
-	?>
-
-	var username = <?php echo json_encode($results); ?>
+			type: "POST",
+			url: "account_handler.php",
+			data: sessionkey,
+			success: function(results){
+				alert(results);
+			}
+		
+		});
 	return username; 
 	//return "TED";
 }
