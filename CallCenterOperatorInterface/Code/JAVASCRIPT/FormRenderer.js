@@ -36,41 +36,25 @@ function validateForm() {
 		respondent: respondent,
 		description: description
 		};
+	
 	var username = getUsername(sessionKey);
+	$.ajax({
+		type:"post",
+		url:"form_handler.php",
+		data: {
+			name: name,
+			mobileNum: mobileNum,
+			postalCode: postalCode,
+			building: building,
+			respondent: respondent,
+			description: description
+			username: username
+			},
+		success: function(results){
+			alert(results);
+		}
+	});
 	
-	<?php
-		// form renderer
-
-		include_once 'db_connect.php'; //need to add the path for this file
-
-		$name = $_POST['name'];
-		$contact = $_POST['mobileNum'];
-		$pc = $_POST['postalCode'];
-		$building = $_POST['building'];
-		$respondent = $_POST['respondent'];
-		$description = $_POST['description'];
-		$username = $_POST['username'];
-
-		if (empty($building)) {
-			$location = $pc;
-		}
-		else {
-			$location = ($building.",".$pc);
-		}
-		
-		//idk why it keeps having a red highlight 
-		$query = "INSERT INTO incidentTbl (name, contact, location, assistanceType, description, ins_name, upd_name)
-			VALUES ($name, $contact, $location, $respondent, $description, $username, $username)";
-	
-		if(mysqli_query($conn, $query)) {
-	    		echo "Records added successfully.";
-		} 
-		else {
-	    		echo "ERROR: Could not able to execute $sql. " . mysqli_error($query);
-		}
-
-	?>
-
 	// Testing
 	console.log(incident);
 	return false;
