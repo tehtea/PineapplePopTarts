@@ -29,6 +29,9 @@
     weather: [], hospital: [], dengue: []
   };
 
+  var map;
+  var kmlLayer;
+
   function initMap(){
     //settings of map zoom and map's initial centre
     var options = {
@@ -117,10 +120,10 @@
         ]
     }
     //new map
-    var map = new google.maps.Map(document.getElementById('map'), options);
-    var kmlLayer = new google.maps.KmlLayer();
+    map = new google.maps.Map(document.getElementById('map'), options);
+
     var src = 'https://sites.google.com/site/kmlfiles5473666/kml/dengue-clusters-kml.kml';
-    var kmlLayer = new google.maps.KmlLayer(src, {
+    kmlLayer = new google.maps.KmlLayer(src, {
       suppressInfoWindows: true,
       preserveViewport: false,
       map: map
@@ -146,7 +149,7 @@
     hide('shelter');
     hide('hospital');
     hide('weather');
-    hide('dengue');
+    show('dengue');
 
     //close window upon clicking on map, outside markers
     google.maps.event.addListener(map, 'click', function(event){
@@ -264,9 +267,6 @@
       map: map
     };
 
-
-
-
   }
 
   //manual input of bomb shelters
@@ -319,7 +319,6 @@
     }
     //tick checkbox
     document.getElementById(cat + "box").checked = true;
-    
   }
 
   //hide markers
@@ -327,7 +326,7 @@
     for (var i=0; i<markers[cat].length; i++){
       markers[cat][i].setVisible(false);
     }
-    //clear checkbox and close any open info window
+    //clear checkbox
     document.getElementById(cat + "box").checked = false;
   }
 
@@ -339,6 +338,19 @@
     }
     else {
       hide(cat);
+    }
+  }
+
+  //toggle KML Layer
+  function toggleKML(box, cat){
+    closeCurrentInfoWindow();
+    if (box.checked){
+      kmlLayer.setMap(map);
+      document.getElementById(cat + "box").checked = true;
+    }
+    else {
+      kmlLayer.setMap(null);
+      document.getElementById(cat + "box").checked = false;
     }
   }
 
