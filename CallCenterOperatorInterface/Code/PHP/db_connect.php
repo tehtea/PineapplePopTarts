@@ -9,4 +9,3 @@ $dbName = "Database3003";
 $conn = mysqli_connect($dbServername, $dbUsername, $dbPassword, $dbName);
 
 ?>
-
