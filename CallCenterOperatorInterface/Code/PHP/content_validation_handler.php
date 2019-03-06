@@ -1,21 +1,20 @@
 <?php 
 	//content validation
-	include_once ('db_connect.php'); //need to add the path for this file	
+	require_once ('db_connect.php'); //need to add the path for this file	
 
 	$sk = $_POST['item']
 	$query = "SELECT sessionKey from accountTbl where sessionKey = @sk";
-	$results = mysqli_query($conn, $query);
+	$results = sqlsrv_query($conn, $query);
 	
-	$count = mysqli_num_rows($results);
+	$count = sqlsrv_num_rows($results);
 	
 	if $count = 0 {
-		$found = false;
+		echo false;
 	}
 	else {
-		$found = true;
+		echo = true;
 	}
-	echo $found;
-	
+	sqlsrv_close($conn);
 ?>
 
 	
