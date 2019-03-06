@@ -37,23 +37,23 @@ function validateForm() {
 
 // Need database
 function getAccounts() {
-	// get all accounts in database
-	<?php 
-		$query = "select * from accountTbl";
-		$results = mysqli_query($conn, $query);
-		$data = array();
-
-		while ($row = mysqli_fetch_assoc($results)){
-		$data[]=$row;
-		}
-			?>
+	
 				
 	/*var accountDetails =[					// Assume that the account details stores username as small-casing 
 		{username: "ted", password: "TED", sessionKey:"CCO-1"},
 		{username: "cheese", password:"Pie", sessionKey:"CCO-1"},
 		{username: "shark", password: "chicken", sessionKey:"CCO-1"}];*/
 				
-	var accountDetails = <?php echo json_encode($data);?> 			
+	var accountDetails = 
+		$.ajax({
+
+			type: "POST",
+			url: "login_handler.php",
+			success: function(results){
+				alert(results);
+			}
+		});	
+	
 	return accountDetails;
 }
 
