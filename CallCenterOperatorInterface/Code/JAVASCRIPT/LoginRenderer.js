@@ -1,7 +1,5 @@
 //Return false to prevent redirect
-<?php 
-	include_once 'db_connect.php'; //need to add the path for this file
-?>
+
 	
 function validateForm() {
 		// Check that all fields are present.
