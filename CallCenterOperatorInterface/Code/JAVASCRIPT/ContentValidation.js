@@ -15,14 +15,26 @@ function loadHeader(item) {
 }
 
 function hasKey(item) {
-	var keyList = ["CCO-1", "CC0-2", "A-1", "A-2"];
-	var found = false;
-	for (var i =0; i < keyList.length; i ++) {
-		if (item == keyList[i]) {
-			found = true;
-			break;
-		}
-	}
+	
+	//var keyList = ["CCO-1", "CC0-2", "A-1", "A-2"];
+	//var found = false;
+	//for (var i =0; i < keyList.length; i ++) {
+	//	if (item == keyList[i]) {
+	//		found = true;
+	//		break;
+	//	}
+	//}
+	
+	var found = 
+		$.ajax({
+			type: "POST",
+			url: "content_validation_handler.php",
+			data: item,
+			success: function(results){
+				alert(results);
+			}
+		});
+
 	return found;
 }
 
