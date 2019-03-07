@@ -29,6 +29,7 @@
     weather: [], hospital: [], dengue: []
   };
 
+  //store map and kmlLayer globally
   var map;
   var kmlLayer;
 
@@ -116,22 +117,24 @@
             featureType: 'water',
             elementType: 'labels.text.stroke',
             stylers: [{color: '#17263c'}]
+          },
+          {
+            featureType: 'all',
+            elementType: 'labels.icon',
+            stylers: [{visibility: 'off'}]
           }
         ]
     }
+
     //new map
     map = new google.maps.Map(document.getElementById('map'), options);
 
-    var src = 'https://sites.google.com/site/kmlfiles5473666/kml/dengue-clusters-kml.kml';
-    kmlLayer = new google.maps.KmlLayer(src, {
-      suppressInfoWindows: true,
-      preserveViewport: false,
-      map: map
-    });
-
-
     //get api data
     getWeatherData();
+
+    //get KML layer
+    var src = 'https://sites.google.com/site/kmlfiles5473666/kml/dengue-clusters-kml.kml';
+    kmlLayer = getKMLLayer(src);
 
     //manual input of bomb shelters & hospitals
     addHospitals();
@@ -312,6 +315,29 @@
     console.log(data);
   }
 
+  //get data from KML
+  function getKMLLayer(src){
+    var kmlLayer = new google.maps.KmlLayer(src, {
+      suppressInfoWindows: true,
+      preserveViewport: false,
+      map: map
+    });
+    return kmlLayer;
+  }
+
+  //toggle KML Layer
+  function toggleKML(box, cat){
+    closeCurrentInfoWindow();
+    if (box.checked){
+      kmlLayer.setMap(map);
+      document.getElementById(cat + "box").checked = true;
+    }
+    else {
+      kmlLayer.setMap(null);
+      document.getElementById(cat + "box").checked = false;
+    }
+  }
+
   //show markers
   function show(cat){
     for (var i=0; i<markers[cat].length; i++){
@@ -338,19 +364,6 @@
     }
     else {
       hide(cat);
-    }
-  }
-
-  //toggle KML Layer
-  function toggleKML(box, cat){
-    closeCurrentInfoWindow();
-    if (box.checked){
-      kmlLayer.setMap(map);
-      document.getElementById(cat + "box").checked = true;
-    }
-    else {
-      kmlLayer.setMap(null);
-      document.getElementById(cat + "box").checked = false;
     }
   }
 
