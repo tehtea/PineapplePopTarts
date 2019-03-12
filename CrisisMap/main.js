@@ -238,7 +238,7 @@
       map: map
     },
     inputs['hospital'][4] = {name: "Singapore General Hospital",
-      label_location: {latitude: 1.279725, longitude: 103.835723},
+      label_location: {latitude: 1.279588, longitude: 103.835907},
       map: map
     },
     inputs['hospital'][5] = {name: "St Luke's Hospital",
@@ -254,7 +254,7 @@
       map: map
     },
     inputs['hospital'][8] = {name: "National University Hospital",
-      label_location: {latitude: 1.293727, longitude: 103.783161},
+      label_location: {latitude: 1.293724, longitude: 103.783175},
       map: map
     },
     inputs['hospital'][9] = {name: "Alexandra Hospital",
