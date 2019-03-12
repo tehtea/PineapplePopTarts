@@ -1,7 +1,6 @@
 "use strict";
+const nodemailer = require("nodemailer");
 const cron = require("node-cron");
-const nodemailer = require('nodemailer');
-
 
 // create reusable transporter object using the default SMTP transport
 let transporter = nodemailer.createTransport({
@@ -9,32 +8,30 @@ let transporter = nodemailer.createTransport({
   secureConnection: false, // TLS requires secureConnection to be false
   port: 587, // port for secure SMTP
   tls: {
-      ciphers:'SSLv3'
+    ciphers:'SSLv3'
   },
   auth: {
-      user: '@e.ntu.edu.sg',  //school email address
-      pass: ''  //password omitted
+    user: '@e.ntu.edu.sg',  //SENDER EMAIL HERE
+    pass: ''  //PASSWORD HERE
   }
 });
 
 // sending emails at periodic intervals
-var task = cron.schedule("1 * * * *", function(){
+cron.schedule('*/10 * * * * *', () => {  //EVERY 10 SECONDS
   console.log("---------------------");
-  console.log("Running Cron Job");
+  console.log("Sending Email...");
   let mailOptions = {
-    from: '"Christopher Lim" <CLIM094@e.ntu.edu.sg>', // sender address
-    to: "limzui@hotmail.com", // list of receivers
+    from: '"NAME HERE" <EMAIL HERE>', // SENDER EMAIL HERE
+    to: "", // RECIPIENT HERE
     subject: "Hello ✔", // Subject line
     text: "Hello world?", // plain text body
     html: "<b>Hello world?</b>" // html body
   };
-  transporter.sendMail(mailOptions, function(error, info) {
-    if (error) {
-      throw error;
-    } else {
-      console.log("Email successfully sent!");
+  transporter.sendMail(mailOptions, function(error, info){
+    if(error){
+    console.log('Error');
+    return console.log(error);
     }
+    console.log('Message sent: ' + info.response);
   });
 });
-
-task.start();
