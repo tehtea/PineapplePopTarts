@@ -9,6 +9,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "docx": "^4.7.1",
+    "fs": "0.0.1-security",
     "node-cron": "^2.0.3",
     "nodemailer": "^5.1.1"
   }
