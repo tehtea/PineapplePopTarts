@@ -230,7 +230,7 @@
       map: map
     },
     inputs['hospital'][2] = {name: "Tan Tock Seng",
-      label_location: {latitude: 1.327241, longitude: 103.846440},
+      label_location: {latitude: 1.321408, longitude: 103.845660},
       map: map
     },
     inputs['hospital'][3] = {name: "Jurong Medical Center",
