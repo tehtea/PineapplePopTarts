@@ -14,3 +14,7 @@ Backend component to automatically generate and send a status summary report ema
  
 #### api_data_fetcher
 * Fetches a list of all key indicators in the past 30 minutes from the CrisisMap component and identify any trends.
+
+#### date_time
+* Gets the current date and time
+* Gets the date and time 30 minutes ago
