@@ -26,9 +26,9 @@ module.exports = {
             let mailOptions = {
               from: '"NAME HERE" <EMAIL HERE>', // SENDER EMAIL HERE
               to: "RECIPIENT EHRE", // RECIPIENT HERE
-              subject: "Hello ✔", // Subject line
-              text: "Hello world?", // plain text body
-              html: "<b>Hello world?</b>", // html body
+              subject: "Status Summary Report", // Subject line
+              text: "Dear PMO,\n\nThe status summary report for the last 30 minutes is as attached.\n\nBest Regards,\nCMS", // plain text body
+              //html: "<b>Hello world?</b>", // html body
               attachments: [  
                   {   
                     filename: "Status Summary Report.docx",    
