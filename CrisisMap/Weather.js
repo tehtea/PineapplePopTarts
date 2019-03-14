@@ -15,7 +15,7 @@
 
     return receivedData;
   };
-
+  
   //get marker data from api (weather)
   function getWeatherData(){
     $.getScript("weatherapi.js");
@@ -28,3 +28,5 @@
     data["weather"] = dataPoints;
     console.log(data);
   }
+
+// export {getData};

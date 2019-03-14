@@ -1,3 +1,5 @@
+// import getData from './Weather.js';
+
 //Object storing all the data (api + bomb shelters + hospitals)
 //KIV for further use/deletion (may help in marker infoboxes)
 //a.k.a local copy of data
