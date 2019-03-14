@@ -2,7 +2,7 @@
 const docx = require("docx");
 const fs = require("fs");
 
-var dateTimeGenerator = require('./date_time.js');
+var dateTimeGenerator = require('./dateTime.js');
 
 module.exports = {
     generateReport: function() {
