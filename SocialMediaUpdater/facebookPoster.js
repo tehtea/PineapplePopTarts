@@ -17,11 +17,10 @@
  */
 
  // modules and libraries
-const request = require('request');
+const 	request = require('request'),
+		path 	= require('path'),
+	    config 	= require(path.join(__dirname, 'facebookConfig.js'));
 
-// app constants
-const PAGE_ID = '262765314600132';
-const pageAccessToken = 'EAAE30Mvcs0cBAGaLfkXy4UnaxxOiPGjd73me6SrKQp7kQ9sGzAWbJtJUvQUIH1qza3b3pigyktux79ymMaqUU1sEqljvRhJ66n993z77ZAMYFkByyjhPHHPk1x3rRWX24ZBKRSF0OwpKwbazwNWdxbsMEMUQaGk4AZBW6WHBW6B77qniFBF8LWFwNdRZBboZD';
 
 // Post something on the page
 function postOnPage(pageId, postMessage, pageAccessToken) {
@@ -50,4 +49,4 @@ function postOnPage(pageId, postMessage, pageAccessToken) {
 	)
 }
 
-postOnPage(PAGE_ID, "Ao ah ao sa la kau Singapore bo beh zao", pageAccessToken);
+postOnPage(config.PAGE_ID, "Ao ah ao sa la kau Singapore bo beh zao", config.pageAccessToken);
