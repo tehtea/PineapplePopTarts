@@ -18,3 +18,5 @@ Reads config data from `facebookConfig.js`.
 
 ## facebookConfig.js
 Contains the page id for the page we are posting to and the page access token we are using. Do note that the page access token might be a bit buggy due to limited understanding of its lifespan at this point.
+
+To run this, run `npm install` to install all dependencies first, then run `node tweeter` to post a sample tweet and `node facebookPoster` to post a sample post on the page.
