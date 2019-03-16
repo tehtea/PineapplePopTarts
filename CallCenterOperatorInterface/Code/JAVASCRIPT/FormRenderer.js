@@ -1,14 +1,16 @@
+// Boundary Class - Form UI
+
 /* For form validation,
 		1. Ensure that the format of inputs are correct
 		2. If correct, save all inputs into database 
 */
 
-/* Input type: name, mobileNumber, postalCode, building, respondent, description*/
-function validateForm() {
+function formSubmission() {
+ 	// Input type: name, mobileNumber, postalCode, building, respondent, description
 	var name = document.forms["incidentForm"]["name"].value;
-	var mobileNum = document.forms["incidentForm"]["mobileNumber"].value;
-	var postalCode = document.forms["incidentForm"]["postalCode"].value;
-	var building = document.forms["incidentForm"]["building"].value;
+	var contact = document.forms["incidentForm"]["mobileNumber"].value;
+	var address = document.forms["incidentForm"]["postalCode"].value;
+	var unitNum = document.forms["incidentForm"]["building"].value;
 	var respondent = [];
 	var j = 0;
 	for (var i = 0; i < document.forms["incidentForm"]["respondent"].length; i ++) {
@@ -18,55 +20,39 @@ function validateForm() {
 			j ++;
 		}
 	}
-	var description = document.forms["incidentForm"]["description"].value;
+	var descr = document.forms["incidentForm"]["description"].value; 
 	
 	// Ensure correctness of input
-	var error = hasError(name, mobileNum, postalCode, building, respondent, description);
+	var error = hasError(name, contact, address, unitNum, respondent, descr);
 	if (error == true) {
 			return false;
 	}
 	
-	// IF CORRECT, ADD TO DATABASE
-	var username = getUsername(sessionKey);
-	
-	var incident = {
+	// IF CORRECT, Save to database
+	var sessionKey = localStorage.getItem("sessionKey");
+	var temp = {
 		name: name,
-		mobileNum: mobileNum,
-		postalCode: postalCode,
-		building: building,
+		contact: contact,
+		address: address,
+		unitNum: unitNum,
 		respondent: respondent,
-		description: description,
-		username: username
-		};
+		descr: descr,
+		sessionKey: sessionKey
+	};  
 	
-	
-	
-	$.ajax({
-		type:"post",
-		url:"form_handler.php",
-		data: {
-		name: name,
-		mobileNum: mobileNum,
-		postalCode: postalCode,
-		building: building,
-		respondent: respondent,
-		description: description,
-		username: username
-		},
-		success: function(results){
-			alert(results);
-		}
+	let done = createNewIncident(temp);
+	done.then(() => {
+		document.getElementById("content").style.display = "none";
+		document.getElementById("complete").style.display = "block";
+		document.getElementById("recordID").innerHTML = localStorage.getItem("recordID");
 	});
 	
-	// Testing
-	console.log(incident);
 	return false;
-	
 }
+
 
 function hasError(name, mobileNum, postalCode, building, respondent, description) {
 	var err = false; 
-	// Note: name, mobileNumber fix formating
 	if (name == "") {
 		document.getElementById("e-name").innerHTML = "*";
 		err = true;
@@ -102,6 +88,6 @@ function hasError(name, mobileNum, postalCode, building, respondent, description
 	} else {
 		document.getElementById("errorMsg").innerHTML = "";
 	}
-	return err;
-	
+	return err;	
 }
+

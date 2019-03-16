@@ -60,3 +60,8 @@ span {
 #content, #no-log-display {
 	display:none;
 }
+
+#section-1 {
+	float: right;
+	margin-right: 50px;
+}

@@ -27,19 +27,20 @@
 
 <head>
 	<title>CMS Update Incident Report Form</title>
+	<link href="../CSS/Successful.css" rel="Stylesheet" style="text/css">
 	<link href="../CSS/Header.css" rel="stylesheet" style="text/css">
 	<link href="../CSS/Form.css" rel="stylesheet" style="text/css">
+	<link href="../CSS/Successful.css" rel="Stylesheet" style="text/css">
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 	<meta http-equiv="content-type" content="text/html;charset=utf-8" />
 	<meta name="generator" content="Geany 1.32" />
+	
+	<script src="../JAVASCRIPT/Apps/node_modules/socket.io/socket.io.js"></script>
+	<script src="../JAVASCRIPT/UpdateIncident.js"></script>
+	<script src="../JAVASCRIPT/FormManager.js"></script>
+	<script src="../JAVASCRIPT/UpdateFormRenderer.js"></script>
 </head>
-	
-//need this for ajax 	
-<script
-  src="https://code.jquery.com/jquery-3.3.1.min.js"
-  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-  crossorigin="anonymous"></script>
-	
+
 <body>
 	<!--Header after login-->
 	<div class="topnav" id="headerW">
@@ -86,49 +87,55 @@
 
 	<div id="content">
 		<!--Update Form-->
-		<form class="form" name="updateIncidentForm" onsubmit="return validateForm()" method="post" action="SuccessfulUpdateView.html">
+		<form class="form" name="updateIncidentForm" onsubmit="return formSubmission()" method="post" action="SuccessfulUpdateView.html">
 			<fieldset>
 				<legend class="formTitle">Update Incident</legend>
 				Please input the updates on the incident. <br><br>
+				Record ID: <i id="textRecord"></i><br>
 				
-				<!--To retrieve previous information of report-->
-				<div class="c1">
-					<input type="text" name="reportID" placeholder="Report ID">
-					<button class="sButton">Retrieve</button>
+				<div id="section-2" style="display:none">
+					<div class="c1">	
+						<div class="c2">
+							<p><strong>Respondent making the report:</strong></p>
+							<span id="e-respondentR"></span> <br>
+							<select name="respondentReporting">
+								<option value="Emergency Ambulance">Emergency Ambulance</option>
+								<option value="Rescue and Evacuation">Rescue and Evacuation </option>
+								<option value="Fire-Fighting">Fire-Fighting </option>
+								<option value="Gas Leak Control">Gas Leak Control </option>
+							</select>
+						</div>
+						
+						<div class="c2">
+							<p><strong>Add More Respondent(s):</strong>
+							<span id="e-respondent"></span>	
+							<br><br>
+							<input type="checkbox" name="respondent" value="Emergency Ambulance">Emergency Ambulance<br>
+							<input type="checkbox" name="respondent" value="Rescue and Evacuation">Rescue and Evacuation<br>
+							<input type="checkbox" name="respondent" value="Fire-Fighting">Fire-Fighting<br>
+							<input type="checkbox" name="respondent" value="Gas Leak Control">Gas Leak Control<br><br>
+						</div>
+					</div>
+								
+					<textarea class="dBox" name="description" placeholder="Incident Update (max. 200 characters)"></textarea>
+					<span id="e-description"></span> <br>
 					
-					<div class="retrieveBox"> 	
-					</div>
-				</div>
-				
-				<div class="c1">	
-					<div class="c2">
-						<p><strong>Respondent making the report:</strong></p>
-						<span id="e-respondentR"></span> <br>
-						<select name="respondentReporting">
-							<option value="Emergency Ambulance">Emergency Ambulance</option>
-							<option value="Rescue and Evacuation">Rescue and Evacuation </option>
-							<option value="Fire-Fighting">Fire-Fighting </option>
-							<option value="Gas Leak Control">Gas Leak Control </option>
-						</select>
-					</div>
-					
-					<div class="c2">
-						<p><strong>Add More Respondent(s):</strong>
-						<span id="e-respondent"></span>	
-						<br><br>
-						<input type="checkbox" name="respondent" value="Emergency Ambulance">Emergency Ambulance<br>
-						<input type="checkbox" name="respondent" value="Rescue and Evacuation">Rescue and Evacuation<br>
-						<input type="checkbox" name="respondent" value="Fire-Fighting">Fire-Fighting<br>
-						<input type="checkbox" name="respondent" value="Gas Leak Control">Gas Leak Control<br><br>
-					</div>
-				</div>
-							
-				<textarea class="dBox" name="description" placeholder="Incident Update (max. 200 characters)"></textarea>
-				<span id="e-description"></span> <br>
-				
-				<input class="sButton" type="submit" value="Submit update"> <span id="errorMsg"></span>
+					<input class="sButton" type="submit" value="Submit update"> <span id="errorMsg"></span>
+				<div>
 			</fieldset>
 		</form>
+		<!--To retrieve previous information of report-->
+		<div class="c1" id="section-1">
+			<input type="text" id="recordID" placeholder="Report ID">
+			<button class="sButton" onclick="checkRecordID()">Retrieve</button>
+			<br><span id="invalidRecord">
+		</div>
+	</div>
+	
+	<div class="content" id="complete" style="display:none">
+		<i class="fas fa-check-circle"></i> <br><br><br>
+		<h1 class="t1">Report Update Successfully!</h1> <br><br>
+		<a href="HomeView.html">Back to Main Page</a>
 	</div>
 	
 </body>

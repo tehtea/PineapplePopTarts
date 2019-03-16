@@ -8,8 +8,6 @@ Frontend of the website for call center operators. Inclusive of login and report
 * InformationView - Display useful information (emergency contact) 
 * LoginView - For call center operators to login to their account
 * SuccessfulLogoutView - Display that logout was successful
-* SuccessfulNewView - Display that submission of new incident report was successful
-* SuccessfulUpdateView - Display that submission of update incident report was successful
 * UpdateFormView - Display form to submit updates on incident report
 
 ## CSS Code
@@ -22,19 +20,45 @@ Frontend of the website for call center operators. Inclusive of login and report
 * Successful - Formatting for SuccessfulLogoutView, SuccessfulUpdateView and SuccessfulLogoutView
 
 ## Javascript Code
+
+#### Entity Classes
+* Account
+* NewIncident
+* UpdateIncident
+
 #### AccountRenderer
 * Logout user (Remove sessionkey)
 * Display username based on sessionKey in local storage
+
 #### ContentValidation
 * Prevent unauthorised users from accessing some of the pages
-#### FormRenderer
+
+#### FormRenderer, FormManager
 * Enable that the form must be filled in the correct format when submitted
 * Generate form into a JSON format for database storage
 * Generate a form ID for call center to make updates
+
 #### LoginRenderer
 * Compare username and pw to database
 * Login user (Store sessionkey)
+
 #### UpdateFormRenderer
-* Retrieve information on incident using sessionkey
+* Retrieve information on incident
 * Enable that the form must be filled in the correct format when submitted
 * Generate form into a JSON format for database storage
+
+#### DatabaseManager, DatabaseRetriever
+* Retrieve information from the subsystem 
+* Parse information to other subsystems
+
+#### AccountDetailsRenderer
+* JS File for the account information webpage
+
+## Pre-requisite
+#### Install the following with npm in the "Apps" folder:
+* mssql
+* socket.io
+* express
+#### Connect to the school vpn
+#### Allow 3rd party cookies on web-browser 
+#### Run DatabaseManager.js on a server or usign node.js

@@ -1,59 +1,33 @@
 //Return false to prevent redirect
-	
+
 function validateForm() {
 		// Check that all fields are present.
-		var userID = document.forms["loginForm"]["userid"].value;
+		var userID = document.forms["loginForm"]["userid"].value.toLowerCase() ;
 		var userPW = document.forms["loginForm"]["pw"].value;
 		var val = isFilled(userPW, userID);
 		
 		if (val == false) {
 			return false;
 		}
-
 		
 		// Compare to database and check whether account is valid
-		var accountDetails = getAccounts();
-		var found = false;
-		for (var i = 0; i < accountDetails.length; i ++) {
-			if (userID.toLowerCase() == accountDetails[i].username & userPW == accountDetails[i].password) {
-				found = true;
-				break;
-			}
-		}
-		// If invalid pw or id
-		if (found == false) {
-			document.getElementById("errorMsg").innerHTML = "*invalid username or password";
-			return false;
-		}
-		
-		// If valid pw and id
-		else {
-			localStorage.setItem("sessionKey",accountDetails[i].sessionKey);
-			return true;
-		}
-}
+ 		var account = new Account(userID,userPW);
+		var socket = io.connect('http://localhost:5000');
 
-// Need database
-function getAccounts() {
-	
-				
-	/*var accountDetails =[					// Assume that the account details stores username as small-casing 
-		{username: "ted", password: "TED", sessionKey:"CCO-1"},
-		{username: "cheese", password:"Pie", sessionKey:"CCO-1"},
-		{username: "shark", password: "chicken", sessionKey:"CCO-1"}];*/
-				
-	var accountDetails = 
-		$.ajax({
-			url: "login_handler.php",
-			dataType: "json",
-			success: function(results){
-				alert(results);
-				console.log(results);
+		socket.emit('login', account); 
+		 socket.on('loginDone', function(result) {
+			result = result[0];
+			
+			// If Invalid acc 
+			if (result == "") {
+				document.getElementById("errorMsg").innerHTML = "*invalid username or password";
+			} else {
+				console.log(result.sessionkey);
+				localStorage.setItem("sessionKey",result.sessionkey);
+				location.replace("file:///C:/Users/darrenchewy/Desktop/Jesslyn/cz3003%20CCO/CZ3003-master/HTML/AccountView.html");
 			}
-		});	
-	
-		
-	return accountDetails;
+		}); 
+	return false;
 }
 
 // Check that all fields are present.

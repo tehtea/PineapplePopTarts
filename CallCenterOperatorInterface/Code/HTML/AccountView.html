@@ -30,16 +30,12 @@
 	<title>CMS Account Details</title>
 	<link href="../CSS/Header.css" rel="stylesheet" style="text/css">
 	<link href="../CSS/Account.css" rel="stylesheet" style="text/css">
+	<script src="../JAVASCRIPT/Apps/node_modules/socket.io/socket.io.js"></script>
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 	<meta http-equiv="content-type" content="text/html;charset=utf-8" />
 	<meta name="generator" content="Geany 1.32" />
 </head>
-//need this for ajax 	
-<script
-  src="https://code.jquery.com/jquery-3.3.1.min.js"
-  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-  crossorigin="anonymous"></script>
-	
+
 <body>
 	<!--Header after login-->
 	<div class="topnav" id="headerW">
@@ -92,7 +88,7 @@
 			</div>
 			<div class="c2 text">
 				<p>
-					<span id="username"></span> <br>
+					<strong id="username"></strong> <br>
 					Call Center Operator
 				</p>
 			</div> 
@@ -102,7 +98,7 @@
 
 </body>
 
-<script src="../JAVASCRIPT/AccountRenderer.js"></script>
+<script src="../JAVASCRIPT/AccountDetailsRenderer.js"></script>
 <script src="../JAVASCRIPT/ContentValidation.js"></script>
 
 </html>
