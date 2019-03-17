@@ -55,13 +55,14 @@ module.exports = {
         // Used to export the file into a .docx file
         console.log('Exporting Document...');
         let packer = new docx.Packer();
-        try{
+        try 
+        {
             packer.toBuffer(doc).then((buffer) => {
                 fs.writeFileSync("Status Summary Report.docx", buffer);
             });
             console.log('Document Exported!');
         }
-        catch{
+        catch (error) {
             throw error;
         }
         
