@@ -23,6 +23,6 @@ Contains the page id for the page we are posting to and the page access token we
 Contains the unit tests for the subsystem. The unit testing framework used is `Mocha`.
 
 ## Directions
-To run this, run `npm install` to install all dependencies first, then run `node tweeter` to post a sample tweet and `node facebookPoster` to post a sample post on the page.
+To run this, run `npm install` to install all dependencies first.
 
 To run the unit tests, run `npm test`.
