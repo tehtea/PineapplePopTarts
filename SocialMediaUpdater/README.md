@@ -21,3 +21,5 @@ Contains the page id for the page we are posting to and the page access token we
 
 ## Directions
 To run this, run `npm install` to install all dependencies first, then run `node tweeter` to post a sample tweet and `node facebookPoster` to post a sample post on the page.
+
+To run the unit tests, run `npm test`.

@@ -7,18 +7,30 @@ var path = require('path'),
     Twit = require('twit'),
     config = require(path.join(__dirname, 'twitterConfig.js'));
 
-function postTweet(message)
+/**
+ * Posts a tweet to the account associated with the configuration specified.
+ * @param message the tweet message.
+ * @param config the configuration data for tweeting. 
+ * Includes the consumer_key, consumer_secret, access_token and access_token_secret.
+ * Twitter API uses it to identify which account to tweet using.
+ * 
+ * @returns a resolved Promise if tweet is succcessful, and a rejected Promise if tweet is unsuccessful.
+ */
+function postTweet(message, config)
 {
     var T = new Twit(config);
-
-    T.post('statuses/update', { status: message }, function(err, data, response) {
-        if (err)
-            console.log(err);
-        else
-            if (response)
-                console.log("Tweet successfully posted!");
+    return new Promise(function(resolve, reject) {
+        T.post('statuses/update', { status: message }, function(err, data, response) {
+            if (response.statusCode == 200)
+            {
+                resolve(response.statusCode);
+            }
+            else
+            {
+                reject(response.statusCode);
+            }
+        });
     });
 }
 
-postTweet("Huge explosion in Nanyang Technological University's School of Computer Science and Engineering reported on 16/3/19 at 21:50")
-
+module.exports = {postTweet};

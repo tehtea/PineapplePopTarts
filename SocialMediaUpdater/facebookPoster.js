@@ -18,35 +18,31 @@
 
  // modules and libraries
 const 	request = require('request'),
-		path 	= require('path'),
-	    config 	= require(path.join(__dirname, 'facebookConfig.js'));
+		path 	= require('path');
 
-
-// Post something on the page
+/**
+ * Post something on the page. If the post is successful, resolve the new Promise created, and if it is unsuccessful, reject it.
+ * @param pageId pageId of the page to post to
+ * @param postMessage the message to be posted
+ * @param pageAccessToken the page access token required to authenticate the request with Facebook API.
+ * 
+ * @returns a Promise.
+ * */ 
 function postOnPage(pageId, postMessage, pageAccessToken) {
-    request.post(
-			{
+	return new Promise((resolve, reject) => {
+		var options = {
 			url: `https://graph.facebook.com/${pageId}/feed?message=${postMessage}`,
 			headers: {
 				'Authorization': 'Bearer' + ' ' + `${pageAccessToken}`
 			}
-    }, (error, res, body) => {
-			if (error) {
-				console.error(error);
-				return;
-			}
-			
-			// check if posting is successful
-			if (JSON.parse(body).id)
-				console.log('post posted!');
-			else
-			{
-				console.log('post failed to be posted for some reason');
-				console.log('token: ' + pageAccessToken);
-				console.log(body);
-			}
-		}
-	)
+		};
+		request.post(options).on('response', function(response) {
+			if (response.statusCode == 200)
+				resolve(response.statusCode);
+			else 
+				reject(response.statusCode);
+		});
+	});
 }
 
-postOnPage(config.PAGE_ID, "Ao ah ao sa la kau Singapore bo beh zao", config.pageAccessToken);
+module.exports = {postOnPage};
