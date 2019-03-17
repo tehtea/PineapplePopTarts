@@ -19,12 +19,12 @@ function validateForm() {
 			result = result[0];
 			
 			// If Invalid acc 
-			if (result == "") {
-				document.getElementById("errorMsg").innerHTML = "*invalid username or password";
-			} else {
+			if (result) {
 				console.log(result.sessionkey);
 				localStorage.setItem("sessionKey",result.sessionkey);
-				location.replace("file:///C:/Users/darrenchewy/Desktop/Jesslyn/cz3003%20CCO/CZ3003-master/HTML/AccountView.html");
+				location.replace("./AccountView.html");
+			} else {
+				document.getElementById("errorMsg").innerHTML = "*invalid username or password";
 			}
 		}); 
 	return false;
