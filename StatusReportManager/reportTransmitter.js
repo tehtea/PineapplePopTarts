@@ -1,25 +1,25 @@
 "use strict";
 const nodemailer = require("nodemailer");
+const senderUsername = "pineapplepoptartscms@gmail.com";
+const senderPassword = "Il0vehuangli";
+const senderEmail = "pineapplepoptartscms@gmail.com";
+const senderName = "CMS";
+const recipientEmail = "CLIM094@e.ntu.edu.sg";
 
 module.exports = {
   sendEmail: function () {
     let transporter = nodemailer.createTransport({
-      host: "smtp-mail.outlook.com", // hostname
-      secureConnection: false, // TLS requires secureConnection to be false
-      port: 587, // port for secure SMTP
-      tls: {
-        ciphers: 'SSLv3'
-      },
+      service: 'gmail',
       auth: {
-        user: '',  //SENDER EMAIL HERE
-        pass: ''  //SENDER PASSWORD HERE
+        user: senderUsername,  //SENDER EMAIL HERE
+        pass: senderPassword  //SENDER PASSWORD HERE
       }
     });
     console.log("---------------------");
     console.log("Sending Email...");
     let mailOptions = {
-      from: '"NAME HERE" <EMAIL HERE>', // SENDER EMAIL HERE
-      to: "RECIPIENT EHRE", // RECIPIENT HERE
+      from: senderName + ' <' + senderEmail + '>', // SENDER EMAIL HERE
+      to: recipientEmail, // RECIPIENT HERE
       subject: "Status Summary Report", // Subject line
       text: "Dear PMO,\n\nThe status summary report for the last 30 minutes is as attached.\n\nBest Regards,\nCMS", // plain text body
       //html: "<b>Hello world?</b>", // html body
