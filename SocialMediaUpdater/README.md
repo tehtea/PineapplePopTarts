@@ -19,6 +19,9 @@ Reads config data from `facebookConfig.js`.
 ## facebookConfig.js
 Contains the page id for the page we are posting to and the page access token we are using. Do note that the page access token might be a bit buggy due to limited understanding of its lifespan at this point.
 
+## SocialMedia.js
+The main driver for the subsystem. Listens for new incidents and incident updates from the CCO subsystem.
+
 ## ./test/test.js
 Contains the unit tests for the subsystem. The unit testing framework used is `Mocha`.
 
@@ -26,3 +29,5 @@ Contains the unit tests for the subsystem. The unit testing framework used is `M
 To run this, run `npm install` to install all dependencies first.
 
 To run the unit tests, run `npm test`.
+
+To run the subsystem's server, run `npm start`
