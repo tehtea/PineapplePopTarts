@@ -1,4 +1,7 @@
 "use strict";
+var keyIncidentFetcher = require('./keyIncidentFetcher.js');
+var apiDataFetcher = require('./apiDataFetcher.js');
+
 const docx = require("docx");
 const fs = require("fs");
 
