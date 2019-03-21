@@ -126,6 +126,10 @@ function initMap(){
   //new map
   map = new google.maps.Map(document.getElementById('map'), options);
 
+  //get incident data from database
+  var incidents = retrieveData();
+  console.log(incidents);
+
   //get api data
   getWeatherData();
 
@@ -170,6 +174,17 @@ function initMap(){
     var infoWindow = new google.maps.InfoWindow();
     //different infowindows for different categories
     switch (cat){
+      case 'incident':
+        google.maps.event.addListener(marker, 'click', function(){
+          //close current window and open another upon clicking marker
+          closeCurrentInfoWindow();
+          infoWindow.setContent("[Incident]: " +
+            input["name"]
+          );
+          infoWindow.open(map, marker);
+          currentInfoWindow = infoWindow;
+        })
+        break;
       case 'shelter':
         google.maps.event.addListener(marker, 'click', function(){
           //close current window and open another upon clicking marker
