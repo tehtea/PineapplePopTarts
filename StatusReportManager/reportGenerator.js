@@ -1,14 +1,20 @@
 "use strict";
-var keyIncidentFetcher = require('./keyIncidentFetcher.js');
+var dateTimeGenerator = require('./dateTime.js');
+var keyIncidentFetcher = require('./KeyIncidentFetcher.js');
+//var keyIncidentFetcher = require('./OtherSubsystems.js');
 var apiDataFetcher = require('./apiDataFetcher.js');
 
 const docx = require("docx");
 const fs = require("fs");
 
-var dateTimeGenerator = require('./dateTime.js');
-
 module.exports = {
     generateReport: function() {
+        //fetch incidents
+        var incidents=null;
+        while (incidents == null){
+            incidents = keyIncidentFetcher.fetchIncidents();
+        }
+        console.log(result);
         // Create empty document
         console.log('Creating Empty Document...');
         let doc = new docx.Document();
@@ -18,6 +24,9 @@ module.exports = {
 
         //Define a break between paragraphs
         let blankPara = new docx.Paragraph();
+
+        //Define default heading para
+        let headingPara = new docx.Paragraph().heading1().left();
 
         //Add title
         let titlePara = new docx.Paragraph().title().center();
@@ -34,20 +43,32 @@ module.exports = {
         
 
         //Add New/Unresolved incidents TODO
-        let incidentPara = new docx.Paragraph().heading1().left();
-        incidentPara.addRun(new docx.TextRun("Incident(s) Summary:").bold());
-        doc.addParagraph(incidentPara);
+        headingPara.addRun(new docx.TextRun("Incident(s) Summary:").bold());
+        doc.addParagraph(headingPara);
+
+        let incidentPara = new docx.Paragraph();
+        incidentPara.addRun(new docx.TextRun("New incidents in the past 30 minutes:\n"));
+        //incidentPara.addRun(new docx.TextRun(incidents));
+        
         doc.addParagraph(blankPara);
 
         //Add Key Indicators TODO
-        let indicatorPara = new docx.Paragraph().heading1().left();
-        indicatorPara.addRun(new docx.TextRun("Indicator(s) Summary:").bold());
+        headingPara = new docx.Paragraph().heading1().left();
+        headingPara.addRun(new docx.TextRun("Key Indicator(s) Summary:").bold());
+        doc.addParagraph(headingPara);
+
+        let indicatorPara = new docx.Paragraph();
+        indicatorPara.addRun(new docx.TextRun(""));
         doc.addParagraph(indicatorPara);
         doc.addParagraph(blankPara);
 
         //Add Trend(s) TODO
-        let trendPara = new docx.Paragraph().heading1().left();
-        trendPara.addRun(new docx.TextRun("Trend(s) Summary:").bold());
+        headingPara = new docx.Paragraph().heading1().left();
+        headingPara.addRun(new docx.TextRun("Trend(s) Summary:").bold());
+        doc.addParagraph(headingPara);
+
+        let trendPara = new docx.Paragraph();
+        trendPara.addRun(new docx.TextRun(""));
         doc.addParagraph(trendPara);
         doc.addParagraph(blankPara);
 

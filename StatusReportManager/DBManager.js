@@ -1,9 +1,16 @@
 var DatabaseRetriever = require("./DBRetriever.js");
 
 // Initiate socket.io server
-var io = require('socket.io').listen(5000);
+const server = require('http').createServer();
+const io = require('socket.io')(server);
+server.listen(5000);
 
-io.sockets.on('connection', function (socket) {
+module.exports = io;
+
+io.on('connection', function (socket) {
+
+	console.log('client connected');
+
 	// wait for request from subsystem
 	socket.on('srRequest', function () {
 		// Get values from database 
@@ -12,4 +19,9 @@ io.sockets.on('connection', function (socket) {
 			socket.emit('srRequestDone',result);
 		}); 
 	});
+
+	socket.on('disconnect', function() {
+        console.log('Client disconnected.');
+    });
+
 });
