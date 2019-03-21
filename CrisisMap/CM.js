@@ -23,7 +23,11 @@ retrieval.then((result) => {
 	var cleaned = incidentDataProcessing(result);
 	console.log(cleaned);
 	// INSERT CRISIS MAP CODE HERE
-
+	var socket = io.connect('http://localhost:3333');
+	socket.on('connect', function(){
+		socket.emit('incidents', cleaned);
+	});
+	socket.on('disconnect', function(){});
 	/* Notes:
 	*	result[0] is newincidents
 	*	result[1] is updateincidents

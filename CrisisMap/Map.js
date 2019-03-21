@@ -127,7 +127,13 @@ function initMap(){
   map = new google.maps.Map(document.getElementById('map'), options);
 
   //get incident data from database
-  var incidents = retrieveData();
+  var io = require("./Apps/node_modules/socket.io-client");
+  var socket = io.connect('http://localhost:3333');
+  var incidents;
+
+  socket.on('incidents', function(cleaned){
+    incidents = cleaned;
+  });
   console.log(incidents);
 
   //get api data
