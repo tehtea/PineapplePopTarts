@@ -41,6 +41,8 @@ function formSubmission() {
 	};  
 	
 	let done = createNewIncident(temp);
+	
+	// Prompt use the successful submission
 	done.then(() => {
 		document.getElementById("content").style.display = "none";
 		document.getElementById("complete").style.display = "block";
@@ -84,7 +86,7 @@ function hasError(name, mobileNum, postalCode, building, respondent, description
 		document.getElementById("e-description").innerHTML = "";
 	}
 	if (err == true) {
-		document.getElementById("errorMsg").innerHTML = "*please edit/fill in using valid formating";
+		document.getElementById("errorMsg").innerHTML = "*please edit/fill in using valid formatting";
 	} else {
 		document.getElementById("errorMsg").innerHTML = "";
 	}

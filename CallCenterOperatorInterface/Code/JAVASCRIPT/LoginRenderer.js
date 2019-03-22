@@ -12,10 +12,9 @@ function validateForm() {
 		
 		// Compare to database and check whether account is valid
  		var account = new Account(userID,userPW);
-		var socket = io.connect('http://localhost:5000');
 
-		socket.emit('login', account); 
-		 socket.on('loginDone', function(result) {
+		var asynFunction = checkAccount(account);
+		asynFunction.then((result) => {
 			result = result[0];
 			
 			// If Invalid acc 

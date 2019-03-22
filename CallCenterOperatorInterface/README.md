@@ -7,7 +7,6 @@ Frontend of the website for call center operators. Inclusive of login and report
 * HomeView - Display the main page of the website
 * InformationView - Display useful information (emergency contact) 
 * LoginView - For call center operators to login to their account
-* SuccessfulLogoutView - Display that logout was successful
 * UpdateFormView - Display form to submit updates on incident report
 
 ## CSS Code
@@ -17,7 +16,7 @@ Frontend of the website for call center operators. Inclusive of login and report
 * Home - Formatting for HomeView
 * Information - Formatting for InformationView
 * Login - Formatting for LoginView
-* Successful - Formatting for SuccessfulLogoutView, SuccessfulUpdateView and SuccessfulLogoutView
+* Successful - Formatting for SuccessfulLogout, SuccessfulUpdate and SuccessfulLogout
 
 ## Javascript Code
 
@@ -46,6 +45,9 @@ Frontend of the website for call center operators. Inclusive of login and report
 * Retrieve information on incident
 * Enable that the form must be filled in the correct format when submitted
 * Generate form into a JSON format for database storage
+
+#### CallCenterOperatorFacade
+* Act as the connect line for the call center operator to the database and other subsystems
 
 #### DatabaseManager, DatabaseRetriever
 * Retrieve information from the subsystem 

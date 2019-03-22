@@ -10,55 +10,6 @@ const config = {
 const sql = require("./Apps/node_modules/mssql");
 
 module.exports = {
-	getAllNewIncident: function() {
-		return new Promise(function(resolve, reject) {
-			// Connect to DB
-			var conn = new sql.ConnectionPool(config);
-			var req = new sql.Request(conn);
-	
-			conn.connect().then(function () {
-				req.query("SELECT * FROM NewIncident").then(function (recordset) {
-					conn.close();
-					console.log(recordset.recordset);
-					resolve(recordset.recordset);
-			})
-				.catch(function (err) {
-					console.log(err);
-					conn.close();
-					reject(err);
-				});
-			})
-			.catch(function (err) {
-				console.log(err);
-				reject(err);
-			});
-		});
-	},
-	
-	getNameBySessionKey: function(sessionKey) {
-		return new Promise(function(resolve, reject) {
-			// Connect to DB
-			var conn = new sql.ConnectionPool(config);
-			var req = new sql.Request(conn);
-	
-			conn.connect().then(function () {
-				req.query("SELECT username FROM AccountTbl WHERE sessionKey='"+sessionKey+"'").then(function (recordset) {
-					conn.close();
-					resolve(recordset.recordset);
-			})
-				.catch(function (err) {
-					console.log(err);
-					conn.close();
-					reject(err);
-				});
-			})
-			.catch(function (err) {
-				console.log(err);
-				reject(err);
-			});
-		});
-	},
-	
 	getAccountByID: function(acc) {
 		return new Promise(function(resolve, reject) {
 			// Connect to DB
@@ -270,57 +221,50 @@ module.exports = {
 		});
 	},
 	
-	// For Status Report
-	getDataSR: function() {
+	resolveIncident: function(recordID) {
 		return new Promise(function(resolve, reject) {
 			// Connect to DB
 			var conn = new sql.ConnectionPool(config);
 			var req = new sql.Request(conn);
 	
 			conn.connect().then(function () {
-				// Query on NewIncident
-				req.query("	SELECT * FROM NewIncident \
-							WHERE InsTime < CURRENT_TIMESTAMP \
-							AND InsTime > DateADD(mi, -30, Current_TimeStamp)", function(err, recordset){
-					if (err) {
-						console.log(err);
-						return;
-					}
-					else {
-						// Results
-						results[0] = recordset.recordset;
-					}
-				});
-			
-				// Query on UpdateIncident
-				req.query("	SELECT * FROM UpdateIncident \
-							WHERE UpdTime < CURRENT_TIMESTAMP \
-							AND UpdTime > DateADD(mi, -30, Current_TimeStamp)", function(err, recordset){
-					if (err) {
-						console.log(err);
-						return;
-					}
-					else {
-						// Results
-						results[1] = recordset.recordset;
-					}
-				});
-			
-				// Query on RespondentRequest
-				req.query("	SELECT * FROM RespondentRequest \
-							WHERE InsTime < CURRENT_TIMESTAMP \
-							AND InsTime > DateADD(mi, -30, Current_TimeStamp)", function(err, recordset){
-					if (err) {
-						console.log(err);
-						return;
-					}
-					else {
-						// Results
-						results[2] = recordset.recordset;
-					}
+				req.query("UPDATE NewIncident SET Resolved=1 WHERE RecordID = "+recordID).then(function (recordset) {
 					conn.close();
-					resolve(results);
+					resolve();
+				})
+				.catch(function (err) {
+					console.log(err);
+					conn.close();
+					reject(err);
 				});
+			})
+			.catch(function (err) {
+				console.log(err);
+				reject(err);
+			});
+		});
+	},
+	
+	getRespondents: function(recordID) {
+		return new Promise(function(resolve, reject) {
+			// Connect to DB
+			var conn = new sql.ConnectionPool(config);
+			var req = new sql.Request(conn);
+	
+			conn.connect().then(function () {
+				req.query("SELECT Respondent FROM RespondentRequest WHERE RecordID =" + recordID).then(function (recordset) {
+					conn.close();
+					resolve(recordset.recordset);
+				})
+				.catch(function (err) {
+					console.log(err);
+					conn.close();
+					reject(err);
+				});
+			})
+			.catch(function (err) {
+				console.log(err);
+				reject(err);
 			});
 		});
 	}

@@ -30,6 +30,7 @@
 	<title>CMS Account Details</title>
 	<link href="../CSS/Header.css" rel="stylesheet" style="text/css">
 	<link href="../CSS/Account.css" rel="stylesheet" style="text/css">
+	<link href="../CSS/Successful.css" rel="stylesheet" style="text/css">
 	<script src="../JAVASCRIPT/Apps/node_modules/socket.io/socket.io.js"></script>
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 	<meta http-equiv="content-type" content="text/html;charset=utf-8" />
@@ -93,11 +94,20 @@
 				</p>
 			</div> 
 		</div>
-		<a href="SuccessfulLogoutView.html"><button class="lButton" onclick="logout()">Log Out</button></a>
+		<button class="lButton" onclick="logout()">Log Out</button>
+	</div>
+	
+	<div id="logout" style="display:none">
+		<h1>Crisis Management System</h1> <br><br>
+			<img class="logo" src="../IMG/pineapple.jpg"> <br>
+			<h2 class="t1">Logged Out Successfully!</h2> <br><br><br>
+			<a href="MapView.html"><button class="button">Get Started</button></a>
 	</div>
 
 </body>
 
+<!--Order Matters-->
+<script src="../JAVASCRIPT/CallCenterOperatorFacade.js"></script>
 <script src="../JAVASCRIPT/AccountDetailsRenderer.js"></script>
 <script src="../JAVASCRIPT/ContentValidation.js"></script>
 

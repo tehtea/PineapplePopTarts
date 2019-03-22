@@ -37,3 +37,8 @@
 #content, #no-log-display {
 	display:none;
 }
+
+#logout {
+	text-align: center;
+	margin: auto;
+}

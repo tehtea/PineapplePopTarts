@@ -21,13 +21,10 @@ function hasKey(item) {
 		if (item == "") {
 			resolve (false);
 		}
-		var socket = io.connect('http://localhost:5000');
 		
-		// From Database check session Key
-		socket.emit('hasKey', item); 
-		// Retrieve name from backend
-		socket.on('hasKeyDone', function(check) {
-			if (check == "") {
+		var asynFunction = getAccountViaKey(item);
+		asynFunction.then((result) => {
+			if (result == "") {
 				resolve(false);
 			} else {
 				resolve(true);

@@ -6,7 +6,7 @@ var DatabaseRetriever = require("./DatabaseRetriever");
 var io = require('./Apps/node_modules/socket.io').listen(5000);
 
 io.sockets.on('connection', function (socket) {
-	// wait for "hasKey" [For content validation]
+	// 1. wait for "hasKey" [For content validation]
 	socket.on('hasKey', function (input) {
 		// Get values from database 
 		let retrievedData = DatabaseRetriever.checkKey(input);
@@ -16,18 +16,7 @@ io.sockets.on('connection', function (socket) {
 		}); 
 	});
 	
-	// Get name from sessionkey
-	socket.on('getNameFromSK', function (input) {
-		
-		// Get values from database 
-		let retrievedData = DatabaseRetriever.getNameBySessionKey(input);
-		retrievedData.then(function(result) {
-			// Return Data retrieve from database
-			socket.emit('getNameFromSKDone',result);
-		}); 
-	});
-	
-	// Add new incident
+	// 2. Add new incident
 	socket.on('createNewIncident', function (obj) {
 		// New Incident Table
 		let x = DatabaseRetriever.storeNewIncident(obj); 
@@ -50,7 +39,7 @@ io.sockets.on('connection', function (socket) {
 		});
 	});
 	
-	// Check RecordID
+	// 3. Check RecordID
 	socket.on('validateRecordID', function (input) {
 		// Get values from database 
 		let retrievedData = DatabaseRetriever.validateRecordID(input);
@@ -60,7 +49,7 @@ io.sockets.on('connection', function (socket) {
 		}); 
 	});
 	
-	// Add update incident
+	// 4. Add update incident
 	socket.on('createUpdateIncident', function (obj) {
 		// Update Incident Table
 		let x = DatabaseRetriever.storeUpdateIncident(obj); 
@@ -81,13 +70,28 @@ io.sockets.on('connection', function (socket) {
 		});
 	});
 	
-	
+	// 5. Login
 	socket.on('login', function (input) {
 		// Get values from database 
 		let retrievedData = DatabaseRetriever.getAccountByID(input);
 		retrievedData.then(function(result) {
 			// Return Data retrieve from database
 			socket.emit('loginDone',result);
+		}); 
+	});
+	
+	// 6. Resolve incident
+	socket.on('resolveIncident', function (recordID) {
+		DatabaseRetriever.resolveIncident(recordID);
+	});
+	
+	// 7. Get respondents
+	socket.on('getRespondents', function (recordID) {
+		// Get values from database 
+		let retrievedData = DatabaseRetriever.getRespondents(recordID);
+		retrievedData.then(function(result) {
+			// Return Data retrieve from database
+			socket.emit('getRespondentsDone',result);
 		}); 
 	});
 });

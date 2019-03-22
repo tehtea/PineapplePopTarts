@@ -2,19 +2,13 @@
 
 function createNewIncident(temp) {
 	return new Promise((resolve,reject) => {
-		var socket = io.connect('http://localhost:5000');		
-		// From Database Retrieve Name using session Key
-		socket.emit('getNameFromSK', temp.sessionKey); 
-		// Retrieve name from backend
-		socket.on('getNameFromSKDone', function(insName) {
-			// Create Object "NewIncident"
-			insName = insName[0].username;
-			var obj = new NewIncident(temp.name,temp.contact,temp.address,temp.unitNum,temp.respondent,temp.descr,insName);
+		var asyncGetAccount = getAccountViaKey(temp.sessionKey);
+		asyncGetAccount.then((account) => {
+			var username = account[0].username;
+			var obj = new NewIncident(temp.name,temp.contact,temp.address,temp.unitNum,temp.respondent,temp.descr,username);
 			
-			// From Database Save new incident
-			socket.emit('createNewIncident', obj); 
-			// Get Record ID
-			socket.on("createNewIncidentDone",(recordID) => {
+			var asyncStoreNewIncident = storeNewIncident(obj);
+			asyncStoreNewIncident.then((recordID) => {
 				localStorage.setItem("recordID", recordID);
 				resolve();
 			});
@@ -24,33 +18,40 @@ function createNewIncident(temp) {
 
 function createUpdateIncident(temp) {
 	return new Promise((resolve,reject) => {
-		var socket = io.connect('http://localhost:5000');
-
 		// From Database Retrieve Name using session Key
-		socket.emit('getNameFromSK', temp.sessionKey); 
-		// Retrieve name from backend
-		socket.on('getNameFromSKDone', function(insName) {
+		var asyncGetAccount = getAccountViaKey(temp.sessionKey);
+		asyncGetAccount.then((account) => {
+			var username = account[0].username;
 			// Create Object "UpdateIncident"
-			insName = insName[0].username;
-			var obj = new UpdateIncident(temp.recordID,temp.respondentReporting,temp.respondentRequest,temp.descr,insName);
+			var obj = new UpdateIncident(temp.recordID,temp.respondentReporting,temp.respondentRequest,temp.descr,username);
 			
-			// From Database Save update incident
-			socket.emit('createUpdateIncident', obj); 
-			resolve();
+			// Store update incident
+			var asyncStoreUpdateIncident = storeUpdateIncident(obj);
+			asyncStoreUpdateIncident.then(() => {
+				resolve();
+			});
 		});
 	});
 }
 
-// Update Incident functions
-function checkRecord(recordID) {
-	return new Promise((resolve, reject) => {
-		var socket = io.connect('http://localhost:5000');
-
-		socket.emit('validateRecordID', recordID); 
-		socket.on('validateRecordIDDone', function(result) {
-			resolve(result);
+function resolveIncident(temp) {
+	return new Promise((resolve,reject) => {
+		// From Database Retrieve Name using session Key
+		var asyncGetAccount = getAccountViaKey(temp.sessionKey);
+		asyncGetAccount.then((account) => {
+			var username = account[0].username;
+			// Create Object "UpdateIncident"
+			var obj = new UpdateIncident(temp.recordID,temp.respondentReporting,[],temp.descr,username);
+			
+			// Store update incident
+			var asyncStoreUpdateIncident = storeUpdateIncident(obj);
+			asyncStoreUpdateIncident.then(() => {
+				// Change incident to resolved
+				var asyncUpdateToResolved = updateToResolved(temp.recordID);
+				asyncUpdateToResolved.then(() => {
+					resolve();
+				});
+			});
 		});
 	});
 }
-
-// Parse obj to other subsystems? and need to display recordID
