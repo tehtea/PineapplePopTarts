@@ -2,17 +2,23 @@
 var dateTimeGenerator = require('./dateTime.js');
 var keyIncidentFetcher = require('./KeyIncidentFetcher.js');
 var apiDataFetcher = require('./apiDataFetcher.js');
+var NewIncident = require('./NewIncident.js');
 
 const docx = require("docx");
 const fs = require("fs");
+const { Document, Packer, Paragraph, RelativeHorizontalPosition, RelativeVerticalPosition, TableAnchorType, WidthType } = docx;
 
 module.exports = {
     generateReport: function () {
         //fetch incidents
+        var newIncidents = [];
         var incidents = keyIncidentFetcher.fetchIncidents();
         incidents.then((result) => {
+            for (var i = 0; i < result[0].length; i++)
+                newIncidents[i] = new NewIncident(result[0][i].RecordID, result[0][i].Name, result[0][i].Contact, result[0][i].Location, result[0][i].UnitNum, result[0][i].Descr, result[0][i].Resolved, result[0][i].InsTime, result[0][i].InsName);
+
             console.log('Incidents fetched!');
-            
+
             // Create empty document
             console.log('Creating Empty Document...');
             let doc = new docx.Document();
@@ -45,9 +51,44 @@ module.exports = {
             doc.addParagraph(headingPara);
 
             let incidentPara = new docx.Paragraph();
-            incidentPara.addRun(new docx.TextRun("New incidents in the past 30 minutes:\n"));
-            //incidentPara.addRun(new docx.TextRun());
+            incidentPara.addRun(new docx.TextRun("New incidents in the past 30 minutes:"));
             doc.addParagraph(incidentPara);
+
+            var incidentTable = doc.createTable(result[0].length + 1, 9);
+            incidentTable.setWidth(WidthType.DXA, 9000);
+
+            for (var j = 0; j < 9; j++) {
+                var cell = incidentTable.getCell(0, j);
+                switch (j) {
+                    case 0: cell.addContent(new docx.Paragraph('Record ID')); break;
+                    case 1: cell.addContent(new docx.Paragraph('Name')); break;
+                    case 2: cell.addContent(new docx.Paragraph('Contact')); break;
+                    case 3: cell.addContent(new docx.Paragraph('Location')); break;
+                    case 4: cell.addContent(new docx.Paragraph('Unit Number')); break;
+                    case 5: cell.addContent(new docx.Paragraph('Description')); break;
+                    case 6: cell.addContent(new docx.Paragraph('Resolved?')); break;
+                    case 7: cell.addContent(new docx.Paragraph('Ins Time')); break;
+                    case 8: cell.addContent(new docx.Paragraph('Ins Name')); break;
+                }
+            }
+            
+            for (var i = 0; i < result[0].length; i++) {
+                for (var j = 0; j < 9; j++) {
+                    cell = incidentTable.getCell(i + 1, j);
+                    switch (j) {
+                        case 0: cell.addContent(new docx.Paragraph(newIncidents[i].recordID.toString())); break;
+                        case 1: cell.addContent(new docx.Paragraph(newIncidents[i].name)); break;
+                        case 2: cell.addContent(new docx.Paragraph(newIncidents[i].contact)); break;
+                        case 3: cell.addContent(new docx.Paragraph(newIncidents[i].location)); break;
+                        case 4: cell.addContent(new docx.Paragraph(newIncidents[i].unitNum)); break;
+                        case 5: cell.addContent(new docx.Paragraph(newIncidents[i].desc)); break;
+                        case 6: cell.addContent(new docx.Paragraph(newIncidents[i].res.toString())); break;
+                        case 7: cell.addContent(new docx.Paragraph(newIncidents[i].insTime)); break;
+                        case 8: cell.addContent(new docx.Paragraph(newIncidents[i].insName)); break;
+                    }
+
+                }
+            }
 
             doc.addParagraph(blankPara);
 

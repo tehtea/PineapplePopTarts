@@ -5,7 +5,7 @@ const server = require('http').createServer();
 const io = require('socket.io')(server);
 server.listen(5000);
 
-module.exports = io;
+console.log('Server listening on port 5000');
 
 io.on('connection', function (socket) {
 
