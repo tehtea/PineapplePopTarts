@@ -267,6 +267,32 @@ module.exports = {
 				reject(err);
 			});
 		});
-	}
+	},
+	
+	getUnresolvedIncidents: function() {
+		return new Promise(function(resolve, reject) {
+			// Connect to DB
+			var conn = new sql.ConnectionPool(config);
+			var req = new sql.Request(conn);
+	
+			conn.connect().then(function () {
+				// New Incident Table
+				req.query("SELECT * FROM NewIncident \
+							WHERE Resolved = 0").then(function (recordset) {
+					conn.close();
+					resolve(recordset.recordset);
+				})
+				.catch(function (err) {
+					console.log(err);
+					conn.close();
+					reject(err);
+				});
+			})
+			.catch(function (err) {
+				console.log(err);
+				reject(err);
+			});
+		});
+	},
 }
 

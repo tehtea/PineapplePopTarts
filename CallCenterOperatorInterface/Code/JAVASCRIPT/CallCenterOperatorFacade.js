@@ -69,3 +69,12 @@ function getRespondents(recordID) {
 		});
 	});
 }
+
+function getUnresolvedIncidents() {
+	return new Promise((resolve, reject) => {
+		socket.emit('getUnresolvedIncidents'); 
+		socket.on('getUnresolvedIncidentsDone', function(result) {
+			resolve(result);
+		});
+	});
+}

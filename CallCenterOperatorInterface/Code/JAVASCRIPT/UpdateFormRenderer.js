@@ -5,37 +5,53 @@
 		1. Ensure that the format of inputs are correct
 		2. If correct, save all inputs into database 
 */
+displayIncidentOption();
 
-function checkRecordID() {
-	var recordID = document.getElementById("recordID").value;
-	if (recordID == "" | /^\d+$/.test(recordID) == false) {
-		document.getElementById("invalidRecord").innerHTML = "*invalid Record";
-		return;
-	}
+function displayIncidentOption() {
+	// Get all unresolved incidents
+	var asyncGetUnresolvedIncidents = getUnresolvedIncidents();
+	asyncGetUnresolvedIncidents.then((result) => {
+		// Display in select option
+		for (var incident of result) {
+			var dropdown = document.getElementById("incidentList");
+			var option = document.createElement("option");
+			option.value = incident.RecordID;
+			option.text = "RecordID: " + incident.RecordID + ", Description: " + incident.Descr;
+			dropdown.add(option);
+		}
+	});
+}
+
+function confirmRecordID() {
+	// If no incident is selected
+	var recordID = document.getElementById("incidentList").value;
+	
+	// Get record ID
 	let validRecord = checkRecord(recordID);
 	validRecord.then((result) => {
-		if (result == null) {
-			document.getElementById("invalidRecord").innerHTML = "*invalid Record";
-		} else if (result.Resolved == true) {
-			document.getElementById("invalidRecord").innerHTML = "*Record has already been resolved";
-		} else {
-			document.getElementById("section-2").style.display = "block";
-			document.getElementById("section-1").style.display = "none";
-			document.getElementById("textRecord").innerHTML = recordID;
-			document.getElementById("textDescr").innerHTML = result.Descr;
+		document.getElementById("section-2").style.display = "block";
+		document.getElementById("section-1").style.display = "none";
+		document.getElementById("textRecord").innerHTML = recordID;
+		document.getElementById("textDescr").innerHTML = result.Descr;
+		
+		// Choices for respondent reporting
+		var asyncGetRespondents = getRespondents(recordID);
+		asyncGetRespondents.then((result) => {
+			// Remove duplicates
+			var set = new Set();
+			for (var j = 0; j < result.length; j ++) {
+				set.add(result[j].Respondent);
+			}
 			
-			// Choices for respondent reporting
-			var asyncGetRespondents = getRespondents(recordID);
-			asyncGetRespondents.then((result) => {
-				for (var i =0; i < result.length; i ++) {
-					var dropdown = document.getElementById("respondentReportingList");
-					var option = document.createElement("option");
-					option.value = result[i].Respondent;
-					option.text = result[i].Respondent;
-					dropdown.add(option);
-				}
-			});
-		}
+			for (var res of set) {
+				var dropdown = document.getElementById("respondentReportingList");
+				var option = document.createElement("option");
+				option.value = res;
+				option.text = res;
+				dropdown.add(option);
+			}
+		});
+		
 	});
 }
 
@@ -118,7 +134,7 @@ function resolveSubmission() {
 	var sessionKey = localStorage.getItem("sessionKey");
 	var temp = {
 		respondentReporting: respondentReporting,
-		descr: descr,
+		descr: "[RESOLVED]" + descr,
 		sessionKey: sessionKey,
 		recordID: document.getElementById("textRecord").innerHTML
 	}; 
@@ -137,10 +153,17 @@ function resolveSubmission() {
 function hasErrorResolve(respondentRequest) {
 	if (respondentRequest.length > 0) {
 		document.getElementById("e-respondent").innerHTML = "*";
-		document.getElementById("errorMsg").innerHTML = "*This field must be empty";
+		document.getElementById("errorMsg").innerHTML = "*this field must be empty";
 		return true;
 	} else {
 		document.getElementById("e-respondent").innerHTML = "";
 		return false;
 	}
+}
+
+function returnSection1() {
+	document.getElementById("section-1").style.display = "block";
+	document.getElementById("section-2").style.display = "none";
+	document.getElementById("textRecord").innerHTML = "";
+	document.getElementById("textDescr").innerHTML = "";
 }

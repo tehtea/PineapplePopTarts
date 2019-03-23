@@ -38,7 +38,6 @@
 	<script src="../JAVASCRIPT/Apps/node_modules/socket.io/socket.io.js"></script>
 	<script src="../JAVASCRIPT/UpdateIncident.js"></script>
 	<script src="../JAVASCRIPT/FormManager.js"></script>
-	<script src="../JAVASCRIPT/UpdateFormRenderer.js"></script>
 </head>
 
 <body>
@@ -119,14 +118,15 @@
 					
 					<input class="sButton" type="submit" onclick="return formSubmission()" value="Submit update">
 					<input class="sButton" type="submit" onclick="return resolveSubmission()" value="Resolve"> <span id="errorMsg"></span>
+					<button class="sButton" id="backButton" onclick="returnSection1()">Back</button>
 				</div>
 			</fieldset>
 		</form>
 		<!--To retrieve previous information of report-->
 		<div class="c1" id="section-1">
-			<input type="text" id="recordID" placeholder="Record ID">
-			<button class="sButton" onclick="checkRecordID()">Retrieve</button>
-			<br><span id="invalidRecord">
+			<select name="incident" id="incidentList">
+			</select>
+			<button class="sButton" onclick="confirmRecordID()">Retrieve</button>
 		</div>
 	</div>
 	
@@ -141,5 +141,6 @@
 <!--Order Matters-->
 <script src="../JAVASCRIPT/CallCenterOperatorFacade.js"></script>
 <script src="../JAVASCRIPT/ContentValidation.js"></script>
+	<script src="../JAVASCRIPT/UpdateFormRenderer.js"></script>
 
 </html>

@@ -94,4 +94,14 @@ io.sockets.on('connection', function (socket) {
 			socket.emit('getRespondentsDone',result);
 		}); 
 	});
+	
+	// 8. Get all unresolved incidents
+	socket.on('getUnresolvedIncidents', function () {
+		// Get values from database 
+		let retrievedData = DatabaseRetriever.getUnresolvedIncidents();
+		retrievedData.then(function(result) {
+			// Return Data retrieve from database
+			socket.emit('getUnresolvedIncidentsDone',result);
+		}); 
+	});
 });

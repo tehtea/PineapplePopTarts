@@ -62,6 +62,15 @@ span {
 }
 
 #section-1 {
-	float: right;
 	margin-right: 50px;
+	text-align: center;
+}
+
+#incidentList {
+	width: 50%;
+}
+
+#backButton {
+	float: right;
+	background-color: #FFB0AC;
 }
