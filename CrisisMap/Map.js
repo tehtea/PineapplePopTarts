@@ -1,4 +1,9 @@
-// import getData from './Weather.js';
+/* Algorithm for fetching incident data to display on map:
+1. Make sure each incident data has longitude and latitude
+2. Make your frontend connect and talk with CM.js
+3. Everytime something new comes from CM.js, display the incident on the map
+*/
+// https://github.com/tehtea/PineapplePopTarts/tree/master/CallCenterOperatorInterface/Code/JAVASCRIPT
 
 //Object storing all the data (api + bomb shelters + hospitals)
 //KIV for further use/deletion (may help in marker infoboxes)
@@ -126,27 +131,17 @@ function initMap(){
   //new map
   map = new google.maps.Map(document.getElementById('map'), options);
 
-  //get incident data from database (DOES NOT WORK YET)
-  // var io = require("./Apps/node_modules/socket.io-client");
-  // var socket = io.connect('http://localhost:3333');
-  // var incidents;
-  //
-  // socket.on('incidents', function(cleaned){
-  //   incidents = cleaned;
-  // });
-  // console.log(incidents);
-  var cm = require('./CM.js');
-  var retrieval = cm.retrieveData();
-  retrieval.then((result) => {
-  	var cleaned = cm.incidentDataProcessing(result);
-  	console.log(cleaned);
-  	// INSERT CRISIS MAP CODE HERE
-    
-  	/* Notes:
-  	*	result[0] is newincidents
-  	*	result[1] is updateincidents
-  	*/
+  //get incident data
+  var socket = io.connect('http://localhost:3333');
+
+  socket.on('connect', function(){
+  	console.log("received connection on port 3335 from PCTC.js");
+  	socket.on('incidents', function(result){
+  		incidents = result;
+  		console.log(incidents);
+  	});
   });
+  socket.on('disconnect', function(){});
 
   //get api data
   getWeatherData();
