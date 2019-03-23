@@ -42,9 +42,9 @@ function confirmRecordID() {
 			for (var j = 0; j < result.length; j ++) {
 				set.add(result[j].Respondent);
 			}
+			var dropdown = document.getElementById("respondentReportingList");
 			
 			for (var res of set) {
-				var dropdown = document.getElementById("respondentReportingList");
 				var option = document.createElement("option");
 				option.value = res;
 				option.text = res;
@@ -72,6 +72,14 @@ function formSubmission() {
 	var error = hasError(descr);
 	if (error == true) {
 			return false;
+	}
+	
+ 	// Adjustment on description
+	for (var c=0;c < descr.length; c ++) {
+		if (descr.charAt(c) == '\'') {
+			descr = descr.substr(0,c) + '"' + descr.substr(c+1);
+			console.log("change");
+		}
 	}
 	
 	// IF CORRECT, Save to database
@@ -130,6 +138,14 @@ function resolveSubmission() {
 			return false;
 	}
 	
+	 // Adjustment on description
+	for (var c=0;c < descr.length; c ++) {
+		if (descr.charAt(c) == '\'') {
+			descr = descr.substr(0,c) + '"' + descr.substr(c+1);
+			console.log("change");
+		}
+	}
+	
 	// IF CORRECT, Save to database
 	var sessionKey = localStorage.getItem("sessionKey");
 	var temp = {
@@ -162,6 +178,11 @@ function hasErrorResolve(respondentRequest) {
 }
 
 function returnSection1() {
+	var dropdown = document.getElementById("respondentReportingList");
+	var length = dropdown.options.length;
+	for (var i = 0; i < length; i++) {
+		dropdown.remove(0);
+	}
 	document.getElementById("section-1").style.display = "block";
 	document.getElementById("section-2").style.display = "none";
 	document.getElementById("textRecord").innerHTML = "";

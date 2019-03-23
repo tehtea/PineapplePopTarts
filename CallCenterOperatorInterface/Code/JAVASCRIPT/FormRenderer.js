@@ -28,6 +28,14 @@ function formSubmission() {
 			return false;
 	}
 	
+ 	// Adjustment on description
+	for (var c=0;c < descr.length; c ++) {
+		if (descr.charAt(c) == '\'') {
+			descr = descr.substr(0,c) + '"' + descr.substr(c+1);
+			console.log("change");
+		}
+	}
+	
 	// IF CORRECT, Save to database
 	var sessionKey = localStorage.getItem("sessionKey");
 	var temp = {
@@ -40,14 +48,14 @@ function formSubmission() {
 		sessionKey: sessionKey
 	};  
 	
-	let done = createNewIncident(temp);
+	 let done = createNewIncident(temp);
 	
 	// Prompt use the successful submission
 	done.then(() => {
 		document.getElementById("content").style.display = "none";
 		document.getElementById("complete").style.display = "block";
 		document.getElementById("recordID").innerHTML = localStorage.getItem("recordID");
-	});
+	}); 
 	
 	return false;
 }
