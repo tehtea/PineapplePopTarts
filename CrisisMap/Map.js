@@ -131,7 +131,7 @@ function initMap(){
   //new map
   map = new google.maps.Map(document.getElementById('map'), options);
 
-  initialiseMap();
+  initialiseMarkers();
 
   //close window upon clicking on map, outside markers
   google.maps.event.addListener(map, 'click', function(event){
@@ -139,24 +139,10 @@ function initMap(){
   })
 
   //FUNCTIONS
-  function initialiseMap(){
-    //refresh data on map whenever function is called
+  function initialiseMarkers(){
     var z = retrieveData();
     z.then((result) => {
-      //loop through inputs object
-      //to add markers
-      for (let cat in inputs){
-        for (let i=0; i<inputs[cat].length; i++){
-          addMarker(inputs[cat][i], cat, i);
-        }
-      }
-
-      //initialise categories
-      hide('shelter');
-      hide('hospital');
-      hide('weather');
-      show('dengue');
-      show('incident');
+      inputs = result; //store in inputs (no idea if it works but not needed actually)
     });
   }
 
@@ -166,14 +152,14 @@ function initMap(){
 
       socket.on('connect', function(){
         console.log("received connection on port 3333 from Map.js");
-        socket.on('incidents', function(result){ //runs each time theres an update (polls for 'incidents')
-          //refresh all data
+        socket.on('incidents', function(result){ //runs each time theres an update (polls for 'incidents' and refreshes all data)
+
           //get incident data
           var incidents;
           incidents = result;
 
           for (let i=0; i<incidents.length; i++){
-            inputs['incident'][i] = {
+            inputs['incident'].push({
               name: incidents[i]["initDescr"] + ": "+ incidents[i]["address"],
               label_location: {
                 latitude: parseFloat(incidents[i]["lat"]),
@@ -181,7 +167,7 @@ function initMap(){
               },
               updates: incidents[i]["updDescr"],
               time: incidents[i]["time"]
-            }
+            });
           }
 
           //get api data
@@ -194,6 +180,21 @@ function initMap(){
           //manual input of bomb shelters & hospitals
           addHospitals();
           addShelters();
+
+          //loop through inputs object
+          //to add markers
+          for (let cat in inputs){
+            for (let i=0; i<inputs[cat].length; i++){
+              addMarker(inputs[cat][i], cat, i);
+            }
+          }
+
+          //initialise categories
+          hide('shelter');
+          hide('hospital');
+          hide('weather');
+          show('dengue');
+          show('incident');
 
           console.log(inputs);
           resolve(inputs); //edit inputs, then add Markers inside the "then" block
