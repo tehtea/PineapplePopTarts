@@ -20,11 +20,11 @@ function retrieveData() {
 }
 
 // INSERT CRISIS MAP CODE HERE
-var cm_to_pctc = require('./Apps/node_modules/socket.io').listen(3335);
+var ioServer = require('./Apps/node_modules/socket.io').listen(3333);
 
-cm_to_pctc.sockets.on('connection', function (socket){
-		console.log("made connection on port 3335 with PCTC.js");
-		// keep send values to Map whenver they appear
+ioServer.sockets.on('connection', function (socket){
+		console.log("made connection on port 3333 with someone else")
+		// keep send values to Map whenever they appear
 		if (globalCleaned){
 			socket.emit('incidents', globalCleaned);
 		}
@@ -33,9 +33,35 @@ cm_to_pctc.sockets.on('connection', function (socket){
 var retrieval = retrieveData();
 retrieval.then((result) => {
 	var cleaned = incidentDataProcessing(result);
-	console.log(cleaned);
-	// debug
+	//console.log(cleaned);
+	//update globalCleaned (global version)
 	globalCleaned = cleaned;
+	//process incidents to extract the postal codes
+	var postalCodes = [];
+	for (let i=0; i<cleaned.length; i++){
+		postalCodes.push(parseInt(cleaned[i]["postalCode"]));
+	}
+
+	//console.log(postalCodes);
+
+	var coordsInfo = [];
+	var z;
+	for (let i=0; i<postalCodes.length; i++){
+		z = getCoor(postalCodes[i]);
+		z.then((result) => {
+			// Insert code here
+			//console.log(result["ADDRESS"]);
+			cleaned[i]["address"] = result["ADDRESS"];
+			cleaned[i]["lat"] = result["LATITUDE"];
+			cleaned[i]["lng"] = result["LONGITUDE"];
+			return cleaned;
+			//console.log(globalCleaned[i]);
+		}).then((result) => {
+			//for each iteration of for loop, update globalCleaned
+			globalCleaned = result;
+		});
+	}
+
 });
 /* Notes:
 *	result[0] is newincidents
@@ -86,3 +112,33 @@ function incidentDataProcessing(data) {
 	}
 	return result;
 }
+
+//PostalCodeToCoor.js
+const request = require('./Apps/node_modules/request');
+const linkPart1 = "https://developers.onemap.sg/commonapi/search?searchVal=";
+const linkPart2 = "&returnGeom=Y&getAddrDetails=Y";
+
+var globalRawData;
+
+function getCoor(postalCode) {
+	return new Promise((resolve,reject) => {
+		// API link for data
+		var GeneralLink = linkPart1 + postalCode + linkPart2;
+
+		// Retrieve from API
+		request(GeneralLink, { json: true }, (err, res, body) => {
+			  if (err) { return console.log(err); }
+			  if (res.statusCode == 200 && res.headers['content-type'].includes("application/json"))
+			  {
+				 var rawData = body.results[0];
+				 resolve(rawData);
+			  }
+		});
+	});
+}
+
+var test = getCoor(416729);
+test.then((result) => {
+	// Insert code here
+	console.log(result);
+});

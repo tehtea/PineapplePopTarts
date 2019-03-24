@@ -131,47 +131,77 @@ function initMap(){
   //new map
   map = new google.maps.Map(document.getElementById('map'), options);
 
-  //get incident data
-  var socket = io.connect('http://localhost:3333');
-
-  socket.on('connect', function(){
-  	console.log("received connection on port 3335 from PCTC.js");
-  	socket.on('incidents', function(result){
-  		incidents = result;
-  		console.log(incidents);
-  	});
-  });
-  socket.on('disconnect', function(){});
-
-  //get api data
-  getWeatherData();
-
-  //get KML layer
-  var src = 'https://sites.google.com/site/kmlfiles5473666/kml/dengue-clusters-kml.kml';
-  kmlLayer = getKMLLayer(src);
-
-  //manual input of bomb shelters & hospitals
-  addHospitals();
-  addShelters();
-
-  //loop through inputs object
-  for (let cat in inputs){
-    for (let i=0; i<inputs[cat].length; i++){
-      addMarker(inputs[cat][i], cat, i);
-    }
-  }
-
-  //initialise categories
-  show('incident');
-  hide('shelter');
-  hide('hospital');
-  hide('weather');
-  show('dengue');
+  initialiseMap();
 
   //close window upon clicking on map, outside markers
   google.maps.event.addListener(map, 'click', function(event){
     closeCurrentInfoWindow();
   })
+
+  //FUNCTIONS
+  function initialiseMap(){
+    //refresh data on map whenever function is called
+    var z = retrieveData();
+    z.then((result) => {
+      //loop through inputs object
+      //to add markers
+      for (let cat in inputs){
+        for (let i=0; i<inputs[cat].length; i++){
+          addMarker(inputs[cat][i], cat, i);
+        }
+      }
+
+      //initialise categories
+      hide('shelter');
+      hide('hospital');
+      hide('weather');
+      show('dengue');
+      show('incident');
+    });
+  }
+
+  //refresh all data
+  function retrieveData(){
+    return new Promise((resolve, reject) => {
+      var socket = io.connect('http://localhost:3333');
+
+      socket.on('connect', function(){
+        console.log("received connection on port 3333 from Map.js");
+        socket.on('incidents', function(result){
+          //get incident data
+          var incidents;
+          incidents = result;
+
+          for (let i=0; i<incidents.length; i++){
+            inputs['incident'][i] = {
+              name: incidents[i]["initDescr"] + ": "+ incidents[i]["address"],
+              label_location: {
+                latitude: parseFloat(incidents[i]["lat"]),
+                longitude: parseFloat(incidents[i]["lng"]),
+              },
+              updates: incidents[i]["updDescr"],
+              time: incidents[i]["time"]
+            }
+          }
+
+          //get api data
+          getWeatherData();
+
+          //get KML layer
+          var src = 'https://sites.google.com/site/kmlfiles5473666/kml/dengue-clusters-kml.kml';
+          kmlLayer = getKMLLayer(src);
+
+          //manual input of bomb shelters & hospitals
+          addHospitals();
+          addShelters();
+
+          console.log(inputs);
+          resolve(inputs); //edit inputs, then add Markers inside the "then" block
+        });
+      });
+      socket.on('disconnect', function(){});
+    });
+  }
 
   //add marker on map and append to array
   function addMarker(input, cat, i){
@@ -239,7 +269,7 @@ function initMap(){
     }
 
     markers[cat].push(marker); //append to category's marker array
-
+    //console.log(markers);
   }
 
 }

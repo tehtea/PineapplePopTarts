@@ -5,20 +5,20 @@
 
   //show markers
   function show(cat){
+    //tick checkbox
+    document.getElementById(cat + "box").checked = true;
     for (var i=0; i<markers[cat].length; i++){
       markers[cat][i].setVisible(true);
     }
-    //tick checkbox
-    document.getElementById(cat + "box").checked = true;
   }
 
   //hide markers
   function hide(cat){
+    //clear checkbox
+    document.getElementById(cat + "box").checked = false;
     for (var i=0; i<markers[cat].length; i++){
       markers[cat][i].setVisible(false);
     }
-    //clear checkbox
-    document.getElementById(cat + "box").checked = false;
   }
 
   //clicking checkbox function
