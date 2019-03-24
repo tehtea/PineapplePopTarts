@@ -8,5 +8,5 @@ reportGenerator.generateReport();
 
 //cron.schedule('*/30 * * * *', () => {  //EVERY 30 MINS
 cron.schedule('*/10 * * * * *', () => {  //EVERY 10 SECONDS
-    //reportTransmitter.sendEmail();
+    reportTransmitter.sendEmail();
 });
