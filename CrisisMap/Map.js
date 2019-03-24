@@ -160,14 +160,14 @@ function initMap(){
     });
   }
 
-  //refresh all data
   function retrieveData(){
     return new Promise((resolve, reject) => {
       var socket = io.connect('http://localhost:3333');
 
       socket.on('connect', function(){
         console.log("received connection on port 3333 from Map.js");
-        socket.on('incidents', function(result){
+        socket.on('incidents', function(result){ //runs each time theres an update (polls for 'incidents')
+          //refresh all data
           //get incident data
           var incidents;
           incidents = result;
