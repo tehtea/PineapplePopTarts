@@ -1,20 +1,19 @@
 // modules and libraries
-var io = require("./Apps/node_modules/socket.io-client");
+var socket = require('./Apps/node_modules/socket.io'); 
+var io = socket.listen(5050);
+
 var facebookPoster 	= require('./facebookPoster');
 var facebookConfig 	= require('./facebookConfig');
 var tweeter 		= require('./tweeter');
 var twitterConfig 	= require('./twitterConfig');
 
-// socket.io initialization
-var socket = io.connect('http://localhost:5000');
-
 // Connect to server
-socket.on('connect',function() {
+io.on('connection', (socket) =>{
 	// Recieve new incident 
-	socket.on('socialMediaNew', function(result) {
+	socket.on('socialMediaNew', function(reportData) {
 		console.log("Received New Incident: ");
-		// ADD CODE HERE
-		var postMessage = parseNewIncidentData(result);
+		
+		var postMessage = parseNewIncidentData(reportData);
 		facebookPoster.postOnPage(
 			facebookConfig.PAGE_ID, 
             postMessage,
@@ -27,14 +26,41 @@ socket.on('connect',function() {
 	});
 	
 	// Recieve update incident
-	socket.on('socialMediaUpd', function(result) {
+	socket.on('socialMediaUpd', function(reportData) {
 		console.log("Received Update Incident");
-		// ADD CODE HERE
-		// Won't add anything here first because i'm not sure if we should be posting updates to an incident as it is directly.
+		
+		var postMessage = parseUpdateIncidentData(reportData);
+		facebookPoster.postOnPage(
+			facebookConfig.PAGE_ID, 
+            postMessage,
+			facebookConfig.pageAccessToken
+		);
+		tweeter.postTweet( 
+            postMessage,
+			twitterConfig
+		);
 	});
 });
 
 // string up the incident data so it can be posted on social media in a readable fashion
-function parseNewIncidentData(incidentData) {
-	return incidentData.Descr + " on " + incidentData.InsTime + " at " + incidentData.Location + ".";
+function parseNewIncidentData(newInc) {
+	// Extract information
+	var recordID = newInc.recordID;
+	var descr = newInc.descr;
+	var address = newInc.address;
+	var unitNum = newInc.unitNum;
+	
+	var postMessage = "Incident No." + recordID + ": \"" + descr + "\" Location: S" + address + " " + unitNum; 
+	return postMessage;
+}
+
+function parseUpdateIncidentData(reportData) {
+	// Extract information
+	var recordID = reportData.updateInc.recordID;
+	var descr = reportData.updateInc.updateDescr;
+	var address = reportData.newInc.Location;
+	var unitNum = reportData.newInc.UnitNum;
+	
+	var postMessage = "Update on Incident No." + recordID + ": \"" + descr + "\" Location: S" + address + " " + unitNum; 
+	return postMessage;
 }

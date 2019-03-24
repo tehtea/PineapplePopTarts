@@ -143,7 +143,7 @@ module.exports = {
 	},
 	
 	// For Update Form, find recordID
-	validateRecordID: function(recordID) {
+	getFormViaRecordID: function(recordID) {
 		return new Promise(function(resolve, reject) {
 			// Connect to DB
 			var conn = new sql.ConnectionPool(config);
@@ -293,6 +293,6 @@ module.exports = {
 				reject(err);
 			});
 		});
-	},
+	}
 }
 

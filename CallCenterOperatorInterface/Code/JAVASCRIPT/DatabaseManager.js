@@ -1,6 +1,8 @@
 // Control class - Database Manager
 
 var DatabaseRetriever = require("./DatabaseRetriever");
+var DatabaseSMSManager = require('./DatabaseSMSManager');
+var DatabaseSocialMediaManager = require('./DatabaseSocialMediaManager');
 
 // Initiate socket.io server
 var io = require('./Apps/node_modules/socket.io').listen(5000);
@@ -25,14 +27,24 @@ io.sockets.on('connection', function (socket) {
 			let getRecord = DatabaseRetriever.getRecordIDIncident(obj);
 			getRecord.then((record) => {
 				// Fix time format
-				var time = record.InsTime;
 				var timeString = record.InsTime.toISOString();
 				
 				// Generate Respondent Table
 				for (var i = 0; i < obj.respondentRequested.length; i ++) {
 					var resp = obj.respondentRequested[i];
 					DatabaseRetriever.storeRespondent(resp, record.RecordID, timeString);
-				}				
+				}		
+				
+				obj.recordID = record.RecordID;
+				var date= new Date(record.InsTime);
+				date.setHours(date.getHours() - 8);
+				obj.insTime = date.toString().slice(4,24);
+				
+				// Send SMS to Respondents
+				DatabaseSMSManager.newIncidentSendSMS(obj);
+				// Create social media post
+				DatabaseSocialMediaManager.socialMediaNew(obj);
+				
 				// Return RecordID
 				socket.emit("createNewIncidentDone",record.RecordID);
 			});
@@ -42,7 +54,7 @@ io.sockets.on('connection', function (socket) {
 	// 3. Check RecordID
 	socket.on('validateRecordID', function (input) {
 		// Get values from database 
-		let retrievedData = DatabaseRetriever.validateRecordID(input);
+		let retrievedData = DatabaseRetriever.getFormViaRecordID(input);
 		retrievedData.then(function(result) {
 			// Return Data retrieve from database
 			socket.emit('validateRecordIDDone',result);
@@ -65,7 +77,22 @@ io.sockets.on('connection', function (socket) {
 				for (var i = 0; i < obj.respondentRequested.length; i ++) {
 					var resp = obj.respondentRequested[i];
 					DatabaseRetriever.storeRespondent(resp, obj.recordID, timeString);
-				}				
+				}	
+				
+				var date= new Date(time.Time);
+				date.setHours(date.getHours() - 8);
+				obj.updateTime = date.toString().slice(4,24);
+				
+				// get original report
+				var getFormViaRecordID = DatabaseRetriever.getFormViaRecordID(obj.recordID);
+				getFormViaRecordID.then((newIncident) => {	
+					if (obj.respondentRequested.length > 0) {
+						// Send SMS to Respondenta if any
+						DatabaseSMSManager.updateIncidentSendSMS(obj, newIncident);
+					}
+					// Create social media post
+					DatabaseSocialMediaManager.socialMediaUpd(obj, newIncident);
+				});
 			});
 		});
 	});

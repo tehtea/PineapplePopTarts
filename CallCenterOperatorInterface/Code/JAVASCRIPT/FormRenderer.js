@@ -48,7 +48,7 @@ function formSubmission() {
 		sessionKey: sessionKey
 	};  
 	
-	 let done = createNewIncident(temp);
+	let done = createNewIncident(temp);
 	
 	// Prompt use the successful submission
 	done.then(() => {
