@@ -15,7 +15,7 @@ class UpdatedIncident {
         }
 
         this.updTime = this.updTime.replace('T',', ');
-        this.updTime = this.updTime.substring(0,this.updTime.length-5);
+        this.updTime = this.updTime.substring(0,this.updTime.length-8);
     }
 
     get recordID() { return this._recordID; }

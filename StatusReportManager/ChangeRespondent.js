@@ -5,7 +5,7 @@ class ChangeRespondent {
         this.insTime = instime.toString();
 
         this.insTime = this.insTime.replace('T',', ');
-        this.insTime = this.insTime.substring(0,this.insTime.length-5);
+        this.insTime = this.insTime.substring(0,this.insTime.length-8);
     }
 
     get recordID() { return this._recordID; }
