@@ -15,8 +15,6 @@ module.exports = {
         pass: senderPassword  //SENDER PASSWORD HERE
       }
     });
-    console.log("---------------------");
-    console.log("Sending Email...");
     let mailOptions = {
       from: senderName + ' <' + senderEmail + '>', // SENDER EMAIL HERE
       to: recipientEmail, // RECIPIENT HERE
@@ -30,6 +28,7 @@ module.exports = {
         }
       ]
     };
+    console.log("Sending Email...");
     transporter.sendMail(mailOptions, function (error, info) {
       if (error) {
         console.log('Error');

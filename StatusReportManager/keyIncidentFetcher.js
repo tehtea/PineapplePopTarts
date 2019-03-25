@@ -9,11 +9,11 @@ module.exports = {
                 socket.emit('srRequest');
                 // Retrieve data
                 socket.on('srRequestDone', function (result) {
+                    // Disconnect
+                    socket.emit('disconnect');
                     resolve(result);
                 });
             });
-            // Disconnect
-            socket.emit('disconnect');
         });
     },
 };

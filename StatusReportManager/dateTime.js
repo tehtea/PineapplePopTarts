@@ -18,7 +18,6 @@ module.exports = {
     day = (day < 10 ? "0" : "") + day;
 
     return day + "/" + month + "/" + year + ", " + hour + ":" + min;
-
     },
 
     getDateTime30MinAgo: function() {
@@ -42,6 +41,5 @@ module.exports = {
         day = (day < 10 ? "0" : "") + day;
         
         return day + "/" + month + "/" + year + ", " + hour + ":" + min;
-    
         }
 }

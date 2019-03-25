@@ -16,12 +16,3 @@ module.exports = {
     });
   }
 }
-
-/*
-for (let i = 1; i < data["area_metadata"].length + 1; i++) {
-          weatherData[i] = data["area_metadata"][i - 1];
-        }
-        weatherData[0] = data;
-        console.log('Weather data received!');
-        return weatherData;
-        */
