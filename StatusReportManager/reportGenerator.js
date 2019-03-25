@@ -45,7 +45,7 @@ module.exports = {
             console.log('Adding Content...');
 
             //Define a break between paragraphs
-            let blankPara = new docx.Paragraph();
+            const blankPara = new docx.Paragraph();
 
             //Define default heading para
             let headingPara = new docx.Paragraph().heading1().left();
@@ -56,10 +56,10 @@ module.exports = {
             doc.addParagraph(titlePara);
             doc.addParagraph(blankPara);
             let subtitlePara = new docx.Paragraph().left();
-            subtitlePara.addRun(new docx.TextRun("For the period ").size(24));
-            subtitlePara.addRun(new docx.TextRun(dateTimeGenerator.getDateTime30MinAgo()).size(24));
-            subtitlePara.addRun(new docx.TextRun(" till ").size(24));
-            subtitlePara.addRun(new docx.TextRun(dateTimeGenerator.getDateTimeNow()).size(24));
+            subtitlePara.addRun(new docx.TextRun("For the period ").size(24).bold());
+            subtitlePara.addRun(new docx.TextRun(dateTimeGenerator.getDateTime30MinAgo()).size(24).bold());
+            subtitlePara.addRun(new docx.TextRun(" till ").size(24).bold());
+            subtitlePara.addRun(new docx.TextRun(dateTimeGenerator.getDateTimeNow()).size(24).bold());
             doc.addParagraph(subtitlePara);
             doc.addParagraph(blankPara);
 
@@ -70,12 +70,12 @@ module.exports = {
             //Check if any new incidents
             let newIncidentPara = new docx.Paragraph();
             if (newIncidents.length == 0) {
-                newIncidentPara.addRun(new docx.TextRun("There are no new incidents in the past 30 minutes.").bold());
+                newIncidentPara.addRun(new docx.TextRun("There are no new incidents in the past 30 minutes.").size(24).bold());
                 doc.addParagraph(newIncidentPara);
             }
             else {
 
-                newIncidentPara.addRun(new docx.TextRun("New incidents in the past 30 minutes:").bold());
+                newIncidentPara.addRun(new docx.TextRun("New incidents in the past 30 minutes:").size(24).bold());
                 doc.addParagraph(newIncidentPara);
 
                 //NEW INCIDENTS
@@ -85,15 +85,15 @@ module.exports = {
                 for (var j = 0; j < 9; j++) {
                     var cell = newIncidentTable.getCell(0, j);
                     switch (j) {
-                        case 0: cell.addContent(new docx.Paragraph().addRun(new docx.TextRun('Record ID').bold())); break;
-                        case 1: cell.addContent(new docx.Paragraph().addRun(new docx.TextRun('Name').bold())); break;
-                        case 2: cell.addContent(new docx.Paragraph().addRun(new docx.TextRun('Contact').bold())); break;
-                        case 3: cell.addContent(new docx.Paragraph().addRun(new docx.TextRun('Location').bold())); break;
-                        case 4: cell.addContent(new docx.Paragraph().addRun(new docx.TextRun('Unit Number').bold())); break;
-                        case 5: cell.addContent(new docx.Paragraph().addRun(new docx.TextRun('Description').bold())); break;
-                        case 6: cell.addContent(new docx.Paragraph().addRun(new docx.TextRun('Resolved?').bold())); break;
-                        case 7: cell.addContent(new docx.Paragraph().addRun(new docx.TextRun('Insert Time').bold())); break;
-                        case 8: cell.addContent(new docx.Paragraph().addRun(new docx.TextRun('Inserted By').bold())); break;
+                        case 0: cell.addContent(new docx.Paragraph().addRun(new docx.TextRun('Record ID').size(24).bold())); break;
+                        case 1: cell.addContent(new docx.Paragraph().addRun(new docx.TextRun('Name').size(24).bold())); break;
+                        case 2: cell.addContent(new docx.Paragraph().addRun(new docx.TextRun('Contact').size(24).bold())); break;
+                        case 3: cell.addContent(new docx.Paragraph().addRun(new docx.TextRun('Location').size(24).bold())); break;
+                        case 4: cell.addContent(new docx.Paragraph().addRun(new docx.TextRun('Unit Number').size(24).bold())); break;
+                        case 5: cell.addContent(new docx.Paragraph().addRun(new docx.TextRun('Description').size(24).bold())); break;
+                        case 6: cell.addContent(new docx.Paragraph().addRun(new docx.TextRun('Resolved?').size(24).bold())); break;
+                        case 7: cell.addContent(new docx.Paragraph().addRun(new docx.TextRun('Insert Time').size(24).bold())); break;
+                        case 8: cell.addContent(new docx.Paragraph().addRun(new docx.TextRun('Inserted By').size(24).bold())); break;
                     }
                 }
 
@@ -121,11 +121,11 @@ module.exports = {
             //Check if any updated incidents
             let updatedIncidentPara = new docx.Paragraph();
             if (updatedIncidents.length == 0) {
-                updatedIncidentPara.addRun(new docx.TextRun("There are no updated incidents in the past 30 minutes.").bold());
+                updatedIncidentPara.addRun(new docx.TextRun("There are no updated incidents in the past 30 minutes.").size(24).bold());
                 doc.addParagraph(updatedIncidentPara);
             }
             else {
-                updatedIncidentPara.addRun(new docx.TextRun("Updated incidents in the past 30 minutes:").bold());
+                updatedIncidentPara.addRun(new docx.TextRun("Updated incidents in the past 30 minutes:").size(24).bold());
                 doc.addParagraph(updatedIncidentPara);
 
                 var updateIncidentTable = doc.createTable(updatedIncidents.length + 1, 6);
@@ -134,12 +134,12 @@ module.exports = {
                 for (var j = 0; j < 6; j++) {
                     var cell = updateIncidentTable.getCell(0, j);
                     switch (j) {
-                        case 0: cell.addContent(new docx.Paragraph().addRun(new docx.TextRun('Record ID').bold())); break;
-                        case 1: cell.addContent(new docx.Paragraph().addRun(new docx.TextRun('Respondent Type').bold())); break;
-                        case 2: cell.addContent(new docx.Paragraph().addRun(new docx.TextRun('Update Time').bold())); break;
-                        case 3: cell.addContent(new docx.Paragraph().addRun(new docx.TextRun('Updated By').bold())); break;
-                        case 4: cell.addContent(new docx.Paragraph().addRun(new docx.TextRun('Description Update').bold())); break;
-                        case 5: cell.addContent(new docx.Paragraph().addRun(new docx.TextRun('Resolved?').bold())); break;
+                        case 0: cell.addContent(new docx.Paragraph().addRun(new docx.TextRun('Record ID').size(24).bold())); break;
+                        case 1: cell.addContent(new docx.Paragraph().addRun(new docx.TextRun('Respondent Type').size(24).bold())); break;
+                        case 2: cell.addContent(new docx.Paragraph().addRun(new docx.TextRun('Update Time').size(24).bold())); break;
+                        case 3: cell.addContent(new docx.Paragraph().addRun(new docx.TextRun('Updated By').size(24).bold())); break;
+                        case 4: cell.addContent(new docx.Paragraph().addRun(new docx.TextRun('Description Update').size(24).bold())); break;
+                        case 5: cell.addContent(new docx.Paragraph().addRun(new docx.TextRun('Resolved?').size(24).bold())); break;
                     }
                 }
 
@@ -164,11 +164,11 @@ module.exports = {
             //Check if any changed respondents
             let respondentIncidentPara = new docx.Paragraph();
             if (changeRespondent.length == 0) {
-                respondentIncidentPara.addRun(new docx.TextRun("There is no change of respondents in the past 30 minutes.").bold());
+                respondentIncidentPara.addRun(new docx.TextRun("There is no change of respondents in the past 30 minutes.").size(24).bold());
                 doc.addParagraph(respondentIncidentPara);
             }
             else {
-                respondentIncidentPara.addRun(new docx.TextRun("Incidents with Updated Respondent Type(s) in the past 30 minutes:").bold());
+                respondentIncidentPara.addRun(new docx.TextRun("Incidents with Updated Respondent Type(s) in the past 30 minutes:").size(24).bold());
                 doc.addParagraph(respondentIncidentPara);
 
                 var respondentIncidentTable = doc.createTable(changeRespondent.length + 1, 3);
@@ -177,9 +177,9 @@ module.exports = {
                 for (var j = 0; j < 3; j++) {
                     var cell = respondentIncidentTable.getCell(0, j);
                     switch (j) {
-                        case 0: cell.addContent(new docx.Paragraph().addRun(new docx.TextRun('Record ID').bold())); break;
-                        case 1: cell.addContent(new docx.Paragraph().addRun(new docx.TextRun('New Respondent Type').bold())); break;
-                        case 2: cell.addContent(new docx.Paragraph().addRun(new docx.TextRun('Insert Time').bold())); break;
+                        case 0: cell.addContent(new docx.Paragraph().addRun(new docx.TextRun('Record ID').size(24).bold())); break;
+                        case 1: cell.addContent(new docx.Paragraph().addRun(new docx.TextRun('New Respondent Type').size(24).bold())); break;
+                        case 2: cell.addContent(new docx.Paragraph().addRun(new docx.TextRun('Insert Time').size(24).bold())); break;
                     }
                 }
 
@@ -198,48 +198,76 @@ module.exports = {
             doc.addParagraph(blankPara);
 
             //Retrieve key indicators
-            //var keyIndicators = apiDataFetcher.fetchData();
+            var weatherData = {};
+            var weatherCoords = [];
+            console.log('Retrieving key indicators...');
+            var keyIndicators = apiDataFetcher.fetchData();
+            keyIndicators.then((data) => {
+                weatherData = data;
+                for (let i = 0; i < data["area_metadata"].length; i++) {
+                    weatherCoords[i] = data["area_metadata"][i];
+                }
 
-            //Add Key Indicators TODO
-            headingPara = new docx.Paragraph().heading1().left();
-            headingPara.addRun(new docx.TextRun("Key Indicator(s) Summary:").bold());
-            doc.addParagraph(headingPara);
+                //console.log(weatherData);
+                //console.log(weatherCoords[46]["name"] + weatherData['items'][0]['forecasts'][46]['forecast']);
+                console.log('Weather data received!');
 
-            let indicatorPara = new docx.Paragraph();
-            indicatorPara.addRun(new docx.TextRun(""));
-            doc.addParagraph(indicatorPara);
-            doc.addParagraph(blankPara);
+                //Add Key Indicators 
+                headingPara = new docx.Paragraph().heading1().left();
+                headingPara.addRun(new docx.TextRun("Key Indicator(s) Summary:").size(24).bold());
+                doc.addParagraph(headingPara);
 
-            //Add Trend(s) TODO
-            headingPara = new docx.Paragraph().heading1().left();
-            headingPara.addRun(new docx.TextRun("Trend(s) Summary:").bold());
-            doc.addParagraph(headingPara);
+                let weatherPara = new docx.Paragraph();
+                weatherPara.addRun(new docx.TextRun("2-hour Weather Forecasts:").size(24).bold());
+                doc.addParagraph(weatherPara);
 
-            let trendPara = new docx.Paragraph();
-            trendPara.addRun(new docx.TextRun(""));
-            doc.addParagraph(trendPara);
-            doc.addParagraph(blankPara);
+                var weatherTable = doc.createTable(weatherCoords.length + 1, 2);
+                weatherTable.setWidth(WidthType.DXA, 9000);
 
-            //Add Date Time stamp in footer
-            let timestampPara = doc.Footer.createParagraph("Report generated on ").right();
-            timestampPara.addRun(new docx.TextRun(dateTimeGenerator.getDateTimeNow()));
+                for (var j = 0; j < 2; j++) {
+                    var cell = weatherTable.getCell(0, j);
+                    switch (j) {
+                        case 0: cell.addContent(new docx.Paragraph().addRun(new docx.TextRun('Location').size(24).bold())); break;
+                        case 1: cell.addContent(new docx.Paragraph().addRun(new docx.TextRun('2hr Weather Forecast').size(24).bold())); break;
+                    }
+                }
 
-            // Used to export the file into a .docx file
-            console.log('Exporting Document...');
-            let packer = new docx.Packer();
-            try {
-                packer.toBuffer(doc).then((buffer) => {
-                    fs.writeFileSync("Status Summary Report.docx", buffer);
-                });
-                console.log('Document Exported!');
-            }
-            catch (error) {
-                throw error;
-            }
+                for (var i = 0; i < weatherCoords.length; i++) {
+                    for (var j = 0; j < 2; j++) {
+                        cell = weatherTable.getCell(i + 1, j);
+                        switch (j) {
+                            case 0: cell.addContent(new docx.Paragraph(weatherCoords[i]["name"])); break;
+                            case 1: cell.addContent(new docx.Paragraph(weatherData['items'][0]['forecasts'][i]['forecast'])); break;
+                        }
+                    }
+                }
+                var weatherLastUpdate = weatherData['items'][0]['update_timestamp'];
+                weatherLastUpdate = weatherLastUpdate.replace('T', ', ');
+                weatherLastUpdate = weatherLastUpdate.substring(0, weatherLastUpdate.length - 9);
 
+                weatherPara = new docx.Paragraph();
+                weatherPara.addRun(new docx.TextRun("API data last updated on " + weatherLastUpdate).bold());
+                doc.addParagraph(weatherPara);
+                doc.addParagraph(blankPara);
+
+
+                //Add Date Time stamp in footer
+                let timestampPara = doc.Footer.createParagraph("Report generated on ").right();
+                timestampPara.addRun(new docx.TextRun(dateTimeGenerator.getDateTimeNow()));
+
+                // Used to export the file into a .docx file
+                console.log('Exporting Document...');
+                let packer = new docx.Packer();
+                try {
+                    packer.toBuffer(doc).then((buffer) => {
+                        fs.writeFileSync("Status Summary Report.docx", buffer);
+                    });
+                    console.log('Document Exported!');
+                }
+                catch (error) {
+                    throw error;
+                }
+            })
         });
-
-
-
     }
 };

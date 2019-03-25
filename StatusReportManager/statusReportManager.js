@@ -6,7 +6,7 @@ var reportGenerator = require('./reportGenerator.js');
 
 reportGenerator.generateReport();
 
-//cron.schedule('*/30 * * * *', () => {  //EVERY 30 MINS
-cron.schedule('*/10 * * * * *', () => {  //EVERY 10 SECONDS
+cron.schedule('*/30 * * * *', () => {  //EVERY 30 MINS
+//cron.schedule('*/10 * * * * *', () => {  //EVERY 10 SECONDS FOR TESTING
     reportTransmitter.sendEmail();
 });
