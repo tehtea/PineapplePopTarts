@@ -160,7 +160,7 @@ function initMap(){
 
           for (let i=0; i<incidents.length; i++){
             inputs['incident'].push({
-              name: incidents[i]["initDescr"] + ": "+ incidents[i]["address"],
+              name: incidents[i]["initDescr"] + "<br>Address: "+ incidents[i]["address"],
               label_location: {
                 latitude: parseFloat(incidents[i]["lat"]),
                 longitude: parseFloat(incidents[i]["lng"]),
@@ -222,9 +222,11 @@ function initMap(){
         google.maps.event.addListener(marker, 'click', function(){
           //close current window and open another upon clicking marker
           closeCurrentInfoWindow();
-          infoWindow.setContent("[Incident]: " +
-            input["name"]
-          );
+          let content = "[Incident]: " + input["name"] + "<br>Time: " + input["time"] + "<br>";
+          if (input["updDescr"]){
+            content = content + "UPDATE: " + input["updDescr"];
+          }
+          infoWindow.setContent(content);
           infoWindow.open(map, marker);
           currentInfoWindow = infoWindow;
         })
