@@ -1,5 +1,5 @@
 <!--
-   InformationView.html
+   Login.html
    
    Copyright 2019 Jesslyn <jesslyn@jesslyn-XPS-13-9360>
    
@@ -26,40 +26,43 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 
 <head>
-	<title>CMS Information</title>
-	<link href="../CSS/Header.css" rel="stylesheet" style="text/css">
-	<link href="../CSS/Information.css" rel="stylesheet" style="text/css">
-	<script src="../JAVASCRIPT/Apps/node_modules/socket.io/socket.io.js"></script>
-	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+	<title>CMS Login</title>
 	<meta http-equiv="content-type" content="text/html;charset=utf-8" />
 	<meta name="generator" content="Geany 1.32" />
+	<script src="../JAVASCRIPT/Apps/node_modules/socket.io/socket.io.js"></script>
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+	<link href="../CSS/Header.css" rel="Stylesheet" style="text/css">
+	<link href="../CSS/Login.css" rel="Stylesheet" style="text/css">
+	
+	<script src="../JAVASCRIPT/LoginRenderer.js"></script>
+	<script src="../JAVASCRIPT/Account.js"></script>
 </head>
 
 <body>
 	<!--Header for public-->
 	<div class="topnav" id="headerWO">
 		<a href="HomeView.html"><i class="fas fa-home"></i></a>
-		<a href="MapView.html"><i class="far fa-map"></i> Map</a>
+		<a href="../../CrisisMap/MapHTML.html"><i class="far fa-map"></i> Map</a>
 		<div class="dropdown">
 			<button class="dropbtn"><i class="far fa-newspaper"></i> Feed</button>
 			<div class="dropdown-content">
-				<a href="https://twitter.com/PineapplePopta1"><i class="fab fa-twitter-square"></i> Twitter</a>
-				<a href="https://www.facebook.com/Pineapple-Poptarts-Crisis-Management-System-952276371629902/"><i class="fab fa-facebook-square"></i> Facebook</a>
+				<a href="https://twitter.com/Pineapp04967829"><i class="fab fa-twitter-square"></i> Twitter</a>
+				<a href="https://www.facebook.com/Pineapplepoptartscms-262765314600132/"><i class="fab fa-facebook-square"></i> Facebook</a>
 			</div>
 		</div>
-		<a href="LoginView.html" class="right login">Log In</a>
-		<a href="InformationView.html" class="right topnav-active"><i class="fas fa-ellipsis-h"></i></a>
+		<a href="LoginView.html" class="right login topnav-active">Log In</a>
+		<a href="InformationView.html" class="right"><i class="fas fa-ellipsis-h"></i></a>
 	</div>
-
+	
 	<!--Header after login-->
 	<div class="topnav" id="headerW">
 		<a href="HomeView.html"><i class="fas fa-home"></i></a>
-		<a href="MapView.html"><i class="far fa-map"></i> Map</a>
+		<a href="../../CrisisMap/MapHTML.html"><i class="far fa-map"></i> Map</a>
 		<div class="dropdown">
 			<button class="dropbtn"><i class="far fa-newspaper"></i> Feed</button>
 			<div class="dropdown-content">
-				<a href="https://twitter.com/PineapplePopta1"><i class="fab fa-twitter-square"></i> Twitter</a>
-				<a href="https://www.facebook.com/Pineapple-Poptarts-Crisis-Management-System-952276371629902/"><i class="fab fa-facebook-square"></i> Facebook</a>
+				<a href="https://twitter.com/Pineapp04967829"><i class="fab fa-twitter-square"></i> Twitter</a>
+				<a href="https://www.facebook.com/Pineapplepoptartscms-262765314600132/"><i class="fab fa-facebook-square"></i> Facebook</a>
 			</div>
 		</div>
 		<div class="dropdown">
@@ -71,36 +74,32 @@
 		</div>
 		
 		<a href="AccountView.html" class="right"><i class="far fa-user-circle"></i></a>
-		<a href="InformationView.html" class="right topnav-active"><i class="fas fa-ellipsis-h"></i></a>
+		<a href="InformationView.html" class="right"><i class="fas fa-ellipsis-h"></i></a>
 	</div>
 
-	<!--Information-->
-	<div class="information">
-		<h1>Useful Information</h1>
-		<div class="info-1">
-			<img src="../IMG/SCDF.png" class="e-logo"> <br>
-			Fire Engine/Ambulance: 995 <br>
-			Non-Emergency Ambulance: 1777 <br>
-			Fire Hazard Reporting: 1800 280 0000 <br>
-			General Enquiries: 1800 286 5555 
-		</div>
-		<div class="info-1">
-			<img src="../IMG/SPF.jpg" class="e-logo"> <br>
-			Police: 999 <br>
-			Police Hotline: 1800 255 0000 <br>
-			Traffic Poice: 6547 1818
-		</div>
-		<div class="info-2">
-			<h4>Other Contact Details</h4>
-			Dengue Hotline: 1800 933 6483 <br>
-			AVA Hotline: 1800 226 2250 <br>
-			SP PowerGrid: 1800 778 8888 <br>
-			NEA Hotline: 1800 225 5632 <br>
-			Floods or Drain Obstructions: 1800 284 6600 <br> 
+	<div id="no-log-display">
+		<img class="logo" src="../IMG/pineapple.jpg" style="padding-top: 25px"><br>
+		
+		<!--Login textbox-->
+		<div class="loginDiv">
+			<br>
+			<p class="loginTitle">Crisis Management System</h1> <br><br>
 			
+			<form  class="loginDiv-2" name="loginForm" onsubmit="return validateForm()" action="AccountView.html" method="post">
+				<input class="loginInput" type="text" name="userid" placeholder="Username"> <br><br>
+				
+				<input class="loginInput" type="password" name="pw" placeholder="Password"> <br><br>
+				
+				<input class="sButton" type="submit" value="Log In">
+				<p id="errorMsg"><br></p> <br>
+			</form>	
 		</div>
 	</div>
-
+	
+	<div id="content">
+		<h1 style="padding-top:70px">You are already logged in.</h1>
+	</div>
+	
 </body>
 
 <!--Order Matters-->

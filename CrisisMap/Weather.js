@@ -1,18 +1,23 @@
 var io = require('./Apps/node_modules/socket.io').listen(5001);
-var fetch = require('isomorphic-fetch');
+var fetch = require('./Apps/node_modules/isomorphic-fetch');
 
-io.sockets.on('connect', function(socket){
-  console.log("Connected to SRM on port 5001");
+module.exports = {
+	runWeather: async function() {
+		console.log("Weather.js is running.");
 
-  socket.on('apiRequest', function(){
-    fetch("https://api.data.gov.sg/v1/environment/2-hour-weather-forecast").then(response => {
-      return response.json();
-    }).then(data => {
-      socket.emit('apiRequestDone', data);
-    });
-  });
-});
+		io.sockets.on('connect', function(socket){
+		  console.log("Connected to SRM on port 5001");
 
+		  socket.on('apiRequest', function(){
+			fetch("https://api.data.gov.sg/v1/environment/2-hour-weather-forecast").then(response => {
+			  return response.json();
+			}).then(data => {
+			  socket.emit('apiRequestDone', data);
+			});
+		  });
+		});
+	}
+}
 function getData(){
     //alert('ajax');
 

@@ -1,5 +1,5 @@
 <!--
-   UpdateFormView.html
+   FormView.html
    
    Copyright 2019 Jesslyn <jesslyn@jesslyn-XPS-13-9360>
    
@@ -25,31 +25,35 @@
 	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 
+<script src="../JAVASCRIPT/FormRenderer.js"></script>
+
 <head>
-	<title>CMS Update Incident Report Form</title>
-	<link href="../CSS/Successful.css" rel="Stylesheet" style="text/css">
+	<title>CMS Incident Report Form</title>
 	<link href="../CSS/Header.css" rel="stylesheet" style="text/css">
 	<link href="../CSS/Form.css" rel="stylesheet" style="text/css">
-	<link href="../CSS/Successful.css" rel="Stylesheet" style="text/css">
+	<link href="../CSS/Successful.css" rel="stylesheet" style="text/css">
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 	<meta http-equiv="content-type" content="text/html;charset=utf-8" />
 	<meta name="generator" content="Geany 1.32" />
 	
 	<script src="../JAVASCRIPT/Apps/node_modules/socket.io/socket.io.js"></script>
+	<script src="https://ajax.googl	eapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<script src="../JAVASCRIPT/UpdateIncident.js"></script>
+	<script src="../JAVASCRIPT/NewIncident.js"></script>
 	<script src="../JAVASCRIPT/FormManager.js"></script>
+	<script src="../JAVASCRIPT/FormRenderer.js"></script>
 </head>
 
 <body>
 	<!--Header after login-->
 	<div class="topnav" id="headerW">
 		<a href="HomeView.html"><i class="fas fa-home"></i></a>
-		<a href="MapView.html"><i class="far fa-map"></i> Map</a>
+		<a href="../../CrisisMap/MapHTML.html"><i class="far fa-map"></i> Map</a>
 		<div class="dropdown">
 			<button class="dropbtn"><i class="far fa-newspaper"></i> Feed</button>
 			<div class="dropdown-content">
-				<a href="https://twitter.com/PineapplePopta1"><i class="fab fa-twitter-square"></i> Twitter</a>
-				<a href="https://www.facebook.com/Pineapple-Poptarts-Crisis-Management-System-952276371629902/"><i class="fab fa-facebook-square"></i> Facebook</a>
+				<a href="https://twitter.com/Pineapp04967829"><i class="fab fa-twitter-square"></i> Twitter</a>
+				<a href="https://www.facebook.com/Pineapplepoptartscms-262765314600132/"><i class="fab fa-facebook-square"></i> Facebook</a>
 			</div>
 		</div>
 		<div class="dropdown topnav-active">
@@ -63,92 +67,86 @@
 		<a href="AccountView.html" class="right"><i class="far fa-user-circle"></i></a>
 		<a href="InformationView.html" class="right"><i class="fas fa-ellipsis-h"></i></a>
 	</div>
-	
+
 	<!--Header without login-->
 	<div class="topnav" id="headerWO">
 		<a href="HomeView.html"><i class="fas fa-home"></i></a>
-		<a href="MapView.html"><i class="far fa-map"></i> Map</a>
+		<a href="../../CrisisMap/MapHTML.html"><i class="far fa-map"></i> Map</a>
 		<div class="dropdown">
 			<button class="dropbtn"><i class="far fa-newspaper"></i> Feed</button>
 			<div class="dropdown-content">
-				<a href="https://twitter.com/PineapplePopta1"><i class="fab fa-twitter-square"></i> Twitter</a>
-				<a href="https://www.facebook.com/Pineapple-Poptarts-Crisis-Management-System-952276371629902/"><i class="fab fa-facebook-square"></i> Facebook</a>
+				<a href="https://twitter.com/Pineapp04967829"><i class="fab fa-twitter-square"></i> Twitter</a>
+				<a href="https://www.facebook.com/Pineapplepoptartscms-262765314600132/"><i class="fab fa-facebook-square"></i> Facebook</a>
 			</div>
 		</div>
 		<a href="LoginView.html" class="right login">Log In</a>
 		<a href="InformationView.html" class="right"><i class="fas fa-ellipsis-h"></i></a>
 	</div>
-	
-	<!--View if not logged in-->
-	<div id="no-log-display">
-		<h1 style="padding-top:70px">Please log in to view this page.</h1>
-	</div>
 
 	<div id="content">
-		<!--Update Form-->
-		<form class="form" name="updateIncidentForm" onsubmit="return false" method="post" action="SuccessfulUpdateView.html">
+		<!-- Require to get name, mobile, location, assistance type, description-->
+		<form class="form" name="incidentForm" onsubmit="return formSubmission()" method="post" action="SuccessfulNewView.html">
 			<fieldset>
-				<legend class="formTitle">Update Incident</legend>
-				Please input the updates on the incident. <br><br>
-				Record ID: <i id="textRecord"></i><br>
-				Description: <i id="textDescr"></i><br>
+				<legend class="formTitle">Incident Reporting</legend>
+				Please input the details of the incident.
 				
-				<div id="section-2" style="display:none">
-					<div class="c1">	
+				<div class="c1">
+					<div class="c2">
+						<input class="inputBox" type="text" name="name" placeholder="Name of Reporter">
+						<span id="e-name"></span> <br><br>
+						<input class="inputBox" type="tel" name="mobileNumber" placeholder="Mobile Number">
+						<span id="e-mobileNumber"></span> <br><br>
+						<input class="inputBox" type="tel" name="postalCode" placeholder="Postal Code">
+						<span id="e-postalCode"></span> <br><br>
+						<input class="inputBox" type="text" name="building" placeholder="Floor/Unit Number (Optional)">
+						<br><br>
+					</div>
+				
+					<div class="c1">
+						<p><strong>Select Respondent(s):</strong>
+						<span id="e-respondent"></span>	
 						<div class="c2">
-							<p><strong>Respondent making the report:</strong></p>
-							<span id="e-respondentR"></span> <br>
-							<select name="respondentReporting" id="respondentReportingList">
-							</select>
-						</div>
-						
-						<div class="c2">
-							<p><strong>Add More Respondent(s):</strong>
-							<span id="e-respondent"></span>	
-							<br><br>
 							<input type="checkbox" name="respondent" value="Emergency Ambulance">Emergency Ambulance<br>
 							<input type="checkbox" name="respondent" value="Rescue and Evacuation">Rescue and Evacuation<br>
 							<input type="checkbox" name="respondent" value="Fire-Fighting">Fire-Fighting<br>
 							<input type="checkbox" name="respondent" value="Gas Leak Control">Gas Leak Control<br>
 							<input type="checkbox" name="respondent" value="Animal Control">Animal Control<br>
-							<br>
+						</div>
+						<div class="c2">
 							<input type="checkbox" name="respondent" value="Counter Terrorism">Counter Terrorism<br>
 							<input type="checkbox" name="respondent" value="Cyber Security">Cyber Security<br>
 							<input type="checkbox" name="respondent" value="Disease Outbreak Control">Disease Outbreak Control<br>
 							<input type="checkbox" name="respondent" value="Flood Control">Flood Control<br>
 							<input type="checkbox" name="respondent" value="Police Force">Police Force<br>
 							<br>
-						</div>
+						</div>						
 					</div>
-								
-					<textarea class="dBox" name="description" placeholder="Incident Update (max. 200 characters)"></textarea>
-					<span id="e-description"></span> <br>
-					
-					<input class="sButton" type="submit" onclick="return formSubmission()" value="Submit update">
-					<input class="sButton" type="submit" onclick="return resolveSubmission()" value="Resolve"> <span id="errorMsg"></span>
-					<button class="sButton" id="backButton" onclick="returnSection1()">Back</button>
+				
 				</div>
+							
+				<textarea class="dBox" name="description" placeholder="Description of incident (max. 200 characters)"></textarea>
+				<span id="e-description"></span> <br>
+				
+				<input class="sButton" type="submit" value="Submit report"> <span id="errorMsg"></span>
 			</fieldset>
 		</form>
-		<!--To retrieve previous information of report-->
-		<div class="c1" id="section-1">
-			<select name="incident" id="incidentList">
-			</select>
-			<button class="sButton" onclick="confirmRecordID()">Retrieve</button>
-		</div>
 	</div>
 	
 	<div class="content" id="complete" style="display:none">
 		<i class="fas fa-check-circle"></i> <br><br><br>
-		<h1 class="t1">Report Update Successfully!</h1> <br><br>
+		<h1 class="t1">Report (ID:<i id="recordID"></i>) Submitted Successfully!</h1> <br><br>
 		<a href="HomeView.html">Back to Main Page</a>
 	</div>
-	
+
+	<!--View if not logged in-->
+	<div id="no-log-display">
+		<h1 style="padding-top:70px">Please log in to view this page.</h1>
+	</div>
+
 </body>
 
 <!--Order Matters-->
 <script src="../JAVASCRIPT/CallCenterOperatorFacade.js"></script>
 <script src="../JAVASCRIPT/ContentValidation.js"></script>
-	<script src="../JAVASCRIPT/UpdateFormRenderer.js"></script>
 
 </html>

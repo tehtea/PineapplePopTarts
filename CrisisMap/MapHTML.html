@@ -5,13 +5,54 @@
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<link href="../CallCenterOperatorInterface/CSS/Header.css" rel="stylesheet" style="text/css">
 		<link href="MapCSS.css" rel="stylesheet" style="text/css">
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 		<script src="./Apps/node_modules/socket.io/socket.io.js"></script>
 		<script src="Map.js"></script>
 		<title>Crisis Map</title>
 	</head>
 
 	<body>
+	<!--Header for public-->
+	<div class="topnav" id="headerWO">
+		<a href="../CallCenterOperatorInterface/HTML/HomeView.html"><i class="fas fa-home"></i></a>
+		<a href="MapHTML.html" class="topnav-active"><i class="far fa-map"></i> Map</a>
+		<div class="dropdown">
+			<button class="dropbtn"><i class="far fa-newspaper"></i> Feed</button>
+			<div class="dropdown-content">
+				<a href="https://twitter.com/Pineapp04967829"><i class="fab fa-twitter-square"></i> Twitter</a>
+				<a href="https://www.facebook.com/Pineapplepoptartscms-262765314600132/"><i class="fab fa-facebook-square"></i> Facebook</a>
+			</div>
+		</div>
+		<a href="../CallCenterOperatorInterface/HTML/LoginView.html" class="right login">Log In</a>
+		<a href="../CallCenterOperatorInterface/HTML/InformationView.html" class="right"><i class="fas fa-ellipsis-h"></i></a>
+	</div>
+
+	<!--Header after login-->
+	<div class="topnav" id="headerW">
+		<a href="../CallCenterOperatorInterface/HTML/HomeView.html"><i class="fas fa-home"></i></a>
+		<a href="MapHTML.html" class="topnav-active"><i class="far fa-map"></i> Map</a>
+		<div class="dropdown">
+			<button class="dropbtn"><i class="far fa-newspaper"></i> Feed</button>
+			<div class="dropdown-content">
+				<a href="https://twitter.com/Pineapp04967829"><i class="fab fa-twitter-square"></i> Twitter</a>
+				<a href="https://www.facebook.com/Pineapplepoptartscms-262765314600132/"><i class="fab fa-facebook-square"></i> Facebook</a>
+			</div>
+		</div>
+		<div class="dropdown">
+			<button class="dropbtn"><i class="fas fa-exclamation-circle"></i> Incident Reporting</button>
+			<div class="dropdown-content">
+				<a href="../CallCenterOperatorInterface/HTML/FormView.html">Create New Incident</a>
+				<a href="../CallCenterOperatorInterface/HTML/UpdateFormView.html">Update Incident</a>
+			</div>
+		</div>
+		
+		<a href="../CallCenterOperatorInterface/HTML/AccountView.html" class="right"><i class="far fa-user-circle"></i></a>
+		<a href="../CallCenterOperatorInterface/HTML/InformationView.html" class="right"><i class="fas fa-ellipsis-h"></i></a>
+	</div>
+	
+	
 		<h1>Crisis Map System</h1>
 		<div id="map"></div>
 		<script src="Toggle.js"></script>
@@ -50,5 +91,9 @@
 			</label>
 		</form>
 	</body>
+
+<!--Order Matters-->
+<script src="../CallCenterOperatorInterface/JAVASCRIPT/CallCenterOperatorFacade.js"></script>
+<script src="../CallCenterOperatorInterface/JAVASCRIPT/ContentValidation.js"></script>
 
 </html>

@@ -293,6 +293,156 @@ module.exports = {
 				reject(err);
 			});
 		});
+	},
+	
+	// Data retrieval for Status Report Manager 
+	getRecentNewIncident: function() {
+		return new Promise(function(resolve, reject) {
+			// Connect to DB
+			var conn = new sql.ConnectionPool(config);
+			var req = new sql.Request(conn);
+	conn.connect().then(function () {
+				// Query DB
+				req.query("SELECT * FROM NewIncident \
+							WHERE InsTime > DateADD(mi, -30, Current_TimeStamp)").then(function (recordset) {
+					conn.close();
+					resolve(recordset.recordset);
+				})
+				.catch(function (err) {
+					console.log(err);
+					conn.close();
+					reject(err);
+				});
+			})
+			.catch(function (err) {
+				console.log(err);
+				reject(err);
+			});
+		});
+	},
+	getRecentUpdateIncident: () => {
+		return new Promise(function(resolve, reject) {
+			// Connect to DB
+			var conn = new sql.ConnectionPool(config);
+			var req = new sql.Request(conn);
+	
+			conn.connect().then(function () {
+				// Query DB
+				req.query("SELECT * FROM UpdateIncident \
+							WHERE UpdTime > DateADD(mi, -30, Current_TimeStamp)").then(function (recordset) {
+					conn.close();
+					resolve(recordset.recordset);
+				})
+				.catch(function (err) {
+					console.log(err);
+					conn.close();
+					reject(err);
+				});
+			})
+			.catch(function (err) {
+				console.log(err);
+				reject(err);
+			});
+		});
+	},
+	getRecentRespondentRequested: () => {
+		return new Promise(function(resolve, reject) {
+			// Connect to DB
+			var conn = new sql.ConnectionPool(config);
+			var req = new sql.Request(conn);
+	
+			conn.connect().then(function () {
+				// Query DB
+				req.query("SELECT * FROM RespondentRequest \
+							WHERE InsTime > DateADD(mi, -30, Current_TimeStamp)").then(function (recordset) {
+					conn.close();
+					resolve(recordset.recordset);
+				})
+				.catch(function (err) {
+					console.log(err);
+					conn.close();
+					reject(err);
+				});
+			})
+			.catch(function (err) {
+				console.log(err);
+				reject(err);
+			});
+		});
+	},
+	
+	// Data Retrieval for Crisis Map
+	getAllNewIncident: () => {
+		return new Promise(function(resolve, reject) {
+			// Connect to DB
+			var conn = new sql.ConnectionPool(config);
+			var req = new sql.Request(conn);
+	
+			conn.connect().then(function () {
+				// Query DB
+				req.query("SELECT * FROM NewIncident").then(function (recordset) {
+					conn.close();
+					resolve(recordset.recordset);
+				})
+				.catch(function (err) {
+					console.log(err);
+					conn.close();
+					reject(err);
+				});
+			})
+			.catch(function (err) {
+				console.log(err);
+				reject(err);
+			});
+		});
+	},
+	getAllUpdateIncident: () => {
+		return new Promise(function(resolve, reject) {
+			// Connect to DB
+			var conn = new sql.ConnectionPool(config);
+			var req = new sql.Request(conn);
+	
+			conn.connect().then(function () {
+				// Query DB
+				req.query("SELECT * FROM UpdateIncident").then(function (recordset) {
+					conn.close();
+					resolve(recordset.recordset);
+				})
+				.catch(function (err) {
+					console.log(err);
+					conn.close();
+					reject(err);
+				});
+			})
+			.catch(function (err) {
+				console.log(err);
+				reject(err);
+			});
+		});
+	},
+	getAllRespondentRequested: () => {
+		return new Promise(function(resolve, reject) {
+			// Connect to DB
+			var conn = new sql.ConnectionPool(config);
+			var req = new sql.Request(conn);
+	
+			conn.connect().then(function () {
+				// Query DB
+				req.query("SELECT * FROM RespondentRequest").then(function (recordset) {
+					conn.close();
+					resolve(recordset.recordset);
+				})
+				.catch(function (err) {
+					console.log(err);
+					conn.close();
+					reject(err);
+				});
+			})
+			.catch(function (err) {
+				console.log(err);
+				reject(err);
+			});
+		});
 	}
 }
 

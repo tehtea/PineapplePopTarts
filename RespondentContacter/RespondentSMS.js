@@ -8,42 +8,47 @@ var client = new twilio(accountSid, authToken);
 var socket = require('./Apps/node_modules/socket.io'); // Import socket.io libraries 
 var io = socket.listen(4000); // Make the server listen to messages on port 4000
 
-io.on('connection', (socket) =>{
+module.exports = {
+	runSMS: async function(acc) {
+		io.on('connection', (socket) =>{
 
-    console.log('connected:', socket.client.id);
+			console.log('connected:', socket.client.id);
 
-    /*socket.on('serverEvent', data =>{
-        console.log('new messsage from client' , data);
-    });*/
-	
-    socket.on('newIncidentSendSMS', (newInc)=>{		
-		for (var res of newInc.respondentRequested) {
-			// Extract information
-			var respondentContact = getRespondentContact(res);
-			var recordID = newInc.recordID;
-			var descr = newInc.descr;
-			var time = newInc.insTime;
-			var address = newInc.address;
-			var unitNum = newInc.unitNum;
-		
-			messageSend(recordID, descr, time, address, unitNum, respondentContact);    
-		}
-    });
-	
-	socket.on('updateIncidentSendSMS', (reportData)=>{
-		for (var res of reportData.updateInc.respondentRequested) {
-			// Extract information
-			var respondentContact = getRespondentContact(res);
-			var recordID = reportData.updateInc.recordID;
-			var descr = reportData.updateInc.updateDescr;
-			var time = reportData.updateInc.updateTime;
-			var address = reportData.newInc.Location;
-			var unitNum = reportData.newInc.UnitNum;
+			/*socket.on('serverEvent', data =>{
+				console.log('new messsage from client' , data);
+			});*/
 			
-			messageSend(recordID, descr, time, address, unitNum, respondentContact);
-		}
-	});
-});
+			socket.on('newIncidentSendSMS', (newInc)=>{		
+				for (var res of newInc.respondentRequested) {
+					// Extract information
+					var respondentContact = getRespondentContact(res);
+					var recordID = newInc.recordID;
+					var descr = newInc.descr;
+					var time = newInc.insTime;
+					var address = newInc.address;
+					var unitNum = newInc.unitNum;
+				
+					messageSend(recordID, descr, time, address, unitNum, respondentContact);    
+				}
+			});
+			
+			socket.on('updateIncidentSendSMS', (reportData)=>{
+				for (var res of reportData.updateInc.respondentRequested) {
+					// Extract information
+					var respondentContact = getRespondentContact(res);
+					var recordID = reportData.updateInc.recordID;
+					var descr = reportData.updateInc.updateDescr;
+					var time = reportData.updateInc.updateTime;
+					var address = reportData.newInc.Location;
+					var unitNum = reportData.newInc.UnitNum;
+					
+					messageSend(recordID, descr, time, address, unitNum, respondentContact);
+				}
+			});
+		});
+
+	}
+}
 
 function messageSend(recordID, descr, time, address, unitNum, respondentContact) {
 	//Creating and sending message to desired telephone number (Respondents)

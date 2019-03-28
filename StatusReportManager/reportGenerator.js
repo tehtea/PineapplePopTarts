@@ -17,24 +17,14 @@ module.exports = {
             var newIncidents = [], updatedIncidents = [], changeRespondent = [];
             var incidents = keyIncidentFetcher.fetchIncidents();
             incidents.then((result) => {
-                var dateTime;
-                var curDate = new Date();
-                var pastDate = new Date(curDate - (30 * 60000));
-
-                for (var i = 0; i < result[0].length; i++) {
-                    dateTime = result[0][i].InsTime;
-                    if (dateTime >= pastDate)
-                        newIncidents[i] = new NewIncident(result[0][i].RecordID, result[0][i].Name, result[0][i].Contact, result[0][i].Location, result[0][i].UnitNum, result[0][i].Descr, result[0][i].Resolved, result[0][i].InsTime, result[0][i].InsName);
+				for (var i = 0; i < result[0].length; i++) {
+					newIncidents[i] = new NewIncident(result[0][i].RecordID, result[0][i].Name, result[0][i].Contact, result[0][i].Location, result[0][i].UnitNum, result[0][i].Descr, result[0][i].Resolved, result[0][i].InsTime, result[0][i].InsName);
                 }
                 for (var i = 0; i < result[1].length; i++) {
-                    dateTime = result[1][i].UpdTime;
-                    if (dateTime >= pastDate)
-                        updatedIncidents[i] = new UpdatedIncident(result[1][i].RecordID, result[1][i].Respondent, result[1][i].UpdTime, result[1][i].UpdName, result[1][i].Descr);
+                    updatedIncidents[i] = new UpdatedIncident(result[1][i].RecordID, result[1][i].Respondent, result[1][i].UpdTime, result[1][i].UpdName, result[1][i].Descr);
                 }
                 for (var i = 0; i < result[2].length; i++) {
-                    dateTime = result[2][i].InsTime;
-                    if (dateTime >= pastDate)
-                        changeRespondent[i] = new ChangeRespondent(result[2][i].RecordID, result[2][i].Respondent, result[2][i].InsTime);
+                    changeRespondent[i] = new ChangeRespondent(result[2][i].RecordID, result[2][i].Respondent, result[2][i].InsTime);
                 }
                 console.log('Incidents fetched!');
 
@@ -262,9 +252,9 @@ module.exports = {
                     try {
                         packer.toBuffer(doc).then((buffer) => {
                             fs.writeFileSync("Status Summary Report.docx", buffer);
+							console.log('Document Exported!');
+							resolve(true);
                         });
-                        console.log('Document Exported!');
-                        resolve(true);
                     }
                     catch (error) {
                         throw error;

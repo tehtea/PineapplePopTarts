@@ -88,7 +88,10 @@ function incidentDataProcessing(data) {
 			unitNum = newInc[i].UnitNum;
 			initDescr = newInc[i].Descr;
 			updDescr = "";
-			time = newInc[i].InsTime;
+			// Format Time
+			var date= new Date(newInc[i].UpdTime);
+			date.setHours(date.getHours() - 8);
+			var time = date.toString().slice(4,24);
 
 			// Find any update incident for that recordID
 			for (var j = 0; j < updInc.length; j++) {
@@ -136,9 +139,3 @@ function getCoor(postalCode) {
 		});
 	});
 }
-
-var test = getCoor(416729);
-test.then((result) => {
-	// Insert code here
-	console.log(result);
-});
