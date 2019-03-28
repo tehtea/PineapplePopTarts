@@ -65,7 +65,6 @@ module.exports = {
                     doc.addParagraph(newIncidentPara);
                 }
                 else {
-
                     newIncidentPara.addRun(new docx.TextRun("New incidents in the past 30 minutes:").size(24).bold());
                     doc.addParagraph(newIncidentPara);
 
@@ -254,9 +253,10 @@ module.exports = {
                             fs.writeFileSync("Status Summary Report.docx", buffer);
 							console.log('Document Exported!');
 							resolve(true);
-                        });
+						});
                     }
                     catch (error) {
+						console.log(error);
                         throw error;
                     }
                 })
