@@ -12,3 +12,9 @@ npm install
 cd ..
 cd ./Web/JAVASCRIPT/CCO/Apps
 npm install
+cd ..
+cd ..
+cd ..
+cd ..
+cd ./Web/JAVASCRIPT/Map/Apps
+npm install

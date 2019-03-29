@@ -24,7 +24,7 @@ module.exports = {
       attachments: [
         {
           filename: "Status Summary Report.docx",
-          path: __dirname + '\\Status Summary Report.docx'
+          path: __dirname + '/Status Summary Report.docx'
         }
       ]
     };
