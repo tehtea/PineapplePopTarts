@@ -9,7 +9,7 @@ var socket = require('./Apps/node_modules/socket.io'); // Import socket.io libra
 var io = socket.listen(4000); // Make the server listen to messages on port 4000
 
 module.exports = {
-	runSMS: async function(acc) {
+	runSMS: async function() {
 		io.on('connection', (socket) =>{
 
 			console.log('connected:', socket.client.id);

@@ -1,0 +1,14 @@
+cd ./RespondentContacter/Apps
+npm install
+cd ..
+cd ..
+cd ./SocialMediaUpdater/Apps
+npm install
+cd ..
+npm install
+cd ..
+cd ./StatusReportManager
+npm install
+cd ..
+cd ./Web/JAVASCRIPT/CCO/Apps
+npm install
