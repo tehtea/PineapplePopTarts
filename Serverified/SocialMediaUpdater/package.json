@@ -1,8 +1,8 @@
 {
-  "name": "test-facebook-from-scratch",
+  "name": "social-media-updater",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "SocialMedia.js",
   "scripts": {
     "test": "mocha",
     "start": "node SocialMedia"
