@@ -11,9 +11,9 @@ module.exports = {
 		cron.schedule('*/30 * * * *', () => {  //EVERY 30 MINS (XX:00 & XX:30)
 		//cron.schedule('*/10 * * * * *', () => {  //EVERY 10 SECONDS FOR TESTING
 			reportGenerated = reportGenerator.generateReport();
-/* 			reportGenerated.then(() => {
+  			reportGenerated.then(() => {
 				reportTransmitter.sendEmail();
-			}); */
+			});  
 		});
 	}
 }

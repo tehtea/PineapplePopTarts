@@ -1,15 +1,16 @@
 var Database = require("./CallCenterOperatorInterface/JAVASCRIPT/DatabaseManager.js");
-var SocialMedia = require("./SocialMediaUpdater/SocialMedia.js");
+//var SocialMedia = require("./SocialMediaUpdater/SocialMedia.js");
 //var SMS = require("./RespondentContacter/RespondentSMS.js");
-var StatusReport = require("./StatusReportManager/statusReportManager.js");
+//var StatusReport = require("./StatusReportManager/statusReportManager.js");
 var CrisisMap = require("./CrisisMap/CM.js");
-var Weather = require("./CrisisMap/Weather.js");
+//var Weather = require("./CrisisMap/Weather.js");
 
-SocialMedia.runSocialMedia();
+//SocialMedia.runSocialMedia();
 //SMS.runSMS();
+CrisisMap.runMap();
 Database.runDatabase();
-Weather.runWeather();
-StatusReport.runStatusReport();
+//Weather.runWeather();
+//StatusReport.runStatusReport();
 
 
 

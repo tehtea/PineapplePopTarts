@@ -148,13 +148,13 @@ function initMap(){
 
   function retrieveData(){
     return new Promise((resolve, reject) => {
-      var socket = io.connect('http://localhost:3333');
+      var socket = io.connect('http://localhost:3000');
 
       socket.on('connect', function(){
-        console.log("received connection on port 3333 from Map.js");
-        socket.on('incidents', function(result){ //runs each time theres an update (polls for 'incidents' and refreshes all data)
-
-          //get incident data
+        console.log("received connection on port 3000 from Map.js");
+        socket.on('cmRequestDone', function(result){ //runs each time theres an update (polls for 'incidents' and refreshes all data)
+          console.log(result);
+		  //get incident data
           var incidents;
           incidents = result;
 
@@ -222,7 +222,7 @@ function initMap(){
         google.maps.event.addListener(marker, 'click', function(){
           //close current window and open another upon clicking marker
           closeCurrentInfoWindow();
-          let content = "[Incident]: " + input["name"] + "<br>Time: " + input["time"] + "<br>";
+          let content = "[Incident]: " + input["name"] + "<br>Latest update: " + input["updates"] + "<br>Time: " + input["time"] + "<br>";
           if (input["updDescr"]){
             content = content + "UPDATE: " + input["updDescr"];
           }

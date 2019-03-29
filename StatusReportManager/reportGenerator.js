@@ -250,7 +250,7 @@ module.exports = {
                     let packer = new docx.Packer();
                     try {
                         packer.toBuffer(doc).then((buffer) => {
-                            fs.writeFileSync("Status Summary Report.docx", buffer);
+                            fs.writeFileSync("./StatusReportManager/Status Summary Report.docx", buffer);
 							console.log('Document Exported!');
 							resolve(true);
 						});
