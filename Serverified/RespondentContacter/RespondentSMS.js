@@ -55,6 +55,8 @@ module.exports = {
 function messageSend(recordID, descr, time, address, unitNum, respondentContact) {
 	//Creating and sending message to desired telephone number (Respondents)
 	const message = 'record ID: ' + recordID + ', "' + descr + '" reported on ' + time + '. Require assistance at S' + address + ' ' + unitNum;		// report message
+	
+	// add a debug mode
 	if (!debugMode) {
 
 		client.messages.create({
