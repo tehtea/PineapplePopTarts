@@ -1,7 +1,7 @@
 var io = require('./Apps/node_modules/socket.io-client');
 
 // SMS Server
-var SOCIALMEDIA_SERVER = 'http://localhost:5050';
+var SOCIALMEDIA_SERVER = 'http://172.21.146.196:5050';
 var socialMediaSocket = io.connect(SOCIALMEDIA_SERVER);
 
 module.exports = {	

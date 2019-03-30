@@ -1,7 +1,7 @@
 var io = require('./Apps/node_modules/socket.io-client');
 
 // SMS Server
-var SMS_SERVER = 'http://localhost:4000';
+var SMS_SERVER = 'http://172.21.146.196:4000';
 var smsSocket = io.connect(SMS_SERVER);
 
 module.exports = {
