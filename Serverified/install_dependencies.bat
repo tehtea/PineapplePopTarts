@@ -30,3 +30,7 @@ cd ..
 cd ..
 cd ./Web/JAVASCRIPT/Map/Apps
 npm install
+cd ..
+cd ..
+cd ..
+npm install
