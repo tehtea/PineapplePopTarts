@@ -1,5 +1,5 @@
 // Design pattern - facade for call center operator subsystem
-const DATABASE_SERVER = 'http://localhost:5000';
+const DATABASE_SERVER = 'http://172.21.146.196:5000';
 var socket = io.connect(DATABASE_SERVER);
 
 // AccountDetailsRenderer, ContentValidation, FormManager

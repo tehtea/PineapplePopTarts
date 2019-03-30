@@ -148,7 +148,7 @@ function initMap(){
 
   function retrieveData(){
     return new Promise((resolve, reject) => {
-      var socket = io.connect('http://localhost:3000');
+      var socket = io.connect('http://172.21.146.196:3000');
 
       socket.on('connect', function(){
         console.log("received connection on port 3000 from Map.js");
