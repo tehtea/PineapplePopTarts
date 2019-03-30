@@ -5,6 +5,8 @@ var authToken = 'f6f83688de9131c8d077a818071b960e';
 var twilio = require('./Apps/node_modules/twilio'); //Import Twilio library
 var client = new twilio(accountSid, authToken);
 
+var debugMode = true; // if debug mode is true, don't send SMS but just console log. Conserve consumption of API credits.
+
 var socket = require('./Apps/node_modules/socket.io'); // Import socket.io libraries 
 var io = socket.listen(4000); // Make the server listen to messages on port 4000
 
@@ -52,11 +54,21 @@ module.exports = {
 
 function messageSend(recordID, descr, time, address, unitNum, respondentContact) {
 	//Creating and sending message to desired telephone number (Respondents)
-	client.messages.create({
-	body: 'record ID: ' + recordID + ', "' + descr + '" reported on ' + time + '. Require assistance at S' + address + ' ' + unitNum,		// report message
-	to: respondentContact,  // Text this number (reportdata.respondentcontactinfo)
-	from: '+19733588619' // From a valid Twilio number
-	}).then((message) => console.log(message.sid));    
+	const message = 'record ID: ' + recordID + ', "' + descr + '" reported on ' + time + '. Require assistance at S' + address + ' ' + unitNum;		// report message
+	if (!debugMode) {
+
+		client.messages.create({
+			body: message,
+			to: respondentContact,  // Text this number (reportdata.respondentcontactinfo)
+			from: '+19733588619' // From a valid Twilio number
+			}).then((message) => console.log(message.sid));   
+
+	} else {
+
+		// don't send out message if using debug mode
+		console.log(`Message: "${message}" send to Number: ${respondentContact}`);
+
+	}
 }
 
 function getRespondentContact(res) {
