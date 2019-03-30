@@ -84,12 +84,16 @@ async function incidentDataProcessing(data) {
 	}
 
 	var coordsInfo = [];
-	var z;
+	// var z;
 	for (let i=0; i<postalCodes.length; i++){
 		z = await getCoor(postalCodes[i]);
-		result[i]["address"] = z["ADDRESS"];
-		result[i]["lat"] = z["LATITUDE"];
-		result[i]["lng"] = z["LONGITUDE"];
+		// check if z is defined first. If z is not defined and we try and access it, the subsystem will crash.
+		if (z)
+		{
+			result[i]["address"] = z["ADDRESS"];
+			result[i]["lat"] = z["LATITUDE"];
+			result[i]["lng"] = z["LONGITUDE"];
+		}
 	}		
 	
     return result;
