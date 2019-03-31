@@ -305,7 +305,6 @@ module.exports = {
 				// Query DB
 				req.query("SELECT * FROM NewIncident \
 							WHERE InsTime > DateADD(mi, -30, Current_TimeStamp)").then(function (recordset) {
-					console.log(`From DatabaseRetriever.js: ${recordset}`);
 					conn.close();
 					resolve(recordset.recordset);
 				})

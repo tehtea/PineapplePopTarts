@@ -4,7 +4,7 @@
   "description": "",
   "main": "SocialMedia.js",
   "scripts": {
-    "test": "nyc mocha --timeout=3000",
+    "test": "mocha",
     "start": "node SocialMedia"
   },
   "author": "",
@@ -15,7 +15,6 @@
     "twit": "^2.2.11"
   },
   "devDependencies": {
-    "mocha": "^6.0.2",
-    "nyc": "^13.3.0"
+    "mocha": "^6.0.2"
   }
 }
