@@ -10,46 +10,67 @@ const facebookConfig  = require('../facebookConfig');
 
 describe('facebookPoster', function() {
   
-    describe('#postOnPage', function() {
-it('should return HTTP status code 200 when the post is successful. \
-If post is unsuccessful, the only acceptable status code should be 400 \
-which means that the post is a duplicate of a recent one previously posted.', function() {
+    describe('#postUniqueMessageOnPage', function() {
+it('should return HTTP status code 200 when the post is successful.', function() {
 
           var promiseFromPost = facebookPoster.postOnPage(facebookConfig.PAGE_ID, 
-            "Another huge explosion in Nanyang Technological\
-            University's School of Computer Science\
-              and Engineering reported on 17/3/19 at 13:50",
+            `Test post performed at time: ${new Date().getTime()}`,
               facebookConfig.pageAccessToken);
 
           promiseFromPost.then(function(statusCode) {
             assert.equal(statusCode, 200);
           }).catch(function(statusCode) {
-            assert.equal(statusCode, 400);
+            assert.fail(`Failed to post, returned with HTTP status code: ${statusCode}`);
           })
         });
     });
+
+    describe('#invalidToken', function() {
+      it('should not return HTTP status code 200 when an invalid access token is provided', function() {
+        var promiseFromPost = facebookPoster.postOnPage(facebookConfig.PAGE_ID, 
+          `Test post performed at time: ${new Date().getTime()}`,
+            '29126');
+            promiseFromPost.then(function(statusCode) {
+              assert.notEqual(statusCode, 200);
+            }).catch(function (statusCode) {
+              assert.ok("Post was unsuccessful");
+            });
+      })
+    })
 
 });
 
 describe('tweeter', function() {
 
-  describe('#postTweet', function() {
-it('should return HTTP status code 200 when the post is successful. \
-If post is unsuccessful, the only acceptable status code should be 403 \
-which means that the tweet is a duplicate of a recent one previously posted.', function() {
+  describe('#postUniqueTweet', function() {
+it('should return HTTP status code 200 when the post is successful.', function() {
 
           var promiseFromTweet = tweeter.postTweet( 
-            "Another huge explosion in Nanyang Technological\
-            University's School of Computer Science\
-              and Engineering reported on 17/3/19 at 13:50",
+            `Test post performed at time: ${new Date().getTime()}`,
             twitterConfig);
 
             promiseFromTweet.then(function(statusCode) {
                 assert.equal(statusCode, 200);
             }).catch(function(statusCode) {
-                assert.equal(statusCode, 403);
+                assert.fail(`Failed to tweet, returned with HTTP status code: ${statusCode}`);
             });
 
         });
     });
+
+    describe('#invalidToken', function() {
+      it('should not return HTTP status code 200 when an invalid access token is provided', function() {
+        var badTwitterConfig = twitterConfig;
+        badTwitterConfig.access_token = 'lol';
+        var promiseFromTweet = tweeter.postTweet( 
+          `Test post performed at time: ${new Date().getTime()}`,
+          badTwitterConfig);
+
+          promiseFromTweet.then(function(statusCode) {
+              assert.notEqual(statusCode, 200);
+            }).catch(function (statusCode) {
+              assert.ok("Post was unsuccessful");
+            });
+      })
+    })
 });

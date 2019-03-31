@@ -4,7 +4,7 @@ const senderUsername = "pineapplepoptartscms@gmail.com";
 const senderPassword = "Il0vehuangli";
 const senderEmail = "pineapplepoptartscms@gmail.com";
 const senderName = "CMS";
-const recipientEmail = "CLIM094@e.ntu.edu.sg";
+const recipientEmail = "jingwei.chew@gmail.com";
 
 module.exports = {
   sendEmail: function () {
