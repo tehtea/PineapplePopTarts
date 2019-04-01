@@ -117,8 +117,8 @@ router.get('/updateForm', function(req, res) {
 router.post('/submitUpdate', function(req, res) {
     if (req.isAuthenticated()) {
         // this is not the actual thing to do
-        const update = Object.assign({}, req.body, {'insName': req.user});
-        socket.emit('createUpdateIncident', incident);
+        console.log(req.body)
+        // socket.emit('createUpdateIncident', incident);
         res.status(200).send("Successfully updated the incident!");
     } else {
         res.redirect('./login');

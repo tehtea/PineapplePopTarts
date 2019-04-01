@@ -33,6 +33,10 @@ function confirmRecordID() {
 		document.getElementById("section-1").style.display = "none";
 		document.getElementById("textRecord").innerHTML = recordID;
 		document.getElementById("textDescr").innerHTML = result.Descr;
+		document.getElementById("submitButton").style.display = "block";
+		document.getElementById("resolveButton").style.display = "block";
+		document.getElementById("backButton").style.display = "block";
+
 		
 		// Choices for respondent reporting
 		var asyncGetRespondents = getRespondents(recordID);
@@ -59,8 +63,8 @@ function formSubmission() {
 	var respondentReporting = document.forms["updateIncidentForm"]["respondentReporting"].value;
 	var respondentRequest = [];
 	var j = 0;
-	for (var i = 0; i < document.forms["updateIncidentForm"]["respondent"].length; i ++) {
-		var tempR = document.forms["updateIncidentForm"]["respondent"][i];
+	for (var i = 0; i < document.forms["updateIncidentForm"]["respondentRequested"].length; i ++) {
+		var tempR = document.forms["updateIncidentForm"]["respondentRequested"][i];
 		if (tempR.checked) {
 			respondentRequest[j] = tempR.value;
 			j ++;
@@ -81,18 +85,25 @@ function formSubmission() {
 			console.log("change");
 		}
 	}
-	document.forms["updateIncidentForm"]["description"].value = descr;
+	document.forms["updateIncidentForm"]["descr"].value = descr;
 	recordID = document.getElementById("textRecord").innerHTML
-
-	// // IF CORRECT, Save to database
-	var temp = {
-		respondentRequest: respondentRequest,
-		respondentReporting: respondentReporting,
-		descr: descr,
-		recordID: document.getElementById("textRecord").innerHTML
-	}; 
-
-
+	
+	// inject record id into the form to be submitted
+	document.getElementById('allInputs') .innerHTML += `<input type='text' name='recordID' value=${recordID} style="display: none;">`
+	
+	// inject respondents into the form to be submitted
+	if (typeof respondentReporting == 'string') {
+		document.getElementById('allInputs') .innerHTML 
+		+= 
+		`<input type="checkbox" name="respondentReporting" value="${respondentReporting}" style='display: none;' checked>`;
+	} else {
+		for (var i = 0; i < respondentReporting.length; i++)
+		{
+			document.getElementById('allInputs') .innerHTML 
+			+= 
+			`<input type="checkbox" name="respondentReporting" value="${respondentReporting[i]}" style='display: none;' checked>`;
+		}
+	}
 
 	return false;
 }
@@ -139,23 +150,6 @@ function resolveSubmission() {
 			console.log("change");
 		}
 	}
-	
-	// IF CORRECT, Save to database
-	var sessionKey = localStorage.getItem("sessionKey");
-	var temp = {
-		respondentReporting: respondentReporting,
-		descr: "[RESOLVED]" + descr,
-		sessionKey: sessionKey,
-		recordID: document.getElementById("textRecord").innerHTML
-	}; 
-	
- 	let done = resolveIncident(temp);
-	
-	// Prompt use the successful submission
-	done.then(() => {
-		document.getElementById("content").style.display = "none";
-		document.getElementById("complete").style.display = "block";
-	});
 	
 	return false;
 }

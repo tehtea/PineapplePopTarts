@@ -46,8 +46,8 @@
 
 	<div id="content">
 		<!--Update Form-->
-		<form class="form" name="updateIncidentForm" onsubmit="return false" method="post" action="./submitUpdate">
-			<fieldset>
+		<form class="form" name="updateIncidentForm" method="post" action="./submitUpdate">
+			<fieldset id="allInputs">
 				<legend class="formTitle">Update Incident</legend>
 				Please input the updates on the incident. <br><br>
 				Record ID: <i id="textRecord"></i><br>
@@ -84,9 +84,9 @@
 					<textarea class="dBox" name="descr" placeholder="Incident Update (max. 200 characters)"></textarea>
 					<span id="e-description"></span> <br>
 					
-					<input class="sButton" type="submit" onclick="return formSubmission()" value="Submit update" action="./submitUpdate" method="post">
-					<input class="sButton" type="submit" onclick="return resolveSubmission()" value="Resolve" action="./submitUpdate" method="post"> <span id="errorMsg"></span>
-					<button class="sButton" id="backButton" onclick="returnSection1()">Back</button>
+					<input name="submitButton" class="sButton" id="submitButton" type="submit" onclick="return formSubmission()" value="Submit update" action="./submitUpdate" method="post" style="display: none; float: left;">
+					<input name="resolveButton" class="sButton" id="resolveButton" type="submit" onclick="return resolveSubmission()" value="Resolve" action="./submitUpdate" method="post" style="display: none; float: left;"> <span id="errorMsg"></span>
+					<button class="sButton" id="backButton" onclick="returnSection1()" style="display: none;">Back</button>
 				</div>
 			</fieldset>
 		</form>
