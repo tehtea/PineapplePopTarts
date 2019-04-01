@@ -1,3 +1,7 @@
+/**
+ * An abstraction layer for making database queries to reduce the amount of boilerplate code to write
+ */
+
 const dbConfig = require('./dbConfig');
 const sql = require('mssql');
 

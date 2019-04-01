@@ -1,5 +1,6 @@
 /**
- * For fetching weather data from the government API. Used by the map.
+ * For fetching weather data from the government API. Used by the map. 
+ * Also reponsible for sending the weather data to the report generator.
  */
 
 var io = require('./Apps/node_modules/socket.io').listen(5001);

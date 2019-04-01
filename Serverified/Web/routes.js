@@ -5,11 +5,7 @@ const   // libraries
         localStrategy = require('passport-local').Strategy,
         loginManager = require('./loginManager'),
         session = require('express-session'), // library for Sessions, which is used to store user data
-        io = require('socket.io-client'),
-
-        // local drivers
-        databaseManager = require('./DatabaseManager'),
-        crisisMapManager = require('./CM');
+        io = require('socket.io-client');
 
 var socket = io.connect("http://localhost:5000/", {
     reconnection: true
@@ -156,8 +152,6 @@ router.get('/youDunnoCanGoAndDie', function(req, res) {
     res.render("InformationView.ejs");
 });
 
-// run the crisis map manager and database managers
-crisisMapManager.runMap();
-databaseManager.runDatabase();
+
 
 module.exports = router;

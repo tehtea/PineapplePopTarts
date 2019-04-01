@@ -1,3 +1,7 @@
+/**
+ * Configuration for making connection to database server
+ */
+
 const config = {
 	server:"172.21.146.196",
 	database:"Database3003",
