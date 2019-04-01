@@ -5,7 +5,7 @@ var authToken = 'f6f83688de9131c8d077a818071b960e';
 var twilio = require('./Apps/node_modules/twilio'); //Import Twilio library
 var client = new twilio(accountSid, authToken);
 
-var debugMode = true; // if debug mode is true, don't send SMS but just console log. Conserve consumption of API credits.
+var debugMode = false; // if debug mode is true, don't send SMS but just console log. Conserve consumption of API credits.
 
 var socket = require('./Apps/node_modules/socket.io'); // Import socket.io libraries 
 var io = socket.listen(4000); // Make the server listen to messages on port 4000
@@ -88,16 +88,16 @@ function getRespondentContact(res) {
 			respondentContact = '+6597853111'; 			// Jesslyn's Number
 			break;
 		case 'Counter Terrorism':					// SoF
-			// INSERT respondentContact
+			respondentContact = '+6596755940';			// Martyn's Number
 			break;
 		case 'Cyber Security':						// CSA
-			// INSERT respondentContact
+			respondentContact = '+6597832796';			// Xi Tongs's Number
 			break;
-		case 'Disease Outbreak Control':			// CDC
-			// INSERT respondentContact
+		case 'Disease Outbreak Control':				// CDC
+			respondentContact = '+6597239430';			// Nigel's Number
 			break;
 		case 'Flood Control':						// PUB
-			// INSERT respondentContact
+			respondentContact = '+6590603282';			// Jing Wei's Number
 			break;
 		case 'Police Force':						// SPF
 			respondentContact = '+6597853111'; 			// Jesslyn's Number
