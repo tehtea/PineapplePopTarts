@@ -9,7 +9,7 @@ module.exports = {
 		ioServer.sockets.on('connection', function (socket){
 			console.log("made connection on port 3000 with someone else")
 			// keep send values to Map whenever they appear
-			var io = require("./Apps/node_modules/socket.io-client");
+			var io = require("socket.io-client");
 			var socket = io.connect('http://172.21.146.196:5000');
 			// Connect to server
 			socket.on('connect',function() {
