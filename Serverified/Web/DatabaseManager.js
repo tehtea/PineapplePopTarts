@@ -1,45 +1,50 @@
-var io = require('socket.io').listen(5000);
-var dbQuery = require('../Web/dbQuery');
-var DatabaseRetriever = require('./databaseRetriever');
+// Control class - Database Manager
+var DatabaseRetriever = require("./DatabaseRetriever");
+var DatabaseSMSManager = require('./DatabaseSMSManager');
+var DatabaseSocialMediaManager = require('./DatabaseSocialMediaManager');
 
+// Initiate socket.io server
+var io = require('socket.io').listen(5000);
+
+// why is everything in module.exports?
 module.exports = {
 	runDatabase: async function() {
 		io.sockets.on('connection', function (socket) {
 			// 2. Add new incident
 			socket.on('createNewIncident', function (obj) {
 				// New Incident Table
-				const query =
-				`INSERT INTO NewIncident(Name, Contact, Location, UnitNum, Descr, InsName) VALUES 
-				('${obj.name}', '${obj.mobileNumber}', '${obj.postalCode}', '${obj.building}', '${obj.description}', '${obj.operator}')`;
-				
-				dbQuery.runQuery(query)
-				.then(() => {
+				let x = DatabaseRetriever.storeNewIncident(obj); 
+				x.then(() => {
 					// Get record id
 					let getRecord = DatabaseRetriever.getRecordIDIncident(obj);
-
 					getRecord.then((record) => {
-
 						// Fix time format
 						var timeString = record.InsTime.toISOString();
-
-						// Generate Respondent Table
-						for (var i = 0; i < obj.respondent.length; i ++) {
-							var resp = obj.respondent[i];
-							DatabaseRetriever.storeRespondent(resp, record.RecordID, timeString);
-						}		
 						
+						// Generate Respondent Table
+						// edge case: if only one respondent, respondentRequested will be a string
+						if (typeof obj.respondentRequested == 'string') {
+							DatabaseRetriever.storeRespondent(obj.respondentRequested, record.RecordID, timeString);
+						} else {
+							for (var i = 0; i < obj.respondentRequested.length; i ++) {
+								var resp = obj.respondentRequested[i];
+								console.log(resp);
+								DatabaseRetriever.storeRespondent(resp, record.RecordID, timeString);
+							}		
+						};
 						obj.recordID = record.RecordID;
 						var date= new Date(record.InsTime);
 						date.setHours(date.getHours() - 8);
 						obj.insTime = date.toString().slice(4,24);
-
-					// // Send SMS to Respondents
-					// DatabaseSMSManager.newIncidentSendSMS(obj);
-					// // Create social media post
-					// DatabaseSocialMediaManager.socialMediaNew(obj);
-					
+						
+						// Send SMS to Respondents
+						DatabaseSMSManager.newIncidentSendSMS(obj);
+						// Create social media post
+						DatabaseSocialMediaManager.socialMediaNew(obj);
+						
+						// Return RecordID
+						socket.emit("createNewIncidentDone",record.RecordID);
 					});
-
 				});
 			});
 			
@@ -87,6 +92,16 @@ module.exports = {
 						});
 					});
 				});
+			});
+			
+			// 5. Login
+			socket.on('login', function (input) {
+				// Get values from database 
+				let retrievedData = DatabaseRetriever.getAccountByID(input);
+				retrievedData.then(function(result) {
+					// Return Data retrieve from database
+					socket.emit('loginDone',result);
+				}); 
 			});
 			
 			// 6. Resolve incident

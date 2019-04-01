@@ -1,5 +1,3 @@
-const dbQuery = require('../Web/dbQuery');
-
 // Boundary Class - Database Retriever 
 
 const config = {
@@ -11,19 +9,80 @@ const config = {
 
 const sql = require("mssql");
 
-module.exports = {	
+module.exports = {
+	getAccountByID: function(acc) {
+		return new Promise(function(resolve, reject) {
+			// Connect to DB
+			var conn = new sql.ConnectionPool(config);
+			var req = new sql.Request(conn);
+	
+			conn.connect().then(function () {
+				req.query("SELECT * FROM AccountTbl WHERE username='"+acc.username+"' AND password='"+acc.password+"' COLLATE SQL_Latin1_General_CP1_CS_AS").then(function (recordset) {
+					conn.close();
+					resolve(recordset.recordset);
+			})
+				.catch(function (err) {
+					console.log(err);
+					conn.close();
+					reject(err);
+				});
+			})
+			.catch(function (err) {
+				console.log(err);
+				reject(err);
+			});
+		});
+	},
+	
+	// For Content Validation
+	checkKey: function(sessionKey) {
+		return new Promise(function(resolve, reject) {
+			// Connect to DB
+			var conn = new sql.ConnectionPool(config);
+			var req = new sql.Request(conn);
+	
+			conn.connect().then(function () {
+				req.query("SELECT * FROM AccountTbl WHERE sessionKey = '" + sessionKey + "'").then(function (recordset) {
+					conn.close();
+					resolve(recordset.recordset);
+				})
+				.catch(function (err) {
+					console.log(err);
+					conn.close();
+					reject(err);
+				});
+			})
+			.catch(function (err) {
+				console.log(err);
+				reject(err);
+			});
+		});
+	},
+	
 	// Store Respondent
 	storeRespondent: function(respondent, recordID, insTime) {
 		return new Promise(function(resolve, reject) {
-			dbQuery.runQuery("INSERT INTO RespondentRequest(RecordID, Respondent, InsTime) VALUES \
-            ('"+recordID+"','"+respondent+"','"+insTime+"');")
-            .then(() => {
-                resolve();
-            })
-            .catch((err) => {
-                console.log(err);
-                reject();
-            })
+			// Connect to DB
+			var conn = new sql.ConnectionPool(config);
+			var req = new sql.Request(conn);
+	
+			conn.connect().then(function () {
+				// New Incident Table
+				req.query("INSERT INTO RespondentRequest(RecordID, Respondent, InsTime) VALUES \
+							('"+recordID+"','"+respondent+"','"+insTime+"');").then(function (recordset) {
+					conn.close();
+					resolve();
+				})
+				.catch(function (err) {
+					console.log(err);
+					conn.close();
+					reject(err);
+				});
+			})
+			.catch(function (err) {
+				console.log(err);
+				reject(err);
+			});
 		});
 	},
 	
@@ -57,14 +116,29 @@ module.exports = {
 	// Get Record ID for newly made Incident
 	getRecordIDIncident: function(obj) {
 		return new Promise(function(resolve, reject) {
-            const query = "SELECT RecordID, InsTime FROM NewIncident \
-            WHERE RecordID = (	\
-                SELECT MAX(RecordID) as RecordID FROM NewIncident \
-                WHERE InsName='"+obj.operator+"');"
-
-            dbQuery.runQuery(query)
-            .then((recordset) => resolve(recordset.recordset[0]))
-            .catch((err) => reject(err));
+			// Connect to DB
+			var conn = new sql.ConnectionPool(config);
+			var req = new sql.Request(conn);
+	
+			conn.connect().then(function () {
+				// New Incident Table
+				req.query("SELECT RecordID, InsTime FROM NewIncident \
+							WHERE RecordID = (	\
+								SELECT MAX(RecordID) as RecordID FROM NewIncident \
+								WHERE InsName='"+obj.insName+"');").then(function (recordset) {
+					conn.close();
+					resolve(recordset.recordset[0]);
+				})
+				.catch(function (err) {
+					console.log(err);
+					conn.close();
+					reject(err);
+				});
+			})
+			.catch(function (err) {
+				console.log(err);
+				reject(err);
+			});
 		});
 	},
 	
@@ -148,6 +222,8 @@ module.exports = {
 	},
 	
 	resolveIncident: function(recordID) {
+		console.log("From resolveIncident:");
+		console.log(recordID);
 		return new Promise(function(resolve, reject) {
 			// Connect to DB
 			var conn = new sql.ConnectionPool(config);

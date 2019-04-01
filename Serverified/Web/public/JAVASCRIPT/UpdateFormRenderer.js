@@ -59,7 +59,7 @@ function confirmRecordID() {
 	});
 }
 
-function formSubmission() {
+function formSubmission(btn) {
 	var respondentReporting = document.forms["updateIncidentForm"]["respondentReporting"].value;
 	var respondentRequest = [];
 	var j = 0;
@@ -70,10 +70,15 @@ function formSubmission() {
 			j ++;
 		}
 	}
-	var descr = document.forms["updateIncidentForm"]["descr"].value; 
+	var descr = document.forms["updateIncidentForm"]["updateDescr"].value; 
 	
 	// Ensure correctness of input
-	var error = hasError(descr);
+	var error;
+	if (btn.value == 'Resolve')
+		error = hasErrorResolve(descr);
+	else
+		error = hasError(descr);
+
 	if (error == true) {
 			return false;
 	}
@@ -85,27 +90,14 @@ function formSubmission() {
 			console.log("change");
 		}
 	}
-	document.forms["updateIncidentForm"]["descr"].value = descr;
-	recordID = document.getElementById("textRecord").innerHTML
+	
+	document.forms["updateIncidentForm"]["updateDescr"].value = descr;
+	recordID = document.getElementById("textRecord").innerHTML;
 	
 	// inject record id into the form to be submitted
 	document.getElementById('allInputs') .innerHTML += `<input type='text' name='recordID' value=${recordID} style="display: none;">`
-	
-	// inject respondents into the form to be submitted
-	if (typeof respondentReporting == 'string') {
-		document.getElementById('allInputs') .innerHTML 
-		+= 
-		`<input type="checkbox" name="respondentReporting" value="${respondentReporting}" style='display: none;' checked>`;
-	} else {
-		for (var i = 0; i < respondentReporting.length; i++)
-		{
-			document.getElementById('allInputs') .innerHTML 
-			+= 
-			`<input type="checkbox" name="respondentReporting" value="${respondentReporting[i]}" style='display: none;' checked>`;
-		}
-	}
 
-	return false;
+	return true;
 }
 
 function hasError(description) {
@@ -122,36 +114,6 @@ function hasError(description) {
 		document.getElementById("errorMsg").innerHTML = "";
 	}
 	return err;	
-}
-
-function resolveSubmission() {
-	var respondentReporting = document.forms["updateIncidentForm"]["respondentReporting"].value;
-	var respondentRequest = [];
-	var j = 0;
-	for (var i = 0; i < document.forms["updateIncidentForm"]["respondent"].length; i ++) {
-		var tempR = document.forms["updateIncidentForm"]["respondent"][i];
-		if (tempR.checked) {
-			respondentRequest[j] = tempR.value;
-			j ++;
-		}
-	}
-	var descr = document.forms["updateIncidentForm"]["description"].value; 
-	
-	// Ensure correctness of input
-	var error = hasErrorResolve(respondentRequest);
-	if (error == true) {
-			return false;
-	}
-	
-	 // Adjustment on description
-	for (var c=0;c < descr.length; c ++) {
-		if (descr.charAt(c) == '\'') {
-			descr = descr.substr(0,c) + '"' + descr.substr(c+1);
-			console.log("change");
-		}
-	}
-	
-	return false;
 }
 
 function hasErrorResolve(respondentRequest) {

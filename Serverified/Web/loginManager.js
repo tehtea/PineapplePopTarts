@@ -15,9 +15,6 @@ function checkAccount(username, password) {
     });
 }
 
-// checkAccount('cheese', 'Pie').then((val) => console.log(val));
-// checkAccount('', '').then((val) => console.log(val)).catch((err) => console.log(err));
-
 module.exports = {
     checkAccount
 }

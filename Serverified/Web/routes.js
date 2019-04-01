@@ -1,11 +1,11 @@
 const   express = require('express'),
         router = express.Router(),
         passport = require('passport'),
-        localStrategy = require('passport-local').Strategy;
-        var loginManager = require('./loginManager'),
-        session = require('express-session'); // library for Sessions, which is used to store user data
-        var io = require('socket.io-client');
-        const databaseManager = require('./DatabaseManager');
+        localStrategy = require('passport-local').Strategy,
+        loginManager = require('./loginManager'),
+        session = require('express-session'), // library for Sessions, which is used to store user data
+        io = require('socket.io-client'),
+        databaseManager = require('./DatabaseManager');
 
 var socket = io.connect("http://localhost:5000/", {
     reconnection: true
@@ -116,10 +116,27 @@ router.get('/updateForm', function(req, res) {
 // submit incident update
 router.post('/submitUpdate', function(req, res) {
     if (req.isAuthenticated()) {
-        // this is not the actual thing to do
-        console.log(req.body)
-        // socket.emit('createUpdateIncident', incident);
-        res.status(200).send("Successfully updated the incident!");
+        var update = req.body;
+        // sanity check for the update object
+        if ( typeof update.respondentReporting == 'string')
+            update.respondentReporting = [update.respondentReporting];
+        update.updateName = req.user;
+        if (!update.respondentRequested)
+            update.respondentRequested = [];
+        console.log("From routes, /submitUpdate:");
+        console.log(update);
+        if (req.body.submit == 'Resolve')
+        {
+            console.log("emitting resolveIncident from routes.js");
+            // logic for resolution
+            socket.emit('resolveIncident', update.recordID);
+            res.status(200).send("Successfully resolved the incident!");
+        } else {
+            // logic for submitting update
+            console.log("emitting createUpdateIncident from routes.js");
+            socket.emit('createUpdateIncident', update);
+            res.status(200).send("Successfully updated the incident!");
+        }
     } else {
         res.redirect('./login');
     }
