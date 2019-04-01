@@ -88,19 +88,19 @@ function getRespondentContact(res) {
 			respondentContact = '+6597853111'; 			// Jesslyn's Number
 			break;
 		case 'Counter Terrorism':					// SoF
-			// INSERT respondentContact
+			respondentContact = '+6596755940';			// Martyn's Number
 			break;
 		case 'Cyber Security':						// CSA
-			// INSERT respondentContact
+			respondentContact = '+6597832796';			// Xi Tongs's Number
 			break;
-		case 'Disease Outbreak Control':			// CDC
-			// INSERT respondentContact
+		case 'Disease Outbreak Control':				// CDC
+			respondentContact = '+6597239430';			// Nigel's Number
 			break;
 		case 'Flood Control':						// PUB
-			// INSERT respondentContact
+			respondentContact = '+6590603282';			// Jing Wei's Number
 			break;
 		case 'Police Force':						// SPF
-			respondentContact = '+6597853111'; 			// Jesslyn's Number
+			respondentContact = '+6596684137'; 			// Christopher's Number
 			break;
 	 
 	} 
