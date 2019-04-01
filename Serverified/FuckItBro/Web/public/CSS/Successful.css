@@ -1,0 +1,39 @@
+.content {
+	display: inline-block;
+	width: 100%;
+	text-align: center;
+	padding-top: 100px;
+}
+
+.fa-check-circle {
+	font-size: 130px;
+}
+
+.t1 {
+	font-weight: normal;
+}
+
+.logo {
+	width: 400px;
+	margin: auto;
+	display: block;
+}
+
+.button {
+	font-size: 25px;
+	width: 300px;
+	background-color: #E5E5E5;
+	border: 1.5px solid black;
+	border-radius: 5px;
+	padding: 7px 0 7px 0;
+	outline: none;
+}
+
+.button:active {
+	background: #efefef;
+}
+
+#logout {
+	text-align: center;
+	margin: auto;
+}

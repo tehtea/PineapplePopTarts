@@ -1,0 +1,113 @@
+<!--
+   UpdateFormView.html
+   
+   Copyright 2019 Jesslyn <jesslyn@jesslyn-XPS-13-9360>
+   
+   This program is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; either version 2 of the License, or
+   (at your option) any later version.
+   
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+   
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+   MA 02110-1301, USA.
+   
+   
+-->
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+<head>
+	<title>CMS Update Incident Report Form</title>
+	<link href="../CSS/Successful.css" rel="Stylesheet" style="text/css">
+	<link href="../CSS/Header.css" rel="stylesheet" style="text/css">
+	<link href="../CSS/Form.css" rel="stylesheet" style="text/css">
+	<link href="../CSS/Successful.css" rel="Stylesheet" style="text/css">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+	<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+	<meta name="generator" content="Geany 1.32" />
+	
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
+	<script src="../JAVASCRIPT/UpdateIncident.js"></script>
+	<script src="../JAVASCRIPT/FormManager.js"></script>
+</head>
+
+<body>
+	<!--Header after login-->
+	<% include partials/header %>
+
+	<div id="content">
+		<!--Update Form-->
+		<form class="form" name="updateIncidentForm" onsubmit="return false" method="post" action="./submitUpdate">
+			<fieldset>
+				<legend class="formTitle">Update Incident</legend>
+				Please input the updates on the incident. <br><br>
+				Record ID: <i id="textRecord"></i><br>
+				Description: <i id="textDescr"></i><br>
+				
+				<div id="section-2" style="display:none">
+					<div class="c1">	
+						<div class="c2">
+							<p><strong>Respondent making the report:</strong></p>
+							<span id="e-respondentR"></span> <br>
+							<select name="respondentReporting" id="respondentReportingList">
+							</select>
+						</div>
+						
+						<div class="c2">
+							<p><strong>Add More Respondent(s):</strong>
+							<span id="e-respondent"></span>	
+							<br><br>
+							<input type="checkbox" name="respondentRequested" value="Emergency Ambulance">Emergency Ambulance<br>
+							<input type="checkbox" name="respondentRequested" value="Rescue and Evacuation">Rescue and Evacuation<br>
+							<input type="checkbox" name="respondentRequested" value="Fire-Fighting">Fire-Fighting<br>
+							<input type="checkbox" name="respondentRequested" value="Gas Leak Control">Gas Leak Control<br>
+							<input type="checkbox" name="respondentRequested" value="Animal Control">Animal Control<br>
+							<br>
+							<input type="checkbox" name="respondentRequested" value="Counter Terrorism">Counter Terrorism<br>
+							<input type="checkbox" name="respondentRequested" value="Cyber Security">Cyber Security<br>
+							<input type="checkbox" name="respondentRequested" value="Disease Outbreak Control">Disease Outbreak Control<br>
+							<input type="checkbox" name="respondentRequested" value="Flood Control">Flood Control<br>
+							<input type="checkbox" name="respondentRequested" value="Police Force">Police Force<br>
+							<br>
+						</div>
+					</div>
+								
+					<textarea class="dBox" name="descr" placeholder="Incident Update (max. 200 characters)"></textarea>
+					<span id="e-description"></span> <br>
+					
+					<input class="sButton" type="submit" onclick="return formSubmission()" value="Submit update" action="./submitUpdate" method="post">
+					<input class="sButton" type="submit" onclick="return resolveSubmission()" value="Resolve" action="./submitUpdate" method="post"> <span id="errorMsg"></span>
+					<button class="sButton" id="backButton" onclick="returnSection1()">Back</button>
+				</div>
+			</fieldset>
+		</form>
+		<!--To retrieve previous information of report-->
+		<div class="c1" id="section-1">
+			<select name="incident" id="incidentList">
+			</select>
+			<button class="sButton" onclick="confirmRecordID()">Retrieve</button>
+		</div>
+	</div>
+	
+	<div class="content" id="complete" style="display:none">
+		<i class="fas fa-check-circle"></i> <br><br><br>
+		<h1 class="t1">Report Update Successfully!</h1> <br><br>
+		<a href="./">Back to Main Page</a>
+	</div>
+	
+</body>
+
+<!--Order Matters-->
+<script src="../JAVASCRIPT/CallCenterOperatorFacade.js"></script>
+<script src="../JAVASCRIPT/UpdateFormRenderer.js"></script>
+
+</html>
