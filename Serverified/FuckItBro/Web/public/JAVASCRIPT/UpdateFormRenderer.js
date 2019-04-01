@@ -86,7 +86,7 @@ function formSubmission() {
 		}
 	}
 	document.forms["updateIncidentForm"]["descr"].value = descr;
-	recordID = document.getElementById("textRecord").innerHTML
+	recordID = document.getElementById("textRecord").innerHTML;
 	
 	// inject record id into the form to be submitted
 	document.getElementById('allInputs') .innerHTML += `<input type='text' name='recordID' value=${recordID} style="display: none;">`
@@ -105,7 +105,7 @@ function formSubmission() {
 		}
 	}
 
-	return false;
+	return true;
 }
 
 function hasError(description) {

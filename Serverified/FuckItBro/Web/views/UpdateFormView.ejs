@@ -84,11 +84,12 @@
 					<textarea class="dBox" name="descr" placeholder="Incident Update (max. 200 characters)"></textarea>
 					<span id="e-description"></span> <br>
 					
-					<input name="submitButton" class="sButton" id="submitButton" type="submit" onclick="return formSubmission()" value="Submit update" action="./submitUpdate" method="post" style="display: none; float: left;">
-					<input name="resolveButton" class="sButton" id="resolveButton" type="submit" onclick="return resolveSubmission()" value="Resolve" action="./submitUpdate" method="post" style="display: none; float: left;"> <span id="errorMsg"></span>
-					<button class="sButton" id="backButton" onclick="returnSection1()" style="display: none;">Back</button>
 				</div>
 			</fieldset>
+			<input name="submit" class="sButton" id="submitButton" type="submit" onclick="return formSubmission()" value="Submit update" action="./submitUpdate" method="post" style="display: none; float: left;">
+			<input name="submit" class="sButton" id="resolveButton" type="submit" onclick="return resolveSubmission()" value="Resolve" action="./submitUpdate" method="post" style="display: none; float: left;"> <span id="errorMsg"></span>
+			<button class="sButton" id="backButton" onclick="returnSection1()" style="display: none;">Back</button>
+
 		</form>
 		<!--To retrieve previous information of report-->
 		<div class="c1" id="section-1">
