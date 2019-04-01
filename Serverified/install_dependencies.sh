@@ -1,7 +1,7 @@
 cwd=$(pwd)
-cd cwd + /Web
+cd ./Web
 npm install
 cd ./public/JAVASCRIPT
 npm install
-cd cwd
+cd $cwd
 npm install
