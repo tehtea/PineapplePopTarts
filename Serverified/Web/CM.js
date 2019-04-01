@@ -106,7 +106,7 @@ async function incidentDataProcessing(data) {
 function getCoor(postalCode) {
 	return new Promise((resolve,reject) => {
 		//PostalCodeToCoor.js
-		const request = require('./Apps/node_modules/request');
+		const request = require('request');
 		const linkPart1 = "https://developers.onemap.sg/commonapi/search?searchVal=";
 		const linkPart2 = "&returnGeom=Y&getAddrDetails=Y";
 
