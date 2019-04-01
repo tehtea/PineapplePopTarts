@@ -100,7 +100,7 @@ function getRespondentContact(res) {
 			respondentContact = '+6590603282';			// Jing Wei's Number
 			break;
 		case 'Police Force':						// SPF
-			respondentContact = '+6597853111'; 			// Jesslyn's Number
+			respondentContact = '+6596684137'; 			// Christopher's Number
 			break;
 	 
 	} 
