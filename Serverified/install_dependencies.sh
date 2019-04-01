@@ -1,18 +1,7 @@
-cd ./RespondentContacter/Apps
+cwd=$(pwd)
+cd cwd + /Web
 npm install
-cd ..
-cd ..
-cd ./SocialMediaUpdater/Apps
+cd ./public/JAVASCRIPT
 npm install
-cd ..
-npm install
-cd ..
-cd ./StatusReportManager
-npm install
-cd ..
-cd ./Web/public/JAVASCRIPT/Apps
-npm install
-cd ..
-cd ..
-cd ..
+cd cwd
 npm install

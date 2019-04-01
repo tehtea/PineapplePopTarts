@@ -1,6 +1,6 @@
 
 // modules and libraries
-var socket = require('./Apps/node_modules/socket.io'); 
+var socket = require('socket.io'); 
 var io = socket.listen(5050);
 
 var facebookPoster 	= require('./facebookPoster');
