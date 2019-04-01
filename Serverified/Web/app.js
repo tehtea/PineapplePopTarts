@@ -13,10 +13,6 @@ app.use("/public/views", express.static(path.join(__dirname, "public","views")))
 
 app.use(routes);
 
-// app.use("/public/views", express.static(path.join(__dirname, "public","views")));
-// app.use("/CSS", express.static(path.join(__dirname, "public", "CSS")));
-// app.use("/public/JAVASCRIPT", express.static(path.join(__dirname, "public", "JAVASCRIPT")));
-
 app.listen(8080, function() {
-    console.log('App listening on port 3030!');
+    console.log('App listening on port 8080!');
 });

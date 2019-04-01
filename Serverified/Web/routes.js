@@ -1,11 +1,15 @@
-const   express = require('express'),
+const   // libraries
+        express = require('express'),
         router = express.Router(),
         passport = require('passport'),
         localStrategy = require('passport-local').Strategy,
         loginManager = require('./loginManager'),
         session = require('express-session'), // library for Sessions, which is used to store user data
         io = require('socket.io-client'),
-        databaseManager = require('./DatabaseManager');
+
+        // local drivers
+        databaseManager = require('./DatabaseManager'),
+        crisisMapManager = require('./CM');
 
 var socket = io.connect("http://localhost:5000/", {
     reconnection: true
@@ -142,11 +146,18 @@ router.post('/submitUpdate', function(req, res) {
     }
 });
 
+// render the map
+router.get('/map', function(req, res) {
+    res.render("MapView");
+});
+
 // show useful info
 router.get('/youDunnoCanGoAndDie', function(req, res) {
     res.render("InformationView.ejs");
-})
+});
 
+// run the crisis map manager and database managers
+crisisMapManager.runMap();
 databaseManager.runDatabase();
 
 module.exports = router;

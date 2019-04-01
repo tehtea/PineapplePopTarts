@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<link href="./CSS/Header.css" rel="stylesheet" style="text/css">
+		<link href="./CSS/MapCSS.css" rel="stylesheet" style="text/css">
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
+		<title>Crisis Map</title>
+	</head>
+
+	<body>
+		
+		<% include partials/header %>
+	
+	
+		<h1>Crisis Map System</h1>
+		<div id="map"></div>
+		<script src="../JAVASCRIPT/Toggle.js"></script>
+		<script defer
+			  src="https://code.jquery.com/jquery-3.3.1.min.js"
+			  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+			  crossorigin="anonymous"></script>
+		<script src="../JAVASCRIPT/Weather.js"></script>
+		<script src="../JAVASCRIPT/DengueKML.js"></script>
+		<script src="../JAVASCRIPT/Hospital.js"></script>
+		<script src="../JAVASCRIPT/Shelter.js"></script>
+		<script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDEiuvLqK8LTYSqLbEdaIzUKqq_pG1bnGc&callback=initMap"
+		type="text/javascript">
+		</script>
+		<form action="#">
+			<label class="container">Show all incidents
+				<input type="checkbox" id="incidentbox" onclick="boxclick(this,'incident')">
+				<span class="checkmark"></span>
+			</label>
+
+			<label class="container">Show bomb shelter
+				<input type="checkbox" id="shelterbox" onclick="boxclick(this,'shelter')">
+				<span class="checkmark"></span>
+			</label>
+
+			<label class="container">Show hospitals
+				<input type="checkbox" id="hospitalbox" onclick="boxclick(this,'hospital')">
+				<span class="checkmark"></span>
+			</label>
+
+			<label class="container">Show weather conditions
+				<input type="checkbox" id="weatherbox" onclick="boxclick(this,'weather')">
+				<span class="checkmark"></span>
+			</label>
+
+			<label class="container">Show dengue hotspots
+				<input type="checkbox" id="denguebox" onclick="toggleKML(this, 'dengue')">
+				<span class="checkmark"></span>
+			</label>
+		</form>
+	</body>
+
+<!--Order Matters-->
+<script src="../JAVASCRIPT/CallCenterOperatorFacade.js"></script>
+<script src="../JAVASCRIPT/Map.js"></script>
+
+</html>
