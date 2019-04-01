@@ -16,7 +16,7 @@ module.exports = {
         app.use(bodyParser.urlencoded({extended: true}));
         app.use(express.static("public"));
 
-        // use the views
+        // set where to find static files for frontend
         app.use("/CSS", express.static(path.join(__dirname, "public", "CSS")));
         app.use("/IMG", express.static(path.join(__dirname, "public", "IMG")));
         app.use("/JAVASCRIPT", express.static(path.join(__dirname, "public", "JAVASCRIPT")));

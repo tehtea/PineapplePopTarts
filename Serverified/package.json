@@ -14,6 +14,7 @@
     "supertest": "^4.0.2"
   },
   "dependencies": {
+    "ejs": "^2.6.1",
     "request": "^2.88.0",
     "socket.io": "^2.2.0",
     "socket.io-client": "^2.2.0",

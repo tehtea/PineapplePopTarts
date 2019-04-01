@@ -77,7 +77,11 @@ function getRespondentContact(res) {
 	var respondentContact;
 	switch(res){
 		case 'Emergency Ambulance':					// SCDF
+			respondentContact = '+6592334282';			// Khairul's Number
+			break;
 		case 'Rescue and Evacuation':
+			respondentContact = '+6592334282';			// Khairul's Number
+			break;
 		case 'Fire-Fighting':
 			respondentContact = '+6592334282';			// Khairul's Number
 			break;
