@@ -5,8 +5,7 @@ var app = express();
 var bodyParser = require('body-parser');
 
 // local drivers
-var databaseManager = require('./DatabaseManager'),
-    weatherFetcher = require('./public/JAVASCRIPT/Weather');
+var databaseManager = require('./DatabaseManager');
 
 module.exports = {
     runWeb : function() {
@@ -27,7 +26,6 @@ module.exports = {
 
         // run the various managers
         databaseManager.runDatabase();
-        weatherFetcher.runWeather();
 
         // run the web server proper
         app.listen(8080, function() {

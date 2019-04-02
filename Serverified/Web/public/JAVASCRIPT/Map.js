@@ -10,7 +10,7 @@
 var data = { incident: {}, shelter: {}, weather: {}, hospital: {}, dengue: {} };
 
 // global variable for socket connection
-var socket = io.connect("http://172.21.146.196:5000");
+var socket = io.connect("localhost:5000");
 
 //Object storing marker input coords only
 var inputs = {
@@ -159,60 +159,57 @@ function initMap() {
   function retrieveData() {
     return new Promise((resolve, reject) => {
       // get incident data
-      socket.emit('cmRequest');
-      socket.on("connect", function() {
-        socket.on("cmRequestDone", function(result) {
-          console.log(result);
-          var incidents;
-          incidents = result;
-
-          for (let i = 0; i < incidents.length; i++) {
-            inputs["incident"].push({
-              name:
-                incidents[i]["initDescr"] +
-                "<br>Address: " +
-                incidents[i]["address"],
-              label_location: {
-                latitude: parseFloat(incidents[i]["lat"]),
-                longitude: parseFloat(incidents[i]["lng"])
-              },
-              updates: incidents[i]["updDescr"],
-              time: incidents[i]["time"]
-            });
-          }
-
-          //get api data
-          getProcessedWeatherData();
-
-          //get KML layer
-          var src =
-            "https://sites.google.com/site/kmlfiles5473666/kml/dengue-clusters-kml.kml";
-          kmlLayer = getKMLLayer(src);
-
-          //manual input of bomb shelters & hospitals
-          addHospitals();
-          addShelters();
-
-          //loop through inputs object
-          //to add markers
-          for (let cat in inputs) {
-            for (let i = 0; i < inputs[cat].length; i++) {
-              addMarker(inputs[cat][i], cat, i);
-            }
-          }
-
-          //initialise categories
-          hide("shelter");
-          hide("hospital");
-          hide("weather");
-          show("dengue");
-          show("incident");
-
-          console.log(inputs);
-          resolve(inputs); //edit inputs, then add Markers inside the "then" block
-        });
+      socket.emit("cmRequest", function() {
       });
-      socket.on("disconnect", function() {});
+      socket.on("cmRequestDone", async function(result) {
+
+        var incidents;
+        incidents = await incidentDataProcessing(result);
+
+        for (let i = 0; i < incidents.length; i++) {
+          inputs["incident"].push({
+            name:
+              incidents[i]["initDescr"] +
+              "<br>Address: " +
+              incidents[i]["address"],
+            label_location: {
+              latitude: parseFloat(incidents[i]["lat"]),
+              longitude: parseFloat(incidents[i]["lng"])
+            },
+            updates: incidents[i]["updDescr"],
+            time: incidents[i]["time"]
+          });
+        }
+
+        //get api data
+        getProcessedWeatherData();
+
+        //get KML layer
+        var src =
+          "https://sites.google.com/site/kmlfiles5473666/kml/dengue-clusters-kml.kml";
+        kmlLayer = getKMLLayer(src);
+
+        //manual input of bomb shelters & hospitals
+        addHospitals();
+        addShelters();
+
+        //loop through inputs object
+        //to add markers
+        for (let cat in inputs) {
+          for (let i = 0; i < inputs[cat].length; i++) {
+            addMarker(inputs[cat][i], cat, i);
+          }
+        }
+
+        //initialise categories
+        hide("shelter");
+        hide("hospital");
+        hide("weather");
+        show("dengue");
+        show("incident");
+
+        resolve(inputs); //edit inputs, then add Markers inside the "then" block
+      });
     });
   }
 
@@ -284,19 +281,15 @@ function initMap() {
         });
         break;
       default:
-        console.log("Type of marker undefined. Marker not added.");
         break;
     }
 
     markers[cat].push(marker); //append to category's marker array
-    //console.log(markers);
   }
 }
 
-
 // fetch weather data from data.gov.sg api
 function getRawWeatherData() {
-  //alert('ajax');
 
   var receivedData; // store your value here
   $.ajax({
@@ -305,11 +298,9 @@ function getRawWeatherData() {
     url: "https://api.data.gov.sg/v1/environment/2-hour-weather-forecast",
     async: false,
     success: function(data) {
-      // console.log('got the data!');
       receivedData = data;
     }
   });
-  // console.log("returning from function");
   return receivedData;
 }
 
@@ -326,101 +317,105 @@ function getProcessedWeatherData() {
 /**
  * For fetching a new incident
  */
-socket.on('newIncident',function(incident) {
-	var x = incidentDataProcessing(result);
+socket.on("newIncidentReported", function(incident) {
+  var x = incidentDataProcessing(result);
 });
 
+socket.on("newUpdateToIncident", function(update) {
+  console.log("received update");
+})
+
 async function incidentDataProcessing(data) {
-	/* Extract all unresolved incidents, with each has the following format:
-	*	Location of the incident
-	*	Unit Number of the incident
-	*	Initial description of the incident
-	*	Latest description of updates (if any)
-	*	Time of the latest report on the incident
-	*/
-	var newInc = data[0];
-	var updInc = data[1];
-	var result = [];
-	var location, unitNum, initDescr, updDescr, time;
+  /* Extract all unresolved incidents, with each has the following format:
+   *	Location of the incident
+   *	Unit Number of the incident
+   *	Initial description of the incident
+   *	Latest description of updates (if any)
+   *	Time of the latest report on the incident
+   */
+  var newInc = data[0];
+  var updInc = data[1];
+  var result = [];
+  var location, unitNum, initDescr, updDescr, time;
 
-	for (var i = 0; i < newInc.length; i ++) {
-		if (newInc[i].Resolved == false) {
-			location = newInc[i].Location;
-			unitNum = newInc[i].UnitNum;
-			initDescr = newInc[i].Descr;
-			updDescr = "";
-			
-			// Format Time
-			var date= new Date(newInc[i].InsTime);
-			date.setHours(date.getHours() - 8);
-			var time = date.toString().slice(4,24);
-			
-			
-			// Find any update incident for that recordID
-			for (var j = 0; j < updInc.length; j++) {
-				if (newInc[i].RecordID == updInc[j].RecordID) {
-					if (newInc[i].InsTime <= updInc[j].UpdTime) {
-						updDescr = updInc[j].Descr;
-						
-						// Format Time
-						date= new Date(updInc[j].UpdTime);
-						date.setHours(date.getHours() - 8);
-						var time = date.toString().slice(4,24);
-					}
-				}
-			}
+  for (var i = 0; i < newInc.length; i++) {
+    if (newInc[i].Resolved == false) {
+      location = newInc[i].Location;
+      unitNum = newInc[i].UnitNum;
+      initDescr = newInc[i].Descr;
+      updDescr = "";
 
-			var incident = {
-				postalCode: location,
-				unitNum: unitNum,
-				initDescr: initDescr,
-				updDescr: updDescr,
-				time: time
-			};
-			result.push(incident);
-		}
-	}
-	
-	// Format coordinate
-	var postalCodes = [];
-	for (let i=0; i<result.length; i++){
-		postalCodes.push(parseInt(result[i]["postalCode"]));
-	}
+      // Format Time
+      var date = new Date(newInc[i].InsTime);
+      date.setHours(date.getHours() - 8);
+      var time = date.toString().slice(4, 24);
 
-	var coordsInfo = [];
-	// var z;
-	for (let i=0; i<postalCodes.length; i++){
-		z = await getCoor(postalCodes[i]);
-		// check if z is defined first. If z is not defined and we try and access it, the subsystem will crash.
-		if (z)
-		{
-			result[i]["address"] = z["ADDRESS"];
-			result[i]["lat"] = z["LATITUDE"];
-			result[i]["lng"] = z["LONGITUDE"];
-		}
-	}		
-	
-    return result;
-};
+      // Find any update incident for that recordID
+      for (var j = 0; j < updInc.length; j++) {
+        if (newInc[i].RecordID == updInc[j].RecordID) {
+          if (newInc[i].InsTime <= updInc[j].UpdTime) {
+            updDescr = updInc[j].Descr;
+
+            // Format Time
+            date = new Date(updInc[j].UpdTime);
+            date.setHours(date.getHours() - 8);
+            var time = date.toString().slice(4, 24);
+          }
+        }
+      }
+
+      var incident = {
+        postalCode: location,
+        unitNum: unitNum,
+        initDescr: initDescr,
+        updDescr: updDescr,
+        time: time
+      };
+      result.push(incident);
+    }
+  }
+
+  // Format coordinate
+  var postalCodes = [];
+  for (let i = 0; i < result.length; i++) {
+    postalCodes.push(parseInt(result[i]["postalCode"]));
+  }
+
+  var coordsInfo = [];
+  // var z;
+  for (let i = 0; i < postalCodes.length; i++) {
+    z = await getCoor(postalCodes[i]);
+    // check if z is defined first. If z is not defined and we try and access it, the subsystem will crash.
+    if (z) {
+      result[i]["address"] = z["ADDRESS"];
+      result[i]["lat"] = z["LATITUDE"];
+      result[i]["lng"] = z["LONGITUDE"];
+    }
+  }
+
+  return result;
+}
 
 function getCoor(postalCode) {
-	return new Promise((resolve,reject) => {
-		//PostalCodeToCoor.js
-		const request = require('request');
-		const linkPart1 = "https://developers.onemap.sg/commonapi/search?searchVal=";
-		const linkPart2 = "&returnGeom=Y&getAddrDetails=Y";
+  return new Promise((resolve, reject) => {
+    //PostalCodeToCoor.js
+    const linkPart1 =
+      "https://developers.onemap.sg/commonapi/search?searchVal=";
+    const linkPart2 = "&returnGeom=Y&getAddrDetails=Y";
 
-		// API link for data
-		var GeneralLink = linkPart1 + postalCode + linkPart2;
+    // API link for data
+    var GeneralLink = linkPart1 + postalCode + linkPart2;
 
-		// Retrieve from API
-		request(GeneralLink, { json: true }, (err, res, body) => {
-			  if (err) { return console.log(err); }
-			  if (res.statusCode == 200 && res.headers['content-type'].includes("application/json"))
-			  {
-				 var rawData = body.results[0];
-				 resolve(rawData);
-			  }
-		});
-	});
+    // Retrieve from API
+    $.ajax({
+      type: "GET",
+      dataType: "json",
+      url: GeneralLink,
+      async: false,
+      success: function(data) {
+        resolve(data.results[0]) // get the first result
+      }
+    });
+
+  });
 }

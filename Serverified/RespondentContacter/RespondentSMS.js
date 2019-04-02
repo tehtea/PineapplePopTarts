@@ -7,48 +7,38 @@ var client = new twilio(accountSid, authToken);
 
 var debugMode = true; // if debug mode is true, don't send SMS but just console log. Conserve consumption of API credits.
 
-var socket = require('socket.io'); // Import socket.io libraries 
-var io = socket.listen(4000); // Make the server listen to messages on port 4000
+var io = require('socket.io-client'); // Import socket.io libraries 
+var socket = io.connect('localhost:5000'); // Make the server listen to messages on port 5000
 
 module.exports = {
 	runSMS: async function() {
-		io.on('connection', (socket) =>{
-
-			console.log('connected:', socket.client.id);
-
-			/*socket.on('serverEvent', data =>{
-				console.log('new messsage from client' , data);
-			});*/
+		socket.on('newIncidentReported', (newInc)=>{		
+			for (var res of newInc.respondentRequested) {
+				// Extract information
+				var respondentContact = getRespondentContact(res);
+				var recordID = newInc.recordID;
+				var descr = newInc.descr;
+				var time = newInc.insTime;
+				var address = newInc.address;
+				var unitNum = newInc.unitNum;
 			
-			socket.on('newIncidentSendSMS', (newInc)=>{		
-				for (var res of newInc.respondentRequested) {
-					// Extract information
-					var respondentContact = getRespondentContact(res);
-					var recordID = newInc.recordID;
-					var descr = newInc.descr;
-					var time = newInc.insTime;
-					var address = newInc.address;
-					var unitNum = newInc.unitNum;
-				
-					messageSend(recordID, descr, time, address, unitNum, respondentContact);    
-				}
-			});
-			
-			socket.on('updateIncidentSendSMS', (reportData)=>{
-				for (var res of reportData.updateInc.respondentRequested) {
-					// Extract information
-					var respondentContact = getRespondentContact(res);
-					var recordID = reportData.updateInc.recordID;
-					var descr = reportData.updateInc.updateDescr;
-					var time = reportData.updateInc.updateTime;
-					var address = reportData.newInc.Location;
-					var unitNum = reportData.newInc.UnitNum;
-					
-					messageSend(recordID, descr, time, address, unitNum, respondentContact);
-				}
-			});
+				messageSend(recordID, descr, time, address, unitNum, respondentContact);    
+			}
 		});
-
+		
+		socket.on('newUpdateToIncident', (reportData)=>{
+			for (var res of reportData.updateInc.respondentRequested) {
+				// Extract information
+				var respondentContact = getRespondentContact(res);
+				var recordID = reportData.updateInc.recordID;
+				var descr = reportData.updateInc.updateDescr;
+				var time = reportData.updateInc.updateTime;
+				var address = reportData.newInc.Location;
+				var unitNum = reportData.newInc.UnitNum;
+				
+				messageSend(recordID, descr, time, address, unitNum, respondentContact);
+			}
+		});
 	}
 }
 
@@ -106,7 +96,8 @@ function getRespondentContact(res) {
 		case 'Police Force':						// SPF
 			respondentContact = '+6596684137'; 			// Christopher's Number
 			break;
-	 
+		default:
+			throw("Cannot find contact. May be a bug in your code");
 	} 
 	return respondentContact;
 }

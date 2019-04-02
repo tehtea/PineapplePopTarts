@@ -1,7 +1,5 @@
 // Control class - Database Manager
 var DatabaseRetriever = require("./DatabaseRetriever");
-var DatabaseSMSManager = require('./DatabaseSMSManager');
-var DatabaseSocialMediaManager = require('./DatabaseSocialMediaManager');
 
 // Initiate socket.io server
 var io = require('socket.io').listen(5000);
@@ -44,11 +42,14 @@ module.exports = {
 						date.setHours(date.getHours() - 8); 
 						obj.insTime = date.toString().slice(4,24);
 						
-						// Send SMS to Respondents
-						DatabaseSMSManager.newIncidentSendSMS(obj);
+						// let subsystems know of new incident and pass them the object
+						socket.emit("newIncidentReported", obj);
+
+						// // Send SMS to Respondents
+						// DatabaseSMSManager.newIncidentSendSMS(obj);
 						
-						// Create social media post
-						DatabaseSocialMediaManager.socialMediaNew(obj);
+						// // Create social media post
+						// DatabaseSocialMediaManager.socialMediaNew(obj);
 						
 						// Return RecordID. TODO: add to the frontend
 						socket.emit("createNewIncidentDone",record.RecordID);
@@ -73,7 +74,7 @@ module.exports = {
 			 * 
 			 * Update object should contain:
 			 * recordID - int
-			 * respondentReporting - array
+			 * respondentReporting - array (the new incidents)
 			 * updateName - name of call center operator updating
 			 * updateDescr - string
 			 */
@@ -92,8 +93,8 @@ module.exports = {
 						var timeString = time.Time.toISOString();
 						
 						// Insert into Respondent Table
-						for (var i = 0; i < obj.respondentRequested.length; i ++) {
-							var resp = obj.respondentRequested[i];
+						for (var i = 0; i < obj.respondentReporting.length; i ++) {
+							var resp = obj.respondentReporting[i];
 							DatabaseRetriever.storeRespondent(resp, obj.recordID, timeString);
 						}	
 						
@@ -104,15 +105,14 @@ module.exports = {
 						
 						// get original report
 						var getFormViaRecordID = DatabaseRetriever.getFormViaRecordID(obj.recordID);
-						getFormViaRecordID.then((newIncident) => {	
-							newIncident = newIncident[0] // unpack the result
+						getFormViaRecordID.then((originalIncident) => {	
+							originalIncident = originalIncident[0] // unpack the result
 
-							if (obj.respondentRequested.length > 0) {
-								// Send SMS to Respondents if any
-								DatabaseSMSManager.updateIncidentSendSMS(obj, newIncident);
-							}
-							// Create social media post
-							DatabaseSocialMediaManager.socialMediaUpd(obj, newIncident);
+							var combinedReports = {
+								updateInc: obj,
+								newInc: newIncident
+							};
+							socket.emit('newUpdateToIncident', combinedReports);
 						});
 					});
 				});
@@ -162,7 +162,6 @@ module.exports = {
 			socket.on('cmRequest', function () {
 				// Get values from database
 				Promise.all([DatabaseRetriever.getAllNewIncident(),DatabaseRetriever.getAllUpdateIncident()]).then((result) => {
-					// Return Data retrieve from database
 					socket.emit('cmRequestDone',result);
 				});
 			});

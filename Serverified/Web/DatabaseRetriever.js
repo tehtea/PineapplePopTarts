@@ -2,7 +2,7 @@
  * Database Retriever.
  */
 
-const dbQuery = require('./dbQuery');
+const dbQuery = require('./dbQuery').runQuery;
 
 module.exports = {
 	// Store Respondent
@@ -73,7 +73,7 @@ module.exports = {
 	
 	// Data Retrieval for Crisis Map
 	getAllNewIncident: () => {
-		return dbQuery("SELECT * FROM NewIncident");
+		return dbQuery("SELECT * FROM NewIncident WHERE Resolved=0");
 	},
 	getAllUpdateIncident: () => {
 		return dbQuery("SELECT * FROM UpdateIncident");
