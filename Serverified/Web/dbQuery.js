@@ -14,16 +14,18 @@ function runQuery(query) {
         conn.connect().then(function () {
             req.query(query).then(function (recordset) {
                 conn.close();
-                resolve(recordset);
-        })
+                resolve(recordset.recordset);
+            })
             .catch(function (err) {
-                console.log(err);
+                console.log(`Error when running query: ${query}`);
+                console.log("Error message: " + err);
                 conn.close();
                 reject(err);
             });
         })
         .catch(function (err) {
-            console.log(err);
+            console.log("Error when connecting to db");
+            console.log("Error message: " + err);
             reject(err);
         });
     });

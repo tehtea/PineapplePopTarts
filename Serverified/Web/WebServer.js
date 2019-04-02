@@ -6,7 +6,6 @@ var bodyParser = require('body-parser');
 
 // local drivers
 var databaseManager = require('./DatabaseManager'),
-    crisisMapManager = require('./CM'),
     weatherFetcher = require('./public/JAVASCRIPT/Weather');
 
 module.exports = {
@@ -27,7 +26,6 @@ module.exports = {
         app.use(routes);
 
         // run the various managers
-        crisisMapManager.runMap();
         databaseManager.runDatabase();
         weatherFetcher.runWeather();
 

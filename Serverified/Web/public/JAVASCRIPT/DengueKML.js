@@ -1,7 +1,7 @@
-
 var kmlLayer;
+
 //get data from KML
-function getKMLLayer(src){
+function getKMLLayer(src) {
   var kmlLayer = new google.maps.KmlLayer(src, {
     suppressInfoWindows: true,
     preserveViewport: false,
@@ -11,13 +11,12 @@ function getKMLLayer(src){
 }
 
 //toggle KML Layer
-function toggleKML(box, cat){
+function toggleKML(box, cat) {
   closeCurrentInfoWindow();
-  if (box.checked){
+  if (box.checked) {
     kmlLayer.setMap(map);
     document.getElementById(cat + "box").checked = true;
-  }
-  else {
+  } else {
     kmlLayer.setMap(null);
     document.getElementById(cat + "box").checked = false;
   }
