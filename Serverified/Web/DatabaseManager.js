@@ -94,16 +94,6 @@ module.exports = {
 				});
 			});
 			
-			// 5. Login
-			socket.on('login', function (input) {
-				// Get values from database 
-				let retrievedData = DatabaseRetriever.getAccountByID(input);
-				retrievedData.then(function(result) {
-					// Return Data retrieve from database
-					socket.emit('loginDone',result);
-				}); 
-			});
-			
 			// 6. Resolve incident
 			socket.on('resolveIncident', function (recordID) {
 				DatabaseRetriever.resolveIncident(recordID);
