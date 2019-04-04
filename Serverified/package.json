@@ -11,6 +11,7 @@
   "devDependencies": {
     "chai": "^4.2.0",
     "mocha": "^6.0.2",
+    "mocha-istanbul-ui": "0.0.8",
     "supertest": "^4.0.2"
   },
   "dependencies": {

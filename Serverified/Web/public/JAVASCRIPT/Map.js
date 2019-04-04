@@ -27,7 +27,8 @@ var icons = {
   shelter: "http://maps.google.com/mapfiles/ms/micons/homegardenbusiness.png",
   weather: "http://maps.google.com/mapfiles/ms/micons/rainy.png",
   hospital: "http://maps.google.com/mapfiles/ms/micons/hospitals.png",
-  dengue: ""
+  dengue: "",
+  newIncident: "http://maps.google.com/mapfiles/kml/pal3/icon41.png"
 };
 
 //Object to store arrays of Google Markers
@@ -36,12 +37,19 @@ var markers = {
   shelter: [],
   weather: [],
   hospital: [],
-  dengue: []
+  dengue: [],
+  newIncident: []
 };
+
+//keep track of a global info window that is currently open
+var currentInfoWindow = null;
 
 //store map and kmlLayer globally
 var map;
 
+/**
+ * Initialize the map on first run
+ */
 function initMap() {
   //settings of map zoom and map's initial centre
   var options = {
@@ -144,153 +152,174 @@ function initMap() {
   google.maps.event.addListener(map, "click", function(event) {
     closeCurrentInfoWindow();
   });
-
-  //FUNCTIONS
-  function initialiseMarkers() {
-    var z = retrieveData();
-    z.then(result => {
-      inputs = result; //store in inputs (no idea if it works but not needed actually)
-    });
-  }
-
-  /**
-   * Get incident data, API data,  on first run of the map
-   */
-  function retrieveData() {
-    return new Promise((resolve, reject) => {
-      // get incident data
-      socket.emit("cmRequest", function() {
-      });
-      socket.on("cmRequestDone", async function(result) {
-
-        var incidents;
-        incidents = await incidentDataProcessing(result);
-
-        for (let i = 0; i < incidents.length; i++) {
-          inputs["incident"].push({
-            name:
-              incidents[i]["initDescr"] +
-              "<br>Address: " +
-              incidents[i]["address"],
-            label_location: {
-              latitude: parseFloat(incidents[i]["lat"]),
-              longitude: parseFloat(incidents[i]["lng"])
-            },
-            updates: incidents[i]["updDescr"],
-            time: incidents[i]["time"]
-          });
-        }
-
-        //get api data
-        getProcessedWeatherData();
-
-        //get KML layer
-        var src =
-          "https://sites.google.com/site/kmlfiles5473666/kml/dengue-clusters-kml.kml";
-        kmlLayer = getKMLLayer(src);
-
-        //manual input of bomb shelters & hospitals
-        addHospitals();
-        addShelters();
-
-        //loop through inputs object
-        //to add markers
-        for (let cat in inputs) {
-          for (let i = 0; i < inputs[cat].length; i++) {
-            addMarker(inputs[cat][i], cat, i);
-          }
-        }
-
-        //initialise categories
-        hide("shelter");
-        hide("hospital");
-        hide("weather");
-        show("dengue");
-        show("incident");
-
-        resolve(inputs); //edit inputs, then add Markers inside the "then" block
-      });
-    });
-  }
-
-  //add marker on map and append to array
-  function addMarker(input, cat, i) {
-    var marker = new google.maps.Marker({
-      position: {
-        lat: input["label_location"]["latitude"],
-        lng: input["label_location"]["longitude"]
-      },
-      map: map,
-      icon: icons[cat]
-    });
-
-    var infoWindow = new google.maps.InfoWindow();
-    //different infowindows for different categories
-    switch (cat) {
-      case "incident":
-        google.maps.event.addListener(marker, "click", function() {
-          //close current window and open another upon clicking marker
-          closeCurrentInfoWindow();
-          let content =
-            "[Incident]: " +
-            input["name"] +
-            "<br>Latest update: " +
-            input["updates"] +
-            "<br>Time: " +
-            input["time"] +
-            "<br>";
-          if (input["updDescr"]) {
-            content = content + "UPDATE: " + input["updDescr"];
-          }
-          infoWindow.setContent(content);
-          infoWindow.open(map, marker);
-          currentInfoWindow = infoWindow;
-        });
-        break;
-      case "shelter":
-        google.maps.event.addListener(marker, "click", function() {
-          //close current window and open another upon clicking marker
-          closeCurrentInfoWindow();
-          infoWindow.setContent("[Shelter]: " + input["name"]);
-          infoWindow.open(map, marker);
-          currentInfoWindow = infoWindow;
-        });
-        break;
-      case "hospital":
-        google.maps.event.addListener(marker, "click", function() {
-          //close current window and open another upon clicking marker
-          closeCurrentInfoWindow();
-          infoWindow.setContent("[Hospital]: " + input["name"]);
-          infoWindow.open(map, marker);
-          currentInfoWindow = infoWindow;
-        });
-        break;
-      case "weather":
-        google.maps.event.addListener(marker, "click", function() {
-          //close current window and open another upon clicking marker
-          closeCurrentInfoWindow();
-          infoWindow.setContent(
-            "[Weather]: " +
-              input["name"] +
-              " (" +
-              data["weather"]["items"][0]["forecasts"][i]["forecast"] +
-              ")"
-          );
-          infoWindow.open(map, marker);
-          currentInfoWindow = infoWindow;
-        });
-        break;
-      default:
-        break;
-    }
-
-    markers[cat].push(marker); //append to category's marker array
-  }
 }
 
-// fetch weather data from data.gov.sg api
-function getRawWeatherData() {
+/**
+ * Calls {@link retrieveData} and their updates then put them as the initial markers.
+ */
+function initialiseMarkers() {
+  var z = retrieveData();
+  z.then(result => {
+    inputs = result; //store in inputs (no idea if it works but not needed actually)
+  });
+}
 
+/**
+ * Get incident data and API data and adds it into the `inputs` global variable.
+ */
+function retrieveData() {
+  return new Promise((resolve, reject) => {
+    // get incident data
+    socket.emit("cmRequest", function() {});
+    socket.on("cmRequestDone", async function(result) {
+      var incidents;
+      incidents = await incidentDataProcessing(result);
+
+      for (let i = 0; i < incidents.length; i++) {
+        inputs["incident"].push({
+          name:
+            incidents[i]["initDescr"] +
+            "<br>Address: " +
+            incidents[i]["address"],
+          label_location: {
+            latitude: parseFloat(incidents[i]["lat"]),
+            longitude: parseFloat(incidents[i]["lng"])
+          },
+          updates: incidents[i]["updDescr"],
+          time: incidents[i]["time"]
+        });
+      }
+
+      //get api data
+      getProcessedWeatherData();
+
+      //get KML layer
+      var src =
+        "https://sites.google.com/site/kmlfiles5473666/kml/dengue-clusters-kml.kml";
+      kmlLayer = getKMLLayer(src);
+
+      //manual input of bomb shelters & hospitals
+      addHospitals();
+      addShelters();
+
+      //loop through inputs object
+      //to add markers
+      for (let cat in inputs) {
+        for (let i = 0; i < inputs[cat].length; i++) {
+          addMarker(inputs[cat][i], cat, i);
+        }
+      }
+
+      //initialise categories
+      hide("shelter");
+      hide("hospital");
+      hide("weather");
+      show("dengue");
+      show("incident");
+
+      resolve(inputs); //edit inputs, then add Markers inside the "then" block
+    });
+  });
+}
+
+/**
+ * Add a new marker onto the map by appending it to the array of its category in the global `markers` object.
+ * @param {*} input - an Object with the keys label_location, name, updates, time. The first two are compulsory. 
+ * @param {*} cat - category of the marker. Refer to "markers" global variable for list of
+ * @param {*} i - counter for the forecasts to fetch
+ */
+function addMarker(input, cat, i) {
+  // input validation for the 'input' variable. Checking for compulsory values.
+  if (!input["label_location"]["latitude"])
+    throw "missing latitude in input for addMarker for input: " + input.name;
+  if (!input["label_location"]["longitude"])
+    throw "missing longitude in input for addMarker";
+  if (!input["name"])
+    throw "missing name in input for addMarker";
+  // input validation for the 'cat' variable.
+  found = false;
+  for (possibleCat of Object.keys(markers))
+  {
+    if (cat == possibleCat)
+    {
+      found = true;
+      break;
+    }
+  }
+  if (!found)
+    throw "invalid category provided for addMarker"
+  
+  var marker = new google.maps.Marker({
+    position: {
+      lat: input["label_location"]["latitude"],
+      lng: input["label_location"]["longitude"]
+    },
+    map: map,
+    icon: icons[cat]
+  });
+
+  var infoWindow = new google.maps.InfoWindow();
+  //different infowindows for different categories
+  if (cat == "incident" || cat == "newIncident") {
+    google.maps.event.addListener(marker, "click", function() {
+      //close current window and open another upon clicking marker
+      closeCurrentInfoWindow();
+      let content =
+        "[Incident]: " +
+        input["name"] +
+        "<br>Latest update: " +
+        input["updates"] +
+        "<br>Time: " +
+        input["time"] +
+        "<br>";
+      if (input["updDescr"]) {
+        content = content + "UPDATE: " + input["updDescr"];
+      }
+      infoWindow.setContent(content);
+      infoWindow.open(map, marker);
+      currentInfoWindow = infoWindow;
+    });
+  } else if (cat == "shelter") {
+    google.maps.event.addListener(marker, "click", function() {
+      //close current window and open another upon clicking marker
+      closeCurrentInfoWindow();
+      infoWindow.setContent("[Shelter]: " + input["name"]);
+      infoWindow.open(map, marker);
+      currentInfoWindow = infoWindow;
+    });
+  } else if (cat == "hospital") {
+    google.maps.event.addListener(marker, "click", function() {
+      //close current window and open another upon clicking marker
+      closeCurrentInfoWindow();
+      infoWindow.setContent("[Hospital]: " + input["name"]);
+      infoWindow.open(map, marker);
+      currentInfoWindow = infoWindow;
+    });
+  } else if (cat == "weather") {
+    google.maps.event.addListener(marker, "click", function() {
+      //close current window and open another upon clicking marker
+      closeCurrentInfoWindow();
+      infoWindow.setContent(
+        "[Weather]: " +
+          input["name"] +
+          " (" +
+          data["weather"]["items"][0]["forecasts"][i]["forecast"] +
+          ")"
+      );
+      infoWindow.open(map, marker);
+      currentInfoWindow = infoWindow;
+    });
+  } else {
+    throw "invalid category!";
+  }   
+  markers[cat].push(marker); //append to category's marker array
+}
+
+/**
+ * fetch weather data from data.gov.sg api
+ *  
+ */ 
+function getRawWeatherData() {
   var receivedData; // store your value here
   $.ajax({
     type: "GET",
@@ -318,36 +347,39 @@ function getProcessedWeatherData() {
  * For fetching a new incident
  */
 socket.on("newIncidentReported", function(newIncident) {
-  var x = incidentDataProcessing([newIncident]).then((newIncident) => {
+  incidentDataProcessing([newIncident]).then((newIncident) => {
     newIncident = newIncident[0];
-      inputs["incident"].push({
-        name:
-        newIncident["initDescr"] +
-          "<br>Address: " +
-          newIncident["address"],
-        label_location: {
-          latitude: parseFloat(newIncident["lat"]),
-          longitude: parseFloat(newIncident["lng"])
-        },
-        updates: newIncident["updDescr"],
-        time: newIncident["time"]
-      });
-    console.log('new incident processed');
+    newInput = {
+      name: newIncident["initDescr"] + "<br>Address: " + newIncident["address"],
+      label_location: {
+        latitude: parseFloat(newIncident["lat"]),
+        longitude: parseFloat(newIncident["lng"])
+      },
+      updates: newIncident["updDescr"],
+      time: newIncident["time"]
+    };
+    inputs["newIncident"].push(newInput);
+    addMarker(newInput, 'newIncident', 0) // in this case i is useless
+    console.log("new incident processed");
+  });
 });
 
 socket.on("newUpdateToIncident", function(update) {
   console.log("received update: ");
   console.log(update);
-})
+});
 
+/**
+ *  Extract all unresolved incidents, with each has the following format:
+ *  Location of the incident
+ *  Unit Number of the incident
+ *  Initial description of the incident
+ *  Latest description of updates (if any)
+ *  Time of the latest report on the incident
+ * @param {*} data - an array with 2 elements. The first element is an array of incidents, 
+ * the second element is an array of updates to all incidents.
+ */
 async function incidentDataProcessing(data) {
-  /* Extract all unresolved incidents, with each has the following format:
-   *	Location of the incident
-   *	Unit Number of the incident
-   *	Initial description of the incident
-   *	Latest description of updates (if any)
-   *	Time of the latest report on the incident
-   */
   var newInc = data[0];
   var updInc = data[1];
   var result = [];
@@ -397,7 +429,6 @@ async function incidentDataProcessing(data) {
   }
 
   var coordsInfo = [];
-  // var z;
   for (let i = 0; i < postalCodes.length; i++) {
     z = await getCoor(postalCodes[i]);
     // check if z is defined first. If z is not defined and we try and access it, the subsystem will crash.
@@ -411,6 +442,10 @@ async function incidentDataProcessing(data) {
   return result;
 }
 
+/**
+ * Gets the geocoding of a location based on its postal code. If the postal code is invalid, throw an exception.
+ * @param {*} postalCode 
+ */
 function getCoor(postalCode) {
   return new Promise((resolve, reject) => {
     //PostalCodeToCoor.js
@@ -428,9 +463,11 @@ function getCoor(postalCode) {
       url: GeneralLink,
       async: false,
       success: function(data) {
-        resolve(data.results[0]) // get the first result
+        if (data.results[0])
+          resolve(data.results[0]); // get the first result
+        else
+          reject("invalid postal code provided");
       }
     });
-
   });
 }
