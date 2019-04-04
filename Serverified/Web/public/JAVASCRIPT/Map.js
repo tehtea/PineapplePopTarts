@@ -317,12 +317,27 @@ function getProcessedWeatherData() {
 /**
  * For fetching a new incident
  */
-socket.on("newIncidentReported", function(incident) {
-  var x = incidentDataProcessing(result);
+socket.on("newIncidentReported", function(newIncident) {
+  var x = incidentDataProcessing([newIncident]).then((newIncident) => {
+    newIncident = newIncident[0];
+      inputs["incident"].push({
+        name:
+        newIncident["initDescr"] +
+          "<br>Address: " +
+          newIncident["address"],
+        label_location: {
+          latitude: parseFloat(newIncident["lat"]),
+          longitude: parseFloat(newIncident["lng"])
+        },
+        updates: newIncident["updDescr"],
+        time: newIncident["time"]
+      });
+    console.log('new incident processed');
 });
 
 socket.on("newUpdateToIncident", function(update) {
-  console.log("received update");
+  console.log("received update: ");
+  console.log(update);
 })
 
 async function incidentDataProcessing(data) {

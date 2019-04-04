@@ -8,7 +8,7 @@ var client = new twilio(accountSid, authToken);
 var debugMode = true; // if debug mode is true, don't send SMS but just console log. Conserve consumption of API credits.
 
 var io = require('socket.io-client'); // Import socket.io libraries 
-var socket = io.connect('localhost:5000'); // Make the server listen to messages on port 5000
+var socket = io.connect('http://localhost:5000/'); // Make the server listen to messages on port 5000
 
 module.exports = {
 	runSMS: async function() {

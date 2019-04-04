@@ -7,7 +7,8 @@ var io = require('socket.io').listen(5000);
 module.exports = {
 	runDatabase: async function() {
 		io.sockets.on('connection', function (socket) {
-			// 2. Add new incident
+			// console.log('connected to: ' + socket.client.id);
+			// 1. Add new incident
 			socket.on('createNewIncident', function (obj) {
 				/**
 				 * obj should have:
@@ -43,21 +44,15 @@ module.exports = {
 						obj.insTime = date.toString().slice(4,24);
 						
 						// let subsystems know of new incident and pass them the object
-						socket.emit("newIncidentReported", obj);
-
-						// // Send SMS to Respondents
-						// DatabaseSMSManager.newIncidentSendSMS(obj);
+						socket.broadcast.emit("newIncidentReported", obj);
 						
-						// // Create social media post
-						// DatabaseSocialMediaManager.socialMediaNew(obj);
-						
-						// Return RecordID. TODO: add to the frontend
+						// Return RecordID.
 						socket.emit("createNewIncidentDone",record.RecordID);
 					});
 				});
 			});
 			
-			// 3. Check RecordID
+			// 2. Check RecordID
 			socket.on('validateRecordID', function (recordID) {
 				// Get values from database 
 				let retrievedData = DatabaseRetriever.getFormViaRecordID(recordID);
@@ -70,7 +65,7 @@ module.exports = {
 			});
 			
 			/**
-			 * 4. Add update incident
+			 * 3. Add update incident
 			 * 
 			 * Update object should contain:
 			 * recordID - int
@@ -112,21 +107,26 @@ module.exports = {
 								updateInc: obj,
 								newInc: newIncident
 							};
-							socket.emit('newUpdateToIncident', combinedReports);
+							socket.broadcast.emit('newUpdateToIncident', combinedReports);
 						});
 					});
 				});
 			});
 			
-			// 6. Resolve incident
+
 			/**
-			 * Resolve incident
+			 * 6. Resolve incident
+			 * 
 			 * Should resolve the incident in the database, then send this resolved incident over
 			 * to the Map subsystem, the Status Report Manager subsystem and the Social Media 
 			 * subsystem.
 			 */
 			socket.on('resolveIncident', function (recordID) {
 				DatabaseRetriever.resolveIncident(recordID);
+				DatabaseRetriever.getFormViaRecordID(recordID).then((incident) => {
+					incident = incident[0]; // unpack the incident
+					socket.emit('incidentResolvedSuccessfully', incident);
+				}).catch((error) => socket.emit('incidentCannotBeResolved', recordID));
 			});
 			
 			// 7. Get respondents
@@ -158,7 +158,7 @@ module.exports = {
 				}); 
 			});
 			
-			// CRISIS MAP SUBSYSTEM
+			// for emitting all incidents and all incident updates to the crisis map
 			socket.on('cmRequest', function () {
 				// Get values from database
 				Promise.all([DatabaseRetriever.getAllNewIncident(),DatabaseRetriever.getAllUpdateIncident()]).then((result) => {

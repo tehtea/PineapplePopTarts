@@ -97,8 +97,13 @@ router.get('/reportForm', function(req, res) {
 router.post('/submitNewIncident', function(req, res) {
     if (req.isAuthenticated()) {
         const incident = Object.assign({}, req.body, {'insName': req.user});
+        // sanitize the incident
+        if (typeof incident.respondentRequested == 'string')
+            incident.respondentRequested = [incident.respondentRequested];
         socket.emit('createNewIncident', incident);
-        res.status(200).send("Incident has been submitted!");
+        socket.on('createNewIncidentDone', (recordID) => {
+            res.send(`Incident ID: ${recordID} has been submitted!`);
+        });
     } else {
         res.redirect('./login');
     }
@@ -130,12 +135,18 @@ router.post('/submitUpdate', function(req, res) {
             console.log("emitting resolveIncident from routes.js");
             // logic for resolution
             socket.emit('resolveIncident', update.recordID);
-            res.status(200).send("Successfully resolved the incident!");
+            socket.on('incidentResolvedSuccessfully', () => {
+                res.send("Successfully resolved the incident!");
+            });
+            socket.on('incidentCannotBeResolved', (recordID) => {
+                res.status(500);
+                res.send(`Incident ${recordID} unable to be resolved for some reason.`);
+            });
         } else {
             // logic for submitting update
             console.log("emitting createUpdateIncident from routes.js");
             socket.emit('createUpdateIncident', update);
-            res.status(200).send("Successfully updated the incident!");
+            res.send("Successfully updated the incident!");
         }
     } else {
         res.redirect('./login');

@@ -1,7 +1,7 @@
 
 // modules and libraries
 var io = require('socket.io-client'); 
-var socket = io.connect('localhost:5000');
+var socket = io.connect('http://localhost:5000/');
 
 var facebookPoster 	= require('./facebookPoster');
 var facebookConfig 	= require('./facebookConfig');
