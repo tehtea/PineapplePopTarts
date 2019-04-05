@@ -7,7 +7,6 @@ var io = require('socket.io').listen(5000);
 module.exports = {
 	runDatabase: async function() {
 		io.sockets.on('connection', function (socket) {
-			// console.log('connected to: ' + socket.client.id);
 			// 1. Add new incident
 			socket.on('createNewIncident', function (obj) {
 				/**
@@ -105,7 +104,7 @@ module.exports = {
 
 							var combinedReports = {
 								updateInc: obj,
-								newInc: newIncident
+								newInc: originalIncident
 							};
 							socket.broadcast.emit('newUpdateToIncident', combinedReports);
 						});
@@ -126,6 +125,11 @@ module.exports = {
 				DatabaseRetriever.getFormViaRecordID(recordID).then((incident) => {
 					incident = incident[0]; // unpack the incident
 					socket.emit('incidentResolvedSuccessfully', incident);
+					var combinedReports = {
+						updateInc: obj,
+						newInc: incident
+					};
+					socket.broadcast.emit('newUpdateToIncident', combinedReports);
 				}).catch((error) => socket.emit('incidentCannotBeResolved', recordID));
 			});
 			

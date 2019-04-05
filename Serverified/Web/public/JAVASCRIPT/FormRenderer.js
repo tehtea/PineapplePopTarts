@@ -78,3 +78,33 @@ function hasError(name, mobileNum, postalCode, building, respondent, description
 	return err;	
 }
 
+/**
+ * Gets the geocoding of a location based on its postal code. If the postal code is invalid, throw an exception.
+ * @param {*} postalCode 
+ */
+function getCoor(postalCode) {
+	return new Promise((resolve, reject) => {
+	  //PostalCodeToCoor.js
+	  const linkPart1 =
+		"https://developers.onemap.sg/commonapi/search?searchVal=";
+	  const linkPart2 = "&returnGeom=Y&getAddrDetails=Y";
+  
+	  // API link for data
+	  var GeneralLink = linkPart1 + postalCode + linkPart2;
+  
+	  // Retrieve from API
+	  $.ajax({
+		type: "GET",
+		dataType: "json",
+		url: GeneralLink,
+		async: false,
+		success: function(data) {
+		  if (data.results[0])
+			resolve(data.results[0]); // get the first result
+		  else
+			reject("invalid postal code provided");
+		}
+	  });
+	});
+}
+

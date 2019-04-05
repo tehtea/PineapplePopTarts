@@ -17,7 +17,20 @@ describe("login backend", function() {
 
     describe("invalidPassword", function() {
         it('should return failure message', function(done) {
-            loginManager.checkAccount("babi", "basket")
+            loginManager.checkAccount("cheese", "basket")
+            .then((val) => {
+                done(new Error("supposed to not resolve successfully"));
+            })
+            .catch((err) => {
+                expect(err).equals("no account found");
+                done();
+            })
+        });
+    });
+
+    describe("invalidUsername", function() {
+        it('should return failure message', function(done) {
+            loginManager.checkAccount("babi", "Pie")
             .then((val) => {
                 done(new Error("supposed to not resolve successfully"));
             })
