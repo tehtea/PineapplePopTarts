@@ -38,7 +38,6 @@ var markers = {
   weather: [],
   hospital: [],
   dengue: [],
-  newIncident: []
 };
 
 //keep track of a global info window that is currently open
@@ -224,7 +223,7 @@ function retrieveData() {
 
 /**
  * Add a new marker onto the map by appending it to the array of its category in the global `markers` object.
- * @param {*} input - an Object with the keys label_location, name, updates, time. The first two are compulsory. 
+ * @param {*} input - an Object with the keys label_location, name, updates, time. The first two are compulsory.
  * @param {*} cat - category of the marker. Refer to "markers" global variable for list of
  * @param {*} i - counter for the forecasts to fetch
  */
@@ -248,7 +247,7 @@ function addMarker(input, cat, i) {
   }
   if (!found)
     throw "invalid category provided for addMarker"
-  
+
   var marker = new google.maps.Marker({
     position: {
       lat: input["label_location"]["latitude"],
@@ -260,7 +259,15 @@ function addMarker(input, cat, i) {
 
   var infoWindow = new google.maps.InfoWindow();
   //different infowindows for different categories
-  if (cat == "incident" || cat == "newIncident") {
+  if (cat == "incident") {
+    let currentTime = new Date();
+    currentTime = currentTime.toString().slice(4, 18);
+
+    //compare if current time and incident's time are in the same hour, else deem as not new
+    if (input['time'].slice(0, 14) == currentTime){
+      marker.setIcon(icons['newIncident']);
+    }
+
     google.maps.event.addListener(marker, "click", function() {
       //close current window and open another upon clicking marker
       closeCurrentInfoWindow();
@@ -311,14 +318,14 @@ function addMarker(input, cat, i) {
     });
   } else {
     throw "invalid category!";
-  }   
+  }
   markers[cat].push(marker); //append to category's marker array
 }
 
 /**
  * fetch weather data from data.gov.sg api
- *  
- */ 
+ *
+ */
 function getRawWeatherData() {
   var receivedData; // store your value here
   $.ajax({
@@ -351,7 +358,7 @@ function getProcessedWeatherData() {
  *  Initial description of the incident
  *  Latest description of updates (if any)
  *  Time of the latest report on the incident
- * @param {*} data - an array with 2 elements. The first element is an array of incidents, 
+ * @param {*} data - an array with 2 elements. The first element is an array of incidents,
  * the second element is an array of updates to all incidents.
  */
 async function incidentDataProcessing(data) {
@@ -419,7 +426,7 @@ async function incidentDataProcessing(data) {
 
 /**
  * Gets the geocoding of a location based on its postal code. If the postal code is invalid, throw an exception.
- * @param {*} postalCode 
+ * @param {*} postalCode
  */
 function getCoor(postalCode) {
   return new Promise((resolve, reject) => {
