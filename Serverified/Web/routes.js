@@ -1,3 +1,7 @@
+/**
+ * The HTTP endpoints served by the Web Server
+ */
+
 const   // libraries
         express = require('express'),
         router = express.Router(),
@@ -16,7 +20,7 @@ router.use(session({
     secret: 'secret',
     resave: false,
     saveUninitialized: true,
-    cookie: { maxAge: 60000, secure: false }
+    cookie: { maxAge: 360000, secure: false }
 }));
 
 router.use(passport.initialize());
@@ -102,6 +106,7 @@ router.post('/submitNewIncident', function(req, res) {
             incident.respondentRequested = [incident.respondentRequested];
         socket.emit('createNewIncident', incident);
         socket.on('createNewIncidentDone', (recordID) => {
+            socket.removeAllListeners();
             res.send(`Incident ID: ${recordID} has been submitted!`);
         });
     } else {
@@ -136,9 +141,11 @@ router.post('/submitUpdate', function(req, res) {
             // logic for resolution
             socket.emit('resolveIncident', update.recordID);
             socket.on('incidentResolvedSuccessfully', () => {
+                socket.removeAllListeners();
                 res.send("Successfully resolved the incident!");
             });
             socket.on('incidentCannotBeResolved', (recordID) => {
+                socket.removeAllListeners();
                 res.status(500);
                 res.send(`Incident ${recordID} unable to be resolved for some reason.`);
             });
@@ -146,6 +153,7 @@ router.post('/submitUpdate', function(req, res) {
             // logic for submitting update
             console.log("emitting createUpdateIncident from routes.js");
             socket.emit('createUpdateIncident', update);
+            socket.removeAllListeners();
             res.send("Successfully updated the incident!");
         }
     } else {

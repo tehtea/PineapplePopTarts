@@ -343,31 +343,6 @@ function getProcessedWeatherData() {
   data["weather"] = dataPoints;
 }
 
-/**
- * For fetching a new incident
- */
-socket.on("newIncidentReported", function(newIncident) {
-  incidentDataProcessing([newIncident]).then((newIncident) => {
-    newIncident = newIncident[0];
-    newInput = {
-      name: newIncident["initDescr"] + "<br>Address: " + newIncident["address"],
-      label_location: {
-        latitude: parseFloat(newIncident["lat"]),
-        longitude: parseFloat(newIncident["lng"])
-      },
-      updates: newIncident["updDescr"],
-      time: newIncident["time"]
-    };
-    inputs["newIncident"].push(newInput);
-    addMarker(newInput, 'newIncident', 0) // in this case i is useless
-    console.log("new incident processed");
-  });
-});
-
-socket.on("newUpdateToIncident", function(update) {
-  console.log("received update: ");
-  console.log(update);
-});
 
 /**
  *  Extract all unresolved incidents, with each has the following format:

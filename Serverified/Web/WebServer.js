@@ -1,3 +1,7 @@
+/**
+ * The script to execute the web server using.
+ */
+
 const routes = require("./routes");
 var path = require('path');
 var express = require('express');

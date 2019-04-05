@@ -1,5 +1,14 @@
+/**
+ * Invoked to check if credentials provided is valid
+ */
+
 const dbQuery = require('./dbQuery');
 
+/**
+ * Checks if the username and password specified matches any records in the database.
+ * @param {*} username 
+ * @param {*} password 
+ */
 function checkAccount(username, password) {
     return new Promise(function (resolve, reject) {
         var queryPromise = dbQuery.runQuery(`SELECT * FROM AccountTbl WHERE username='${username}' AND password='${password}'`);
@@ -7,9 +16,9 @@ function checkAccount(username, password) {
         queryPromise
         .then((results) => {
             if (results.length == 0) {
-                reject('fuck');
+                reject('no account found');
             }
-            resolve('lol');
+            resolve('account found');
         })
         .catch((err) => reject);
     });

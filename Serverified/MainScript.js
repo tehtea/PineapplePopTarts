@@ -7,5 +7,5 @@ var webServer = require("./Web/WebServer.js");
 // run all subsystems
 respondentContacter.runSMS();
 socialMediaUpdater.runSocialMedia();
-// statusReportManager.runStatusReport(); // this shit needs more debugging
+statusReportManager.runStatusReport();
 webServer.runWeb();
