@@ -260,12 +260,14 @@ function addMarker(input, cat, i) {
   var infoWindow = new google.maps.InfoWindow();
   //different infowindows for different categories
   if (cat == "incident") {
-    let currentHr = parseInt(new Date().toString().charAt(17));
-
+    let currentTime = new Date();
+    console.log(currentTime);
+    console.log(input['time']);
     //compare if current time and incident's time are within 2hrs, else deem as not new
-    if (Math.abs(parseInt(input['time'].charAt(13)) - currentHr) < 2){
+    if ((Math.abs(currentTime - input['time']) / 3.6e6) < 2){
       marker.setIcon(icons['newIncident']);
     }
+    //input["time"] = input["time"].toString().slice(4, 24);
 
     google.maps.event.addListener(marker, "click", function() {
       //close current window and open another upon clicking marker
@@ -376,7 +378,6 @@ async function incidentDataProcessing(data) {
       // Format Time
       var date = new Date(newInc[i].InsTime);
       date.setHours(date.getHours() - 8);
-      var time = date.toString().slice(4, 24);
 
       // Find any update incident for that recordID
       for (var j = 0; j < updInc.length; j++) {
@@ -387,7 +388,6 @@ async function incidentDataProcessing(data) {
             // Format Time
             date = new Date(updInc[j].UpdTime);
             date.setHours(date.getHours() - 8);
-            var time = date.toString().slice(4, 24);
           }
         }
       }
@@ -397,7 +397,7 @@ async function incidentDataProcessing(data) {
         unitNum: unitNum,
         initDescr: initDescr,
         updDescr: updDescr,
-        time: time
+        time: date
       };
       result.push(incident);
     }
