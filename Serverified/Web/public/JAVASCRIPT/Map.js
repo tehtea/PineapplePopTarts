@@ -260,11 +260,10 @@ function addMarker(input, cat, i) {
   var infoWindow = new google.maps.InfoWindow();
   //different infowindows for different categories
   if (cat == "incident") {
-    let currentTime = new Date();
-    currentTime = currentTime.toString().slice(4, 18);
+    let currentHr = parseInt(new Date().toString().charAt(17));
 
-    //compare if current time and incident's time are in the same hour, else deem as not new
-    if (input['time'].slice(0, 14) == currentTime){
+    //compare if current time and incident's time are within 2hrs, else deem as not new
+    if (Math.abs(parseInt(input['time'].charAt(13)) - currentHr) < 2){
       marker.setIcon(icons['newIncident']);
     }
 
