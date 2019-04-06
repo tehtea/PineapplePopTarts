@@ -7,6 +7,10 @@
 	padding: 80px 30px;
 }
 
+.updateForm {
+	display: inline;
+}
+
 .formTitle {
 	font-weight: bold;
 	font-size: 50px;
