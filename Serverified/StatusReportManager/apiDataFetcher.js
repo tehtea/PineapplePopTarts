@@ -1,18 +1,22 @@
+const request = require('request');
+
 module.exports = {
-  fetchData: function () {
-    return new Promise(function (resolve, reject) {
-      var io = require("socket.io-client");
-      var socket = io.connect('http://172.21.146.196:5001', { reconnect: true });
-      // Connect to server
-      socket.on('connect', function () {
-        console.log('Connected to Weather.js');
-        // Request data from CrisisMap/Weather.js
-        socket.emit('apiRequest');
-        // Retrieve data
-        socket.on('apiRequestDone', function (data) {
-          resolve(data);
-        })
-      });
-    });
-  }
+  fetchData: fetchData
 }
+
+/**
+ * fetch weather data from data.gov.sg api
+ */
+function fetchData() {
+  return new Promise(function(resolve, reject) {
+    request('https://api.data.gov.sg/v1/environment/2-hour-weather-forecast', { json: true }, (err, res, body) => {
+      if (err) { throw(err) }
+      if (res.statusCode == 200 && res.headers['content-type'].includes("application/json"))
+      {
+        resolve(body);
+      }
+      else
+        throw ("cannot get data but no error provided");
+    });
+  });
+};

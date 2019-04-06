@@ -124,7 +124,7 @@ router.post('/submitNewIncident', function(req, res) {
 // render the update form
 router.get('/updateForm', function(req, res) {
     if (req.isAuthenticated()) {
-        res.render("UpdateFormView");
+        res.render("UpdateFormView", {serverAddress: req.hostname});
     } else {
         res.redirect('./login');
     }
@@ -177,7 +177,7 @@ router.post('/logout', function(req, res) {
 
 // render the map
 router.get('/map', function(req, res) {
-    res.render("MapView");
+    res.render("MapView", {serverAddress: req.hostname});
 });
 
 // show useful info

@@ -9,11 +9,17 @@
 		<link href="./CSS/MapCSS.css" rel="stylesheet" style="text/css">
 		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
+
 		<title>Crisis Map</title>
 	</head>
 
 	<body>
-		
+		<!-- For initializing the socket connection. Used by the .js files.-->
+		<% var addr = serverAddress; %>
+		<script type="text/javascript">
+			var serverAddress = '<%- addr %>';
+			var socket = io.connect(`http://${serverAddress}:5000`);	
+		</script>
 		<% include partials/header %>
 	
 	

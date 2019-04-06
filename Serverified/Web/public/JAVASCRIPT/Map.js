@@ -9,8 +9,6 @@
 //a.k.a local copy of data
 var data = { incident: {}, shelter: {}, weather: {}, hospital: {}, dengue: {} };
 
-// global variable for socket connection
-var socket = io.connect("localhost:5000");
 
 //Object storing marker input coords only
 var inputs = {

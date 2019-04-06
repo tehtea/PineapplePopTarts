@@ -39,6 +39,13 @@
 </head>
 
 <body>
+	<!-- For initializing the socket connection. Used by the .js files.-->
+	<% var addr = serverAddress; %>
+	<script type="text/javascript">
+		var serverAddress = '<%- addr %>';
+		var socket = io.connect(`http://${serverAddress}:5000`);	
+	</script>
+
 	<!--Header after login-->
 	<% include partials/header %>
 
