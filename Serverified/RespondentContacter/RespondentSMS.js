@@ -96,8 +96,10 @@ function getRespondentContact(res) {
 		case 'Police Force':						// SPF
 			respondentContact = '+6596684137'; 			// Christopher's Number
 			break;
-		default:
+		default: {
+			console.log(res);
 			throw("Cannot find contact. May be a bug in your code");
+		}
 	} 
 	return respondentContact;
 }

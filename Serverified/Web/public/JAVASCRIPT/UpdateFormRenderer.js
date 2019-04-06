@@ -70,8 +70,9 @@ function formSubmission(btn) {
 			j ++;
 		}
 	}
+
 	var descr = document.forms["updateIncidentForm"]["updateDescr"].value; 
-	
+
 	// Ensure correctness of input
 	var error;
 	if (btn.value == 'Resolve')
@@ -80,9 +81,9 @@ function formSubmission(btn) {
 		error = hasError(descr);
 
 	if (error == true) {
-			return false;
+		return false;
 	}
-	
+
  	// Adjustment on description
 	for (var c=0;c < descr.length; c ++) {
 		if (descr.charAt(c) == '\'') {
@@ -90,12 +91,17 @@ function formSubmission(btn) {
 			console.log("change");
 		}
 	}
-	
+
 	document.forms["updateIncidentForm"]["updateDescr"].value = descr;
 	recordID = document.getElementById("textRecord").innerHTML;
 	
 	// inject record id into the form to be submitted
-	document.getElementById('allInputs') .innerHTML += `<input type='text' name='recordID' value=${recordID} style="display: none;">`
+	recordIDInput = document.createElement("input");
+	recordIDInput.type = "hidden";
+	recordIDInput.style = "display: none;";
+	recordIDInput.value = recordID;
+	recordIDInput.name = 'recordID';
+	document.forms["updateIncidentForm"].appendChild(recordIDInput);
 
 	return true;
 }

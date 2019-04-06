@@ -32,13 +32,14 @@ passport.use('local', new localStrategy(
     passReqToCallback : true,
     usernameField: 'userid',
     passwordField: 'pw',
+    failureFlash: "invalid username or password!"
     },
         function(req, username, password, done) {
             console.log("Called local strategy");
             // check username and password
             loginManager.checkAccount(username, password)
             .then(() => done(null, username))
-            .catch(() => done(null, false));
+            .catch(() => done(null, false, req.flash('loginMessage', '*invalid username or password')));
         }
     )
 );
@@ -68,16 +69,22 @@ router.get('/', function(req, res) {
 // render the login page
 router.get('/login', function(req, res) {
     if (!req.isAuthenticated()) {
-        res.render("LoginView");
+        res.render("LoginView", {message: req.flash('loginMessage')});
     } else {
         res.redirect('./accountView');
     }
 });
 
 // render the account page via login page
-router.post('/accountView', passport.authenticate('local', { failureRedirect: '/login', session: true}), function(req, res)  {
-    res.render("AccountView", {userid: req.body.userid, isLoggedIn: req.isAuthenticated()});
-});
+router.post('/accountView', 
+    passport.authenticate('local', 
+    { 
+        successRedirect : '/accountView', // redirect to the account view
+        failureRedirect : '/login', // redirect back to the signup page if there is an error
+        failureFlash : true, // allow flash messages
+        session: true
+    })
+);
 
 // render the account page through other places
 router.get('/accountView', function(req, res)  {
@@ -107,7 +114,7 @@ router.post('/submitNewIncident', function(req, res) {
         socket.emit('createNewIncident', incident);
         socket.on('createNewIncidentDone', (recordID) => {
             socket.removeAllListeners();
-            res.send(`Incident ID: ${recordID} has been submitted!`);
+            res.render("SubmissionResultView", {resultMessage : `Incident ID: ${recordID} has been submitted!`});
         });
     } else {
         res.redirect('./login');
@@ -127,12 +134,14 @@ router.get('/updateForm', function(req, res) {
 router.post('/submitUpdate', function(req, res) {
     if (req.isAuthenticated()) {
         var update = req.body;
-        // sanity check for the update object
+        // sanity checks for the update object
         if ( typeof update.respondentReporting == 'string')
             update.respondentReporting = [update.respondentReporting];
         update.updateName = req.user;
         if (!update.respondentRequested)
             update.respondentRequested = [];
+        if ( typeof update.respondentRequested == 'string' )
+            update.respondentRequested = [update.respondentRequested];
         console.log("From routes, /submitUpdate:");
         console.log(update);
         if (req.body.submit == 'Resolve')
@@ -142,23 +151,28 @@ router.post('/submitUpdate', function(req, res) {
             socket.emit('resolveIncident', update.recordID);
             socket.on('incidentResolvedSuccessfully', () => {
                 socket.removeAllListeners();
-                res.send("Successfully resolved the incident!");
+                res.render("SubmissionResultView", {resultMessage : `Incident ID: ${update.recordID} has been resolved!`});
             });
             socket.on('incidentCannotBeResolved', (recordID) => {
                 socket.removeAllListeners();
                 res.status(500);
-                res.send(`Incident ${recordID} unable to be resolved for some reason.`);
+                res.render("SubmissionResultView", {resultMessage : `Incident ID: ${recordID} unable to be resolved for some reason.`});
             });
         } else {
             // logic for submitting update
             console.log("emitting createUpdateIncident from routes.js");
             socket.emit('createUpdateIncident', update);
             socket.removeAllListeners();
-            res.send("Successfully updated the incident!");
+            res.render("SubmissionResultView", {resultMessage : `Incident ID: ${update.recordID} has been updated!`});
         }
     } else {
         res.redirect('./login');
     }
+});
+
+router.post('/logout', function(req, res) {
+    req.logout();
+    res.redirect('./');
 });
 
 // render the map

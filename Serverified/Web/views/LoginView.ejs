@@ -29,11 +29,27 @@
                     <input class="loginInput" type="password" name="pw" placeholder="Password"> <br><br>
                     
                     <input class="sButton" type="submit" value="Log In">
-                    <p id="errorMsg"><br></p> <br>
+                    <p id="errorMsg"><br><%= message %></p> <br>
                 </form>	
             </div>
         </div>
 
     </body>
+
+    <script>
+        function validateForm() {
+            if (!document.forms["loginForm"]["userid"].value) {
+                if (!document.forms["loginForm"]["pw"].value)
+                    document.getElementById("errorMsg").innerHTML = '<br>*username and password missing';
+                else
+                    document.getElementById("errorMsg").innerHTML = '<br>*username missing';
+                return false;
+            } else if (!document.forms["loginForm"]["pw"].value) {
+                document.getElementById("errorMsg").innerHTML = '<br>*password missing';
+                return false;
+            }
+            return true;
+        }
+    </script>
 
 </html>

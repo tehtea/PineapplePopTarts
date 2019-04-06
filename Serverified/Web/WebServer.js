@@ -7,6 +7,8 @@ var path = require('path');
 var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
+var flash = require('connect-flash');
+
 
 // local drivers
 var databaseManager = require('./DatabaseManager');
@@ -17,6 +19,7 @@ module.exports = {
         app.set("view engine", "ejs");
         app.use(bodyParser.urlencoded({extended: true}));
         app.use(express.static("public"));
+        app.use(flash());
 
         // set where to find static files for frontend
         app.use("/CSS", express.static(path.join(__dirname, "public", "CSS")));
