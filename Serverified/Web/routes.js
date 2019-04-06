@@ -157,7 +157,7 @@ router.post('/submitUpdate', function(req, res) {
         {
             console.log("emitting resolveIncident from routes.js");
             // logic for resolution
-            socket.emit('resolveIncident', update.recordID);
+            socket.emit('resolveIncident', update);
             socket.on('incidentResolvedSuccessfully', () => {
                 socket.removeAllListeners();
                 res.render("SubmissionResultView", {resultMessage : `Incident ID: ${update.recordID} has been resolved!`});

@@ -26,8 +26,7 @@ module.exports = {
 		});
 		
 		// Recieve update incident
-		socket.on('newUpdateToIncident', function(reportData) {
-			
+		socket.on('newUpdateToIncident', function(reportData) {			
 			var postMessage = parseUpdateIncidentData(reportData);
 			facebookPoster.postOnPage(
 				facebookConfig.PAGE_ID, 

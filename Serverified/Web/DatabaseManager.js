@@ -120,17 +120,22 @@ module.exports = {
 			 * to the Map subsystem, the Status Report Manager subsystem and the Social Media 
 			 * subsystem.
 			 */
-			socket.on('resolveIncident', function (recordID) {
-				DatabaseRetriever.resolveIncident(recordID);
-				DatabaseRetriever.getFormViaRecordID(recordID).then((incident) => {
+			socket.on('resolveIncident', function (update) {
+				DatabaseRetriever.getFormViaRecordID(update.recordID).then((incident) => {
 					incident = incident[0]; // unpack the incident
-					socket.emit('incidentResolvedSuccessfully', incident);
+					update.updateDescr = "[RESOLVED]"; // the public does not need to know so much about the resolution
 					var combinedReports = {
-						updateInc: obj,
+						updateInc: update, //not actually needed so can just leave an empty array
 						newInc: incident
 					};
 					socket.broadcast.emit('newUpdateToIncident', combinedReports);
-				}).catch((error) => socket.emit('incidentCannotBeResolved', recordID));
+					DatabaseRetriever.resolveIncident(update.recordID);
+					socket.emit('incidentResolvedSuccessfully', incident);
+				}).catch((error) => {
+					console.log(error);
+					socket.emit('incidentCannotBeResolved', update.recordID)
+				}
+				);
 			});
 			
 			// 7. Get respondents
