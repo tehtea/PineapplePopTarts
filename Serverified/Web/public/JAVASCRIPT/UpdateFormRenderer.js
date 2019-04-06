@@ -76,7 +76,7 @@ function formSubmission(btn) {
 	// Ensure correctness of input
 	var error;
 	if (btn.value == 'Resolve')
-		error = hasErrorResolve(descr);
+		error = hasErrorResolve(respondentRequest);
 	else
 		error = hasError(descr);
 
