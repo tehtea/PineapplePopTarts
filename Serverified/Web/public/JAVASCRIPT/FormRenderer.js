@@ -6,22 +6,22 @@
 */
 
 function formSubmission() {
- 	// Input type: name, mobileNumber, postalCode, building, respondent, description
+ 	// Input type: name, contact, address, unitNum, respondent, description
 	var name = document.forms["incidentForm"]["name"].value;
-	var contact = document.forms["incidentForm"]["mobileNumber"].value;
-	var address = document.forms["incidentForm"]["postalCode"].value;
-	var unitNum = document.forms["incidentForm"]["building"].value;
+	var contact = document.forms["incidentForm"]["contact"].value;
+	var address = document.forms["incidentForm"]["address"].value;
+	var unitNum = document.forms["incidentForm"]["unitNum"].value;
 	var respondent = [];
 	var j = 0;
-	for (var i = 0; i < document.forms["incidentForm"]["respondent"].length; i ++) {
-		var tempR = document.forms["incidentForm"]["respondent"][i];
+	for (var i = 0; i < document.forms["incidentForm"]["respondentRequested"].length; i ++) {
+		var tempR = document.forms["incidentForm"]["respondentRequested"][i];
 		if (tempR.checked) {
 			respondent[j] = tempR.value;
 			j ++;
 		}
 	}
 
-	var descr = document.forms["incidentForm"]["description"].value; 
+	var descr = document.forms["incidentForm"]["descr"].value; 
 
 	// Adjustment on description
 	for (var c=0;c < descr.length; c ++) {
@@ -30,7 +30,7 @@ function formSubmission() {
 			console.log("change");
 		}
 	}
-	document.forms["incidentForm"]["description"].value = descr;
+	document.forms["incidentForm"]["descr"].value = descr;
 
 	// Ensure correctness of input
 	var error = hasError(name, contact, address, unitNum, respondent, descr);
@@ -58,6 +58,7 @@ function hasError(name, mobileNum, postalCode, building, respondent, description
 	} else {
 		document.getElementById("e-postalCode").innerHTML = "";
 	}
+
 	if (respondent.length < 1) {
 		document.getElementById("e-respondent").innerHTML = "*";
 		err = true;
@@ -77,34 +78,3 @@ function hasError(name, mobileNum, postalCode, building, respondent, description
 	}
 	return err;	
 }
-
-/**
- * Gets the geocoding of a location based on its postal code. If the postal code is invalid, throw an exception.
- * @param {*} postalCode 
- */
-function getCoor(postalCode) {
-	return new Promise((resolve, reject) => {
-	  //PostalCodeToCoor.js
-	  const linkPart1 =
-		"https://developers.onemap.sg/commonapi/search?searchVal=";
-	  const linkPart2 = "&returnGeom=Y&getAddrDetails=Y";
-  
-	  // API link for data
-	  var GeneralLink = linkPart1 + postalCode + linkPart2;
-  
-	  // Retrieve from API
-	  $.ajax({
-		type: "GET",
-		dataType: "json",
-		url: GeneralLink,
-		async: false,
-		success: function(data) {
-		  if (data.results[0])
-			resolve(data.results[0]); // get the first result
-		  else
-			reject("invalid postal code provided");
-		}
-	  });
-	});
-}
-

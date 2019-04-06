@@ -9,7 +9,8 @@ const   // libraries
         localStrategy = require('passport-local').Strategy,
         loginManager = require('./loginManager'),
         session = require('express-session'), // library for Sessions, which is used to store user data
-        io = require('socket.io-client');
+        io = require('socket.io-client'),
+        request = require('request'); // for checking postal code
 
 var socket = io.connect("http://localhost:5000/", {
     reconnection: true
@@ -98,7 +99,7 @@ router.get('/accountView', function(req, res)  {
 // render the incident submission form
 router.get('/reportForm', function(req, res) {
     if (req.isAuthenticated()) {
-        res.render("FormView");
+        res.render("FormView", {postalCodeErr: req.flash('postalCodeErr')});
     } else {
         res.redirect('./login');
     }
@@ -111,11 +112,19 @@ router.post('/submitNewIncident', function(req, res) {
         // sanitize the incident
         if (typeof incident.respondentRequested == 'string')
             incident.respondentRequested = [incident.respondentRequested];
-        socket.emit('createNewIncident', incident);
-        socket.on('createNewIncidentDone', (recordID) => {
-            socket.removeAllListeners();
-            res.render("SubmissionResultView", {resultMessage : `Incident ID: ${recordID} has been submitted!`});
-        });
+        checkPostalCode(incident.address).then((validPostalCode) => {
+            if (validPostalCode) {
+                socket.emit('createNewIncident', incident);
+                socket.on('createNewIncidentDone', (recordID) => {
+                    socket.removeAllListeners();
+                    res.render("SubmissionResultView", {resultMessage : `Incident ID: ${recordID} has been submitted!`});
+                });
+            } else {
+                req.flash('postalCodeErr', '*The postal code is not found within Singapore!');
+                res.redirect('./reportForm');
+            }
+        })
+
     } else {
         res.redirect('./login');
     }
@@ -185,6 +194,28 @@ router.get('/youDunnoCanGoAndDie', function(req, res) {
     res.render("InformationView.ejs");
 });
 
+/**
+ * Check if a postal code is within Singapore. If not, resolve false.
+ * @param {*} postalCode 
+ */
+function checkPostalCode(postalCode) {
+    return new Promise(function(resolve, reject) {
+        const linkPart1 =
+		"https://developers.onemap.sg/commonapi/search?searchVal=";
+        const linkPart2 = "&returnGeom=Y&getAddrDetails=Y";
 
+        // API link for data
+        var GeneralLink = linkPart1 + postalCode + linkPart2;
+  
+        // Retrieve from API
+        request.get(GeneralLink, {json: true}, (err, res, body) => {
+            if (body.results.length > 0) {
+                resolve(true);
+            } else {
+                resolve(false);
+            }
+        });
+    });
+};
 
 module.exports = router;
