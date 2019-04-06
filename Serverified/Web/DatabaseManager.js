@@ -87,8 +87,8 @@ module.exports = {
 						var timeString = time.Time.toISOString();
 						
 						// Insert into Respondent Table
-						for (var i = 0; i < obj.respondentReporting.length; i ++) {
-							var resp = obj.respondentReporting[i];
+						for (var i = 0; i < obj.respondentRequested.length; i ++) {
+							var resp = obj.respondentRequested[i];
 							DatabaseRetriever.storeRespondent(resp, obj.recordID, timeString);
 						}	
 						
