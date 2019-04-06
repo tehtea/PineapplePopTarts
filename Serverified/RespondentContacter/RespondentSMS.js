@@ -70,10 +70,10 @@ function getRespondentContact(res) {
 			respondentContact = '+6592334282';			// Khairul's Number
 			break;
 		case 'Rescue and Evacuation':
-			respondentContact = '+6592334282';			// Khairul's Number
+			respondentContact = '+6583837858';			// My mum's number
 			break;
 		case 'Fire-Fighting':
-			respondentContact = '+6592334282';			// Khairul's Number
+			respondentContact = '+6598247659';			// My sis' number
 			break;
 		case 'Gas Leak Control':					// Singapore Power
 			respondentContact = '+6596192840'; 			// Iggy's Number
