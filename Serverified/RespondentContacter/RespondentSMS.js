@@ -10,7 +10,13 @@ var debugMode = false; // if debug mode is true, don't send SMS but just console
 var io = require('socket.io-client'); // Import socket.io libraries 
 var socket = io.connect('http://localhost:5000/'); // Make the server listen to messages on port 5000
 
+/**
+ * Respondent SMS controller class
+ */
 module.exports = {
+	/** 
+	 * run the server for SMS to retrieve recent incident submissions from the database, which results in sending SMS to respondents as requested
+	 */
 	runSMS: async function() {
 		socket.on('newIncidentReported', (newInc)=>{		
 			for (var res of newInc.respondentRequested) {
@@ -42,6 +48,15 @@ module.exports = {
 	}
 }
 
+/**
+ * Send SMS to the appropriate respondents 
+ * @param {number} recordID the record ID of the incident
+ * @param {string} descr the description of the incident
+ * @param {string} time the time when the incident is reported
+ * @param {string} address the postal code of where the incident is
+ * @param {string} unitNum the unit number of where the incident is
+ * @param {string} respondentContact the contact number of the respondent
+ */
 function messageSend(recordID, descr, time, address, unitNum, respondentContact) {
 	//Creating and sending message to desired telephone number (Respondents)
 	const message = 'record ID: ' + recordID + ', "' + descr + '" reported on ' + time + '. Require assistance at S' + address + ' ' + unitNum;		// report message
@@ -63,6 +78,11 @@ function messageSend(recordID, descr, time, address, unitNum, respondentContact)
 	}
 }
 
+/**
+ * Get the contact number of the respondent
+ * @param {string} res the respondent type
+ * @returns {string} contact number of the respondent
+ */
 function getRespondentContact(res) {
 	var respondentContact;
 	switch(res){

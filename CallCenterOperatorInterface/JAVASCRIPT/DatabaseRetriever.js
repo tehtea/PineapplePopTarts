@@ -1,5 +1,6 @@
-// Boundary Class - Database Retriever 
-
+/**
+ * Configuration of database
+ */
 const config = {
 	server:"172.21.146.196",
 	database:"Database3003",
@@ -9,7 +10,15 @@ const config = {
 
 const sql = require("./Apps/node_modules/mssql");
 
+/**
+ * Database retriever boundary class
+ */
 module.exports = {
+	/**
+	 * Get account details by username
+	 * @param {Account} acc the account 
+	 * @returns {Account} matching account 
+	 */
 	getAccountByID: function(acc) {
 		return new Promise(function(resolve, reject) {
 			// Connect to DB
@@ -34,7 +43,11 @@ module.exports = {
 		});
 	},
 	
-	// For Content Validation
+	/**
+	 * Check whether sessionkey is valid for content validation
+	 * @param {string} sessionKey given session key
+	 * @returns {object} matching account
+	 */
 	checkKey: function(sessionKey) {
 		return new Promise(function(resolve, reject) {
 			// Connect to DB
@@ -59,7 +72,12 @@ module.exports = {
 		});
 	},
 	
-	// Store Respondent
+	/**
+	 * Store respondents requested into the database
+	 * @param {string} respondent the respondent requested
+	 * @param {string} recordID the record ID of the incident
+	 * @param {string} insTime the time respondent is requested
+	 */
 	storeRespondent: function(respondent, recordID, insTime) {
 		return new Promise(function(resolve, reject) {
 			// Connect to DB
@@ -86,7 +104,10 @@ module.exports = {
 		});
 	},
 	
-	// Store New Incident
+	/**
+	 * Store new incident report into the database
+	 * @param {object} obj the new incident report
+	 */
 	storeNewIncident: function(obj) {
 		return new Promise(function(resolve, reject) {
 			// Connect to DB
@@ -113,7 +134,11 @@ module.exports = {
 		});
 	},
 	
-	// Get Record ID for newly made Incident
+	/**
+	 * Get record ID for the newly generated incident
+	 * @param {object} obj the new incident report
+	 * @return {object} new incident in database
+	 */
 	getRecordIDIncident: function(obj) {
 		return new Promise(function(resolve, reject) {
 			// Connect to DB
@@ -142,7 +167,11 @@ module.exports = {
 		});
 	},
 	
-	// For Update Form, find recordID
+	/**
+	 * Get incident with the matching record ID 
+	 * @param {string} recordID incident's record ID
+	 * @return {object} new incident in database with the same record ID
+	 */
 	getFormViaRecordID: function(recordID) {
 		return new Promise(function(resolve, reject) {
 			// Connect to DB
@@ -168,7 +197,10 @@ module.exports = {
 		});
 	},
 	
-	// Store Update Form
+	/**
+	 * Store update incident into the database
+	 * @param {object} obj update incident information
+	 */
 	storeUpdateIncident: function(obj) {
 		return new Promise(function(resolve, reject) {
 			// Connect to DB
@@ -194,7 +226,11 @@ module.exports = {
 		});
 	},
 	
-	// Get time for respondent table from update table
+	/**
+	 * Get time for respondent table from update table
+	 * @param {object} obj update incident
+	 * @return {object} update time
+	 */
 	getTimeUpdateIncident: function(obj) {
 		return new Promise(function(resolve, reject) {
 			// Connect to DB
@@ -221,6 +257,10 @@ module.exports = {
 		});
 	},
 	
+	/**
+	 * Resolve incident in the database
+	 * @param {string} recordID the incident's recordID
+	 */
 	resolveIncident: function(recordID) {
 		return new Promise(function(resolve, reject) {
 			// Connect to DB
@@ -245,6 +285,11 @@ module.exports = {
 		});
 	},
 	
+	/**
+	 * Get all respondent requested for a particular incident
+	 * @param {string} recordID the incident's recordID
+	 * @returns {object} all respondent requested
+	 */
 	getRespondents: function(recordID) {
 		return new Promise(function(resolve, reject) {
 			// Connect to DB
@@ -269,6 +314,10 @@ module.exports = {
 		});
 	},
 	
+	/** 
+	 * Get all unresolved incidents in the database
+	 * @returns {object} all unresolved incidents
+	 */
 	getUnresolvedIncidents: function() {
 		return new Promise(function(resolve, reject) {
 			// Connect to DB
@@ -295,7 +344,10 @@ module.exports = {
 		});
 	},
 	
-	// Data retrieval for Status Report Manager 
+	/**
+	 * Retrieve new incidents for Status Report Manager 
+	 * @returns {object} new incidents created in the last 30 minutes
+	 */
 	getRecentNewIncident: function() {
 		return new Promise(function(resolve, reject) {
 			// Connect to DB
@@ -320,6 +372,11 @@ module.exports = {
 			});
 		});
 	},
+	
+	/**
+	 * Retrieve update incidents for Status Report Manager
+	 * @returns {object} update incidents created in the last 30 minutes
+	 */
 	getRecentUpdateIncident: () => {
 		return new Promise(function(resolve, reject) {
 			// Connect to DB
@@ -345,6 +402,11 @@ module.exports = {
 			});
 		});
 	},
+	
+	/**
+	 * Retrieve respondent requested for Status Report Manager
+	 * @returns {object} respondent requested in the last 30 minutes
+	 */
 	getRecentRespondentRequested: () => {
 		return new Promise(function(resolve, reject) {
 			// Connect to DB
@@ -371,7 +433,10 @@ module.exports = {
 		});
 	},
 	
-	// Data Retrieval for Crisis Map
+	/**
+	 * Retrieve new incident for crisis map
+	 * @returns {object} all new incidents
+	 */
 	getAllNewIncident: () => {
 		return new Promise(function(resolve, reject) {
 			// Connect to DB
@@ -396,6 +461,11 @@ module.exports = {
 			});
 		});
 	},
+	
+	/**
+	 * Retrieve update incident for crisis map
+	 * @returns {object} all update incidents
+	 */
 	getAllUpdateIncident: () => {
 		return new Promise(function(resolve, reject) {
 			// Connect to DB
@@ -420,6 +490,11 @@ module.exports = {
 			});
 		});
 	},
+	
+	/**
+	 * Retrieve respondent requested for crisis map
+	 * @returns {object} all respondent requested 
+	 */
 	getAllRespondentRequested: () => {
 		return new Promise(function(resolve, reject) {
 			// Connect to DB

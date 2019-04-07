@@ -1,4 +1,11 @@
+/**
+ * Date Time formatter class
+ */
 module.exports = {
+	/**
+	 * Get the current time in a string format
+	 * @returns {string} the current time
+	 */
     getDateTimeNow: function() {
 
     var date = new Date();
@@ -20,6 +27,10 @@ module.exports = {
     return day + "/" + month + "/" + year + ", " + hour + ":" + min;
     },
 
+	/**
+	 * Get the time 30 minutes before the current time in a string format
+	 * @returns {string} the time
+	 */
     getDateTime30MinAgo: function() {
 
         var date = new Date();

@@ -22,11 +22,11 @@ const 	request = require('request'),
 
 /**
  * Post something on the page. If the post is successful, resolve the new Promise created, and if it is unsuccessful, reject it.
- * @param pageId pageId of the page to post to
- * @param postMessage the message to be posted
- * @param pageAccessToken the page access token required to authenticate the request with Facebook API.
+ * @param {string} pageId pageId of the page to post to
+ * @param {string} postMessage the message to be posted
+ * @param {string} pageAccessToken the page access token required to authenticate the request with Facebook API.
  * 
- * @returns a Promise.
+ * @returns {number} a Promise.
  * */ 
 function postOnPage(pageId, postMessage, pageAccessToken) {
 	return new Promise((resolve, reject) => {

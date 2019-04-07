@@ -8,7 +8,13 @@ var facebookConfig 	= require('./facebookConfig');
 var tweeter 		= require('./tweeter');
 var twitterConfig 	= require('./twitterConfig');
 
+/** 
+ * Social Media class
+ */
 module.exports = {
+	/**
+	 * Run social media subsystem server to retrieve recent incident submissions and send SMS
+	 */
 	runSocialMedia: async function() {
 		// Recieve new incident 
 		socket.on('newIncidentReported', function(reportData) {
@@ -39,7 +45,11 @@ module.exports = {
 			);
 		});
 
-		// string up the incident data so it can be posted on social media in a readable fashion
+		/**
+		 * String up the new incident data so it can be posted on social media in a readable fashion
+		 * @param {object} newInc new incident report
+		 * @returns {string} the post message
+		 */
 		function parseNewIncidentData(newInc) {
 			// Extract information
 			var recordID = newInc.recordID;
@@ -51,6 +61,11 @@ module.exports = {
 			return postMessage;
 		}
 
+		/**
+		 * String up the update incident data so it can be posted on social media in a readable fashion
+		 * @param {object} reportData update incident report
+		 * @returns {string} the post message
+		 */
 		function parseUpdateIncidentData(reportData) {
 			// Extract information
 			var recordID = reportData.updateInc.recordID;

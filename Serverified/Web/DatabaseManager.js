@@ -1,10 +1,16 @@
-// Control class - Database Manager
+/**
+ * Database manager control class
+ */
+
 var DatabaseRetriever = require("./DatabaseRetriever");
 
 // Initiate socket.io server
 var io = require('socket.io').listen(5000);
 
 module.exports = {
+	/**
+	 * Run database server and parse data between subsystems
+	 */
 	runDatabase: async function() {
 		io.sockets.on('connection', function (socket) {
 			// 1. Add new incident
