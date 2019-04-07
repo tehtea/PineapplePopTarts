@@ -1,5 +1,4 @@
-// Design pattern - facade for call center operator subsystem
-// socket will be initialized by each ejs file.
+// Facade class for call center operator subsystem (Design pattern)
 
 function checkRecord(recordID) {
 	return new Promise((resolve, reject) => {

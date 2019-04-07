@@ -5,7 +5,7 @@
 
 /**
  * Show markers for the category specified.
- * @param {*} cat - category as specified by the keys of the `inputs` global variable.
+ * @param {string} cat - category as specified by the keys of the `inputs` global variable.
  */
 function show(cat) {
   //tick checkbox
@@ -17,7 +17,7 @@ function show(cat) {
 
 /**
  * Hide markers for the category specified
- * @param {*} cat - category as specified by the keys of the `inputs` global variable.
+ * @param {string} cat - category as specified by the keys of the `inputs` global variable.
  */
 function hide(cat) {
   //clear checkbox
@@ -29,8 +29,8 @@ function hide(cat) {
 
 /**
  * Callback for each filter's checkbox.
- * @param {*} box - the DOM object associated with the checkbox
- * @param {*} cat - the category to be filtering using
+ * @param {string} box - the DOM object associated with the checkbox
+ * @param {string} cat - the category to be filtering using
  */
 function boxclick(box, cat) {
   closeCurrentInfoWindow();

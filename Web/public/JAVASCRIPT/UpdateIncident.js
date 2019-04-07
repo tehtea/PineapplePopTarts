@@ -66,8 +66,20 @@ class UpdateIncident{
 	 * Set respondents requested
 	 * @param {string[]} respondentRequested the respondent requested
 	 */
-    setRespondentRequested(respondentRequested) {this.respondentRequested=respondentRequested;}
-    setUpdateDescr(updateDescr) {this.updateDescr=updateDescr;}
-    setUpdateName(updateName) {this.updateName=updateName;}
+	setRespondentRequested(respondentRequested) {this.respondentRequested=respondentRequested;}
+	/**
+	 * Set incident's description
+	 * @param {string} updateDescr the update description
+	 */
+	setUpdateDescr(updateDescr) {this.updateDescr=updateDescr;}
+	/**
+	 * Set call center operator name
+	 * @param {string} updateName the call center operator name
+	 */
+	setUpdateName(updateName) {this.updateName=updateName;}
+	/**
+	 * Set update time
+	 * @param {string} updateTime the update time
+	 */
     setUpdateTime(updateTime) {this.updateTime=updateTime;}
 }

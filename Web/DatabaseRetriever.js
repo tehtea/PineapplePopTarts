@@ -1,5 +1,5 @@
 /**
- * Database Retriever. Contains 
+ * Database Retriever. Contains all the method for retrieving from database.
  */
 
 const dbQuery = require('./dbQuery').runQuery;
@@ -7,8 +7,8 @@ const dbQuery = require('./dbQuery').runQuery;
 /**
  * Stores a new respondent into the RespondentRequest table, given a respondent, a record ID and the incident time. 
  * @param {string} respondent - can be any of the 10 respondents in the form. 
- * @param {*} recordID - the recordID of the incident in question.
- * @param {*} insTime - the time of insertion.
+ * @param {number} recordID - the recordID of the incident in question.
+ * @param {string} insTime - the time of insertion.
  */
 function storeRespondent (respondent, recordID, insTime) {
 	return dbQuery("INSERT INTO RespondentRequest(RecordID, Respondent, InsTime) VALUES \
@@ -45,7 +45,7 @@ function getRecordIDIncident(obj) {
 
 /**
  * Find a new incident using its record id.
- * @param {int} recordID 
+ * @param {number} recordID 
  */
 function getFormViaRecordID(recordID) {
 	return dbQuery("SELECT * FROM NewIncident WHERE \
@@ -73,7 +73,7 @@ function getTimeUpdateIncident(obj) {
 
 /**
  * Resolve an incident based on its recordID.
- * @param {int} recordID 
+ * @param {number} recordID 
  */
 function resolveIncident (recordID) {
 	return dbQuery("UPDATE NewIncident SET Resolved=1 WHERE RecordID = "+recordID);
@@ -81,7 +81,7 @@ function resolveIncident (recordID) {
 
 /**
  * Get the array of respondents associated with an incident.
- * @param {int} recordID 
+ * @param {number} recordID 
  */
 function getRespondents(recordID) {
 	return dbQuery("SELECT Respondent FROM RespondentRequest WHERE RecordID =" + recordID);

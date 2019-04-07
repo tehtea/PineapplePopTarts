@@ -6,7 +6,7 @@ const request = require('request');
 
 /**
  * Fetch the data from the weather API for the status report
- * @returns {object} data on Singapore's weather information
+ * @returns {Object} data on Singapore's weather information
  */
 function fetchData() {
   return new Promise(function(resolve, reject) {

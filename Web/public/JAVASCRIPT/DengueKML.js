@@ -1,7 +1,7 @@
 var kmlLayer;
 /** 
  * Get data from KML
- * @param {object} src source for google map kml layer
+ * @param {Object} src source for google map kml layer
  * @returns the kmlLayer
  */
 function getKMLLayer(src){
@@ -15,8 +15,8 @@ function getKMLLayer(src){
 
 /**
  * Toggle the KML layer
- * @param {object} box the checkbox 
- & @param {object} cat the category
+ * @param {Object} box the checkbox 
+ & @param {Object} cat the category
  */
 function toggleKML(box, cat){
   closeCurrentInfoWindow();

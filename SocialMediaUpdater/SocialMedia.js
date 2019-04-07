@@ -47,7 +47,7 @@ module.exports = {
 
 		/**
 		 * String up the new incident data so it can be posted on social media in a readable fashion
-		 * @param {object} newInc new incident report
+		 * @param {Object} newInc new incident report
 		 * @returns {string} the post message
 		 */
 		function parseNewIncidentData(newInc) {
@@ -63,7 +63,7 @@ module.exports = {
 
 		/**
 		 * String up the update incident data so it can be posted on social media in a readable fashion
-		 * @param {object} reportData update incident report
+		 * @param {Object} reportData update incident report
 		 * @returns {string} the post message
 		 */
 		function parseUpdateIncidentData(reportData) {

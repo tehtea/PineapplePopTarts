@@ -163,6 +163,7 @@ function initialiseMarkers() {
 
 /**
  * Get incident data and API data and adds it into the `inputs` global variable.
+ * @returns inputs 
  */
 function retrieveData() {
   return new Promise((resolve, reject) => {
@@ -221,9 +222,9 @@ function retrieveData() {
 
 /**
  * Add a new marker onto the map by appending it to the array of its category in the global `markers` object.
- * @param {*} input - an Object with the keys label_location, name, updates, time. The first two are compulsory.
- * @param {*} cat - category of the marker. Refer to "markers" global variable for list of
- * @param {*} i - counter for the forecasts to fetch
+ * @param {Object} input - an Object with the keys label_location, name, updates, time. The first two are compulsory.
+ * @param {string} cat - category of the marker. Refer to "markers" global variable for list of
+ * @param {number} i - counter for the forecasts to fetch
  */
 function addMarker(input, cat, i) {
   // input validation for the 'input' variable. Checking for compulsory values.
@@ -357,7 +358,7 @@ function getProcessedWeatherData() {
  *  Initial description of the incident
  *  Latest description of updates (if any)
  *  Time of the latest report on the incident
- * @param {*} data - an array with 2 elements. The first element is an array of incidents,
+ * @param {Object} data - an array with 2 elements. The first element is an array of incidents,
  * the second element is an array of updates to all incidents.
  */
 async function incidentDataProcessing(data) {
@@ -423,7 +424,7 @@ async function incidentDataProcessing(data) {
 
 /**
  * Gets the geocoding of a location based on its postal code. If the postal code is invalid, throw an exception.
- * @param {*} postalCode
+ * @param {string} postalCode
  */
 function getCoor(postalCode) {
   return new Promise((resolve, reject) => {

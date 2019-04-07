@@ -3,6 +3,9 @@
  * https://botwiki.org/resource/tutorial/random-image-tweet/
  */
 
+ /**
+  * a module for getting filepaths
+  */
 var path = require('path'),
     Twit = require('twit'),
     config = require(path.join(__dirname, 'twitterConfig.js'));
