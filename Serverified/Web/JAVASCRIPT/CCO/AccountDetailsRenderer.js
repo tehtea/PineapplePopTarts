@@ -1,5 +1,8 @@
 loadUsername();
 
+/**
+ * Log out user and remove sessionKey from cookies
+ */
 function logout() {
 	window.localStorage.removeItem("sessionKey");
 	loadHeader("");
@@ -7,6 +10,9 @@ function logout() {
 	document.getElementById("logout").style.display = "block";
 }
 
+/**
+ * Log in user and store sessionKey
+ */
 function loadUsername() {
 	var sessionKey = localStorage.getItem("sessionKey");
 	var asynFunction = getAccountViaKey(sessionKey);

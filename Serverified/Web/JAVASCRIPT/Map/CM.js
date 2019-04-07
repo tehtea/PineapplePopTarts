@@ -1,5 +1,10 @@
-// Get Data
+/**
+ * Facade class between Crisis map and database 
+ */
 module.exports = {
+	/**
+	 * Retrieve retrieve and process incident reports to display on the map
+	 */
 	runMap: function() {
 		var ioServer = require('./Apps/node_modules/socket.io').listen(3000);
 		ioServer.sockets.on('connection', function (socket){
@@ -99,6 +104,11 @@ async function incidentDataProcessing(data) {
     return result;
 };
 
+/**
+ * Convert postal code to coordinates
+ * @param {string} postalCode the incident's postal code
+ * @returns {object} incident coordinates 
+ */
 function getCoor(postalCode) {
 	return new Promise((resolve,reject) => {
 		//PostalCodeToCoor.js

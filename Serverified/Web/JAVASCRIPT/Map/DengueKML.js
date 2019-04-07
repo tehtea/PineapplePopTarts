@@ -1,6 +1,10 @@
 
 var kmlLayer;
-//get data from KML
+/** 
+ * Get data from KML
+ * @param {object} src source for google map kml layer
+ * @returns the kmlLayer
+ */
 function getKMLLayer(src){
   var kmlLayer = new google.maps.KmlLayer(src, {
     suppressInfoWindows: true,
@@ -10,7 +14,11 @@ function getKMLLayer(src){
   return kmlLayer;
 }
 
-//toggle KML Layer
+/**
+ * Toggle the KML layer
+ * @param {object} box the checkbox 
+ & @param {object} cat the category
+ */
 function toggleKML(box, cat){
   closeCurrentInfoWindow();
   if (box.checked){

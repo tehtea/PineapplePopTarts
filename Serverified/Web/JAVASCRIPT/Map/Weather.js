@@ -1,7 +1,13 @@
 var io = require('./Apps/node_modules/socket.io').listen(5001);
 var fetch = require('./Apps/node_modules/isomorphic-fetch');
 
+/**
+ * Weather API retriever class
+ */
 module.exports = {
+	/**
+	 * Run weather class
+	 */
 	runWeather: async function() {
 		console.log("Weather.js is running.");
 
@@ -18,6 +24,11 @@ module.exports = {
 		});
 	}
 }
+
+/**
+ * Retrieve data from weather API
+ * @returns {object} information in weather
+ */
 function getData(){
     //alert('ajax');
 
@@ -36,7 +47,9 @@ function getData(){
     return receivedData;
 };
 
-//get marker data from api (weather)
+/** 
+ * Get marker data from weather API
+ */
 function getWeatherData(){
     var dataPoints;
     dataPoints = getData();

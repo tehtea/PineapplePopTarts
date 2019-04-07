@@ -7,6 +7,9 @@
 */
 displayIncidentOption();
 
+/** 
+ * Display all unresolved incident to update
+ */
 function displayIncidentOption() {
 	// Get all unresolved incidents
 	var asyncGetUnresolvedIncidents = getUnresolvedIncidents();
@@ -22,6 +25,9 @@ function displayIncidentOption() {
 	});
 }
 
+/**
+ * Display update form after selecting incident to update
+ */
 function confirmRecordID() {
 	// If no incident is selected
 	var recordID = document.getElementById("incidentList").value;
@@ -55,6 +61,10 @@ function confirmRecordID() {
 	});
 }
 
+/** 
+ * Submission of update incident form
+ * @returns {boolean} refresh page
+ */
 function formSubmission() {
 	var respondentReporting = document.forms["updateIncidentForm"]["respondentReporting"].value;
 	var respondentRequest = [];
@@ -103,6 +113,11 @@ function formSubmission() {
 	return false;
 }
 
+/**
+ * Check whether the form inputs are in the valid format for update incident
+ * @param {string} description
+ * @returns {boolean} has error
+ */
 function hasError(description) {
 	var err = false; 
 	if (description == "" | description.length > 200) {
@@ -119,6 +134,10 @@ function hasError(description) {
 	return err;	
 }
 
+/**
+ * Resolve incident 
+ * @returns {boolean} refresh page
+ */
 function resolveSubmission() {
 	var respondentReporting = document.forms["updateIncidentForm"]["respondentReporting"].value;
 	var respondentRequest = [];
@@ -166,6 +185,11 @@ function resolveSubmission() {
 	return false;
 }
 
+/**
+ * Check whether the form inputs are in the valid format for resolve incident
+ * @param {string[]} respondentRequest
+ * @returns {boolean} has error
+ */
 function hasErrorResolve(respondentRequest) {
 	if (respondentRequest.length > 0) {
 		document.getElementById("e-respondent").innerHTML = "*";
@@ -177,6 +201,9 @@ function hasErrorResolve(respondentRequest) {
 	}
 }
 
+/**
+ * Change the UI from update incident form back to choosing incident to update
+ */
 function returnSection1() {
 	var dropdown = document.getElementById("respondentReportingList");
 	var length = dropdown.options.length;

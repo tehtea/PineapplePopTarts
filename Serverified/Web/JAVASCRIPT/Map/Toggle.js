@@ -2,8 +2,10 @@
   //keep track of Info Window that is currently open
   var currentInfoWindow = null;
 
-
-  //show markers
+  /**
+   * Show markers on map
+   * @param {string} cat the category
+   */
   function show(cat){
     //tick checkbox
     document.getElementById(cat + "box").checked = true;
@@ -12,7 +14,10 @@
     }
   }
 
-  //hide markers
+  /**
+   * Hide markers on map
+   * @param {string} cat the category
+   */
   function hide(cat){
     //clear checkbox
     document.getElementById(cat + "box").checked = false;
@@ -21,7 +26,11 @@
     }
   }
 
-  //clicking checkbox function
+  /**
+   * Update markers when checkbox are selected
+   * @param {string} cat the category
+   * @param {object} box the checkbox
+   */
   function boxclick(box, cat){
     closeCurrentInfoWindow();
     if (box.checked){
@@ -32,7 +41,9 @@
     }
   }
 
-  //close current infoWindow
+  /**
+   * Close current infoWindow
+   */
   function closeCurrentInfoWindow(){
     if (currentInfoWindow != null){
       currentInfoWindow.close();

@@ -6,8 +6,13 @@ var DatabaseSocialMediaManager = require('./DatabaseSocialMediaManager');
 // Initiate socket.io server
 var io = require('./Apps/node_modules/socket.io').listen(5000);
 
-// why is everything in module.exports?
+/**
+ * Database manager control class
+ */
 module.exports = {
+	/**
+	 * Run database server and parse data between subsystems
+	 */
 	runDatabase: async function() {
 		io.sockets.on('connection', function (socket) {
 			// 1. wait for "hasKey" [For content validation]

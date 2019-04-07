@@ -5,6 +5,10 @@
 		2. If correct, save all inputs into database 
 */
 
+/**
+ * Submission of new incident form
+ * @return {boolean} refresh page 
+ */
 function formSubmission() {
  	// Input type: name, mobileNumber, postalCode, building, respondent, description
 	var name = document.forms["incidentForm"]["name"].value;
@@ -60,7 +64,16 @@ function formSubmission() {
 	return false;
 }
 
-
+/**
+ * Check whether form inputs are valid
+ * @param {string} name the reporter's name
+ * @param {string} mobileNum the reporter's mobile number
+ * @param {string} postalCode the postal code of the incident
+ * @param {string} building the unit number of the incident 
+ * @param {string[]} respondent the respondents requested
+ * @param {string} description the description of the incident 
+ * @returns {boolean} has error
+ */
 function hasError(name, mobileNum, postalCode, building, respondent, description) {
 	var err = false; 
 	if (name == "") {

@@ -34,7 +34,9 @@ var markers = {incident: [], shelter: [],
 //store map and kmlLayer globally
 var map;
 
-
+/**
+ * Generate and instantiate the map
+ */
 function initMap(){
   //settings of map zoom and map's initial centre
   var options = {
@@ -138,7 +140,9 @@ function initMap(){
     closeCurrentInfoWindow();
   })
 
-  //FUNCTIONS
+  /**
+   * Initialise markers on the map
+   */
   function initialiseMarkers(){
     var z = retrieveData();
     z.then((result) => {
@@ -146,6 +150,10 @@ function initMap(){
     });
   }
 
+/**
+ * Retrieve data for the map
+ * @returns inputs 
+ */
   function retrieveData(){
     return new Promise((resolve, reject) => {
       var socket = io.connect('http://172.21.146.196:3000');
@@ -204,7 +212,12 @@ function initMap(){
     });
   }
 
-  //add marker on map and append to array
+  /**
+   * Add marker on map and append to array
+   * @param {object} input the data retrieved
+   * @param {string} cat the category
+   * @param {number} i the counter
+   */
   function addMarker(input, cat, i){
     var marker = new google.maps.Marker({
       position: {

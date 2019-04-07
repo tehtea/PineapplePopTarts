@@ -1,4 +1,6 @@
-//manual input of hospitals
+/**
+ * Manual input information of hospitals
+ */
 function addHospitals(){
   inputs['hospital'][0] = {name: "Khoo Teck Puat",
     label_location: {latitude: 1.4246, longitude: 103.8382},

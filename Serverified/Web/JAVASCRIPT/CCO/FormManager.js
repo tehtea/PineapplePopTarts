@@ -1,5 +1,8 @@
 // Control Class - Incident Manager
-
+/**
+ * Add new incident into database
+ * @param {object} temp new incident form inputs
+ */
 function createNewIncident(temp) {
 	return new Promise((resolve,reject) => {
 		var asyncGetAccount = getAccountViaKey(temp.sessionKey);
@@ -16,6 +19,10 @@ function createNewIncident(temp) {
 	});
 }
 
+/**
+ * Add update incident into database
+ * @param {object} temp update incident form inputs
+ */ 
 function createUpdateIncident(temp) {
 	return new Promise((resolve,reject) => {
 		// From Database Retrieve Name using session Key
@@ -34,6 +41,10 @@ function createUpdateIncident(temp) {
 	});
 }
 
+/** 
+ * Set incident to "resolved" in the database
+ * @param {object} temp update incident form inputs
+ */
 function resolveIncident(temp) {
 	return new Promise((resolve,reject) => {
 		// From Database Retrieve Name using session Key

@@ -2,7 +2,13 @@ var express = require("express");
 var app = express();
 var path = require('path');
 
+/**
+ * WebServer controller class
+ */
 module.exports = {
+	/**
+	 * Run the server for the web interface
+	 */
     runWebServer: async function() {
         // Set CSS to be fetched from ./CSS/CCO and ./CSS/Map
         app.use("/CSS", express.static(path.join(__dirname, "CSS", "CCO")));

@@ -1,4 +1,6 @@
-//manual input of bomb shelters
+/**
+ * Manually input information on bomb shelters
+ */
 function addShelters(){
   inputs['shelter'][0] = {name: "Temasek Polytechnic",
     label_location: {latitude: 1.345444, longitude: 103.9287187}
