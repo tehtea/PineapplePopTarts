@@ -196,7 +196,7 @@ router.get('/youDunnoCanGoAndDie', function(req, res) {
 
 /**
  * Check if a postal code is within Singapore. If not, resolve false.
- * @param {*} postalCode 
+ * @param {string} postalCode 
  */
 function checkPostalCode(postalCode) {
     return new Promise(function(resolve, reject) {

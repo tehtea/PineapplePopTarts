@@ -6,8 +6,8 @@ const dbQuery = require('./dbQuery');
 
 /**
  * Checks if the username and password specified matches any records in the database.
- * @param {*} username 
- * @param {*} password 
+ * @param {string} username 
+ * @param {string} password 
  */
 function checkAccount(username, password) {
     return new Promise(function (resolve, reject) {
