@@ -3,6 +3,10 @@ var item = localStorage.getItem("sessionKey");
 loadHeader(item);
 loadContent(item);
 
+/**
+ * Generate different header based on whether the user is logged in
+ * @param {string} item user's local session key
+ */
 function loadHeader(item) {
 	let check = hasKey(item);
 	check.then(function(result) {
@@ -16,6 +20,11 @@ function loadHeader(item) {
 	});
 }
 
+/**
+ * Check whether the session key is valid
+ * @param {string} item user's local session key
+ * @returns {boolean} confirmation of valid account
+ */
 function hasKey(item) {
 	return new Promise((resolve,reject) => {
 		if (item == "") {
@@ -33,6 +42,10 @@ function hasKey(item) {
 	});
 }
 
+/**
+ * Generate different content based on whether the user is logged in
+ * @param {string} item user's local session key
+ */
 function loadContent(item) {
 	if (document.getElementById("no-log-display")) {
 		let check = hasKey(item);

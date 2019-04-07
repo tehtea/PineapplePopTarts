@@ -1,5 +1,7 @@
-//Return false to prevent redirect
-
+/**
+ * Validate login 
+ * @returns {boolean} refresh page
+ */
 function validateForm() {
 		// Check that all fields are present.
 		var userID = document.forms["loginForm"]["userid"].value.toLowerCase() ;
@@ -29,7 +31,12 @@ function validateForm() {
 	return false;
 }
 
-// Check that all fields are present.
+/**
+ * Check that all fields are present
+ * @param {string} userPW user's password
+ * @param {string} userID user's username
+ * @returns {boolean} confirmation of all fields filled
+ */
 function isFilled(userPW, userID) {
 		if (userPW == "" && userID == "") {
 		document.getElementById("errorMsg").innerHTML = "*username & password missing";
