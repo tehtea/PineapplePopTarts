@@ -5,7 +5,7 @@ var authToken = 'f6f83688de9131c8d077a818071b960e';
 var twilio = require('twilio'); //Import Twilio library
 var client = new twilio(accountSid, authToken);
 
-var debugMode = true; // if debug mode is true, don't send SMS but just console log. Conserve consumption of API credits.
+var debugMode = false; // if debug mode is true, don't send SMS but just console log. Conserve consumption of API credits.
 
 var io = require('socket.io-client'); // Import socket.io libraries 
 var socket = io.connect('http://localhost:5000/'); // Make the server listen to messages on port 5000
