@@ -1,0 +1,95 @@
+<!--
+   FormView.html
+   
+   Copyright 2019 Jesslyn <jesslyn@jesslyn-XPS-13-9360>
+   
+   This program is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; either version 2 of the License, or
+   (at your option) any later version.
+   
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+   
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+   MA 02110-1301, USA.
+   
+   
+-->
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+	<script src="../JAVASCRIPT/FormRenderer.js"></script>
+
+	<head>
+		<title>CMS Incident Report Form</title>
+		<link href="../CSS/Header.css" rel="stylesheet" style="text/css">
+		<link href="../CSS/Form.css" rel="stylesheet" style="text/css">
+		<link href="../CSS/Successful.css" rel="stylesheet" style="text/css">
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+		<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+		<meta name="generator" content="Geany 1.32" />
+		
+		<script src="https://ajax.googl	eapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	</head>
+
+	<body>
+		<% include partials/header %>
+
+		<div id="content">
+			<!-- Required to get name, mobile, location, assistance type, description-->
+			<form class="form" name="incidentForm" onsubmit="return formSubmission()" method="post" action="./submitNewIncident">
+				<fieldset>
+					<legend class="formTitle">Incident Reporting</legend>
+					Please input the details of the incident.
+					
+					<div class="c1">
+						<div class="c2">
+							<input class="inputBox" type="text" name="name" placeholder="Name of Reporter">
+							<span id="e-name"></span> <br><br>
+							<input class="inputBox" type="tel" name="contact" placeholder="Mobile Number">
+							<span id="e-mobileNumber"></span> <br><br>
+							<input class="inputBox" type="tel" name="address" placeholder="Postal Code">
+							<span id="e-postalCode"><%= postalCodeErr %></span> <br><br>
+							<input class="inputBox" type="text" name="unitNum" placeholder="Floor/Unit Number (Optional)">
+							<br><br>
+						</div>
+					
+						<div class="c1">
+							<p><strong>Select Respondent(s):</strong>
+							<span id="e-respondent"></span>	
+							<div class="c2">
+								<input type="checkbox" name="respondentRequested" value="Emergency Ambulance">Emergency Ambulance<br>
+								<input type="checkbox" name="respondentRequested" value="Rescue and Evacuation">Rescue and Evacuation<br>
+								<input type="checkbox" name="respondentRequested" value="Fire-Fighting">Fire-Fighting<br>
+								<input type="checkbox" name="respondentRequested" value="Gas Leak Control">Gas Leak Control<br>
+								<input type="checkbox" name="respondentRequested" value="Animal Control">Animal Control<br>
+							</div>
+							<div class="c2">
+								<input type="checkbox" name="respondentRequested" value="Counter Terrorism">Counter Terrorism<br>
+								<input type="checkbox" name="respondentRequested" value="Cyber Security">Cyber Security<br>
+								<input type="checkbox" name="respondentRequested" value="Disease Outbreak Control">Disease Outbreak Control<br>
+								<input type="checkbox" name="respondentRequested" value="Flood Control">Flood Control<br>
+								<input type="checkbox" name="respondentRequested" value="Police Force">Police Force<br>
+								<br>
+							</div>						
+						</div>
+					
+					</div>
+								
+					<textarea class="dBox" name="descr" placeholder="Description of incident (max. 200 characters)"></textarea>
+					<span id="e-description"></span> <br>
+					
+					<input class="sButton" type="submit" value="Submit report"> <span id="errorMsg"></span>
+				</fieldset>
+			</form>
+		</div>
+	</body>
+
+</html>

@@ -2,53 +2,43 @@
 var accountSid = 'AC8f68c14c3b365cf9abba4c8db460cb39';
 var authToken = 'f6f83688de9131c8d077a818071b960e'; 
 
-var twilio = require('./Apps/node_modules/twilio'); //Import Twilio library
+var twilio = require('twilio'); //Import Twilio library
 var client = new twilio(accountSid, authToken);
 
 var debugMode = false; // if debug mode is true, don't send SMS but just console log. Conserve consumption of API credits.
 
-var socket = require('./Apps/node_modules/socket.io'); // Import socket.io libraries 
-var io = socket.listen(4000); // Make the server listen to messages on port 4000
+var io = require('socket.io-client'); // Import socket.io libraries 
+var socket = io.connect('http://localhost:5000/'); // Make the server listen to messages on port 5000
 
 module.exports = {
 	runSMS: async function() {
-		io.on('connection', (socket) =>{
-
-			console.log('connected:', socket.client.id);
-
-			/*socket.on('serverEvent', data =>{
-				console.log('new messsage from client' , data);
-			});*/
+		socket.on('newIncidentReported', (newInc)=>{		
+			for (var res of newInc.respondentRequested) {
+				// Extract information
+				var respondentContact = getRespondentContact(res);
+				var recordID = newInc.recordID;
+				var descr = newInc.descr;
+				var time = newInc.insTime;
+				var address = newInc.address;
+				var unitNum = newInc.unitNum;
 			
-			socket.on('newIncidentSendSMS', (newInc)=>{		
-				for (var res of newInc.respondentRequested) {
-					// Extract information
-					var respondentContact = getRespondentContact(res);
-					var recordID = newInc.recordID;
-					var descr = newInc.descr;
-					var time = newInc.insTime;
-					var address = newInc.address;
-					var unitNum = newInc.unitNum;
-				
-					messageSend(recordID, descr, time, address, unitNum, respondentContact);    
-				}
-			});
-			
-			socket.on('updateIncidentSendSMS', (reportData)=>{
-				for (var res of reportData.updateInc.respondentRequested) {
-					// Extract information
-					var respondentContact = getRespondentContact(res);
-					var recordID = reportData.updateInc.recordID;
-					var descr = reportData.updateInc.updateDescr;
-					var time = reportData.updateInc.updateTime;
-					var address = reportData.newInc.Location;
-					var unitNum = reportData.newInc.UnitNum;
-					
-					messageSend(recordID, descr, time, address, unitNum, respondentContact);
-				}
-			});
+				messageSend(recordID, descr, time, address, unitNum, respondentContact);    
+			}
 		});
-
+		
+		socket.on('newUpdateToIncident', (reportData)=>{
+			for (var res of reportData.updateInc.respondentRequested) {
+				// Extract information
+				var respondentContact = getRespondentContact(res);
+				var recordID = reportData.updateInc.recordID;
+				var descr = reportData.updateInc.updateDescr;
+				var time = reportData.updateInc.updateTime;
+				var address = reportData.newInc.Location;
+				var unitNum = reportData.newInc.UnitNum;
+				
+				messageSend(recordID, descr, time, address, unitNum, respondentContact);
+			}
+		});
 	}
 }
 
@@ -77,9 +67,13 @@ function getRespondentContact(res) {
 	var respondentContact;
 	switch(res){
 		case 'Emergency Ambulance':					// SCDF
-		case 'Rescue and Evacuation':
-		case 'Fire-Fighting':
 			respondentContact = '+6592334282';			// Khairul's Number
+			break;
+		case 'Rescue and Evacuation':
+			respondentContact = '+6583837858';			// My mum's number
+			break;
+		case 'Fire-Fighting':
+			respondentContact = '+6598247659';			// My sis' number
 			break;
 		case 'Gas Leak Control':					// Singapore Power
 			respondentContact = '+6596192840'; 			// Iggy's Number
@@ -100,9 +94,12 @@ function getRespondentContact(res) {
 			respondentContact = '+6590603282';			// Jing Wei's Number
 			break;
 		case 'Police Force':						// SPF
-			respondentContact = '+6597853111'; 			// Jesslyn's Number
+			respondentContact = '+6596684137'; 			// Christopher's Number
 			break;
-	 
+		default: {
+			console.log(res);
+			throw("Cannot find contact. May be a bug in your code");
+		}
 	} 
 	return respondentContact;
 }

@@ -1,0 +1,76 @@
+* {
+	font-family: arial;	
+	font-size: 18px;
+}
+
+.form {
+	padding: 80px 30px;
+}
+
+.updateForm {
+	display: inline;
+}
+
+.formTitle {
+	font-weight: bold;
+	font-size: 50px;
+}
+
+
+.inputBox {
+	border: 1.5px solid black;
+	border-radius: 5px;
+	padding: 4px;
+	width: 300px;
+	float: left;
+}
+
+.sButton {
+	font-size: 20px;
+	width: 200px;
+	background-color: #E5E5E5;
+	border: 1.5px solid black;
+	border-radius: 5px;
+	margin-top: 20px;
+	padding: 7px 0 7px 0;
+	outline: none;
+}
+
+.sButton:active {
+	background: #efefef;
+}
+
+.dBox {
+	width: 80%;
+	height: 70px;
+	margin: auto;
+}
+
+
+
+.c2 {
+	display: inline-box;
+	float: left;
+	padding-top: 30px;
+	padding-right: 10%;
+}
+
+span {
+	font-size: 14px;
+	color: red;
+	padding-left: 10px;
+}
+
+#section-1 {
+	margin-right: 50px;
+	text-align: center;
+}
+
+#incidentList {
+	width: 50%;
+}
+
+#backButton {
+	float: right;
+	background-color: #FFB0AC;
+}
