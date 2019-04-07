@@ -1,4 +1,11 @@
+/**
+ * API data fetcher class
+ */
 module.exports = {
+	/**
+	 * Fetch the data from the weather API for the status report
+	 * @returns {object} data on Singapore's weather information
+	 */
   fetchData: function () {
     return new Promise(function (resolve, reject) {
       var io = require("socket.io-client");
