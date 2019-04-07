@@ -179,6 +179,7 @@ router.post('/submitUpdate', function(req, res) {
     }
 });
 
+// the post endpoint for logging out
 router.post('/logout', function(req, res) {
     req.logout();
     res.redirect('./');
@@ -196,7 +197,7 @@ router.get('/youDunnoCanGoAndDie', function(req, res) {
 
 /**
  * Check if a postal code is within Singapore. If not, resolve false.
- * @param {*} postalCode 
+ * @param {string} postalCode 
  */
 function checkPostalCode(postalCode) {
     return new Promise(function(resolve, reject) {

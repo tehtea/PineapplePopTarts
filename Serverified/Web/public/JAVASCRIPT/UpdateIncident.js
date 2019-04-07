@@ -1,7 +1,16 @@
 /**
+ * UpdateIncident entity class
  * Used by the incident update form
  */
 class UpdateIncident{
+    /** 
+	 * UpdateIncident constructor
+	 * @param {number} recordID the incident record ID
+	 * @param {string} respondentReporting the respondent reporting the update
+	 * @param {string[]} respondentRequested the respondent requested for the incident
+	 * @param {string} updateDescr the description of the incident
+	 * @param {string} updateName the name of the call center reporter
+	 */
     constructor(recordID, respondentReporting, respondentRequested, updateDescr, updateName) {
         this.recordID = recordID;
         this.respondentReporting = respondentReporting;
@@ -12,17 +21,51 @@ class UpdateIncident{
         this.updateName = updateName;
     }
     
-    // Accessor
+   	/** 
+	 * Get incident's record ID
+	 * @returns {number} the record ID
+	 */
     getRecordID() {return this.recordID;}
+    /**
+	 * Get respondent reporting the update
+	 * @returns {string} the respondent reporting
+	 */
     getRespondentReporting() {return this.respondentReporting;}
+	/**
+	 * Get incident's respondents requested
+	 * @returns {string[]} the respondents requested
+	 */
     getRespondentRequested() {return this.respondentRequested;}
+	/** 
+	 * Get incident's description 
+	 * @returns {string} the description
+	 */
     getUpdateDescr() {return this.updateDescr;}
+	/**
+	 * Get name of the call center operator who submitted the incident
+	 * @returns {string} call center operator name
+	 */
     getUpdateName() {return this.updateName;}
+	/** 
+	 * Get update time 
+	 * @returns {string} the update time
+	 */
     getUpdateTime() {return this.updateTime;}
     
-    // Mutator
+	/** 
+	 * Get update time 
+	 * @returns {string} the update time
+	 */
     setRecordID(recordID) {this.recordID = recordID;}
+	/**
+	 * Set the respondent reporting
+	 * @param {string} respondentReporting the respondent reporting
+	 */
     setRespondentReporting(respondentReporting) {this.respondentReporting=respondentReporting;}
+	/**
+	 * Set respondents requested
+	 * @param {string[]} respondentRequested the respondent requested
+	 */
     setRespondentRequested(respondentRequested) {this.respondentRequested=respondentRequested;}
     setUpdateDescr(updateDescr) {this.updateDescr=updateDescr;}
     setUpdateName(updateName) {this.updateName=updateName;}

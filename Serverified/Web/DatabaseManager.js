@@ -114,7 +114,7 @@ module.exports = {
 			
 
 			/**
-			 * 6. Resolve incident
+			 * 4. Resolve incident
 			 * 
 			 * Should resolve the incident in the database, then send this resolved incident over
 			 * to the Map subsystem, the Status Report Manager subsystem and the Social Media 
@@ -138,7 +138,7 @@ module.exports = {
 				);
 			});
 			
-			// 7. Get respondents
+			// 5. Get respondents
 			socket.on('getRespondents', function (recordID) {
 				// Get values from database 
 				let retrievedData = DatabaseRetriever.getRespondents(recordID);
@@ -148,7 +148,7 @@ module.exports = {
 				}); 
 			});
 			
-			// 8. Get all unresolved incidents. Used by the call center operator update form.
+			// 6. Get all unresolved incidents. Used by the call center operator update form.
 			socket.on('getUnresolvedIncidents', function () {
 				// Get values from database 
 				let retrievedData = DatabaseRetriever.getUnresolvedIncidents();
@@ -158,7 +158,7 @@ module.exports = {
 				}); 
 			});
 			
-			// STATUS REPORT SUBSYSTEM
+			// 7. STATUS REPORT SUBSYSTEM request for all recent incident events
 			socket.on('srRequest', function () {
 				// Get values from database 
 				Promise.all([DatabaseRetriever.getRecentNewIncident(),DatabaseRetriever.getRecentUpdateIncident(),DatabaseRetriever.getRecentRespondentRequested()]).then((result) => {
@@ -167,7 +167,7 @@ module.exports = {
 				}); 
 			});
 			
-			// for emitting all incidents and all incident updates to the crisis map
+			// 8. for emitting all incidents and all incident updates to the crisis map
 			socket.on('cmRequest', function () {
 				// Get values from database
 				Promise.all([DatabaseRetriever.getAllNewIncident(),DatabaseRetriever.getAllUpdateIncident()]).then((result) => {
