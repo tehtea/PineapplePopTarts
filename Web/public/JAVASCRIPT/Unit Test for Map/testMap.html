@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Tests for all .js files pertaining to Map</title>
+  <link rel="stylesheet" media="all" href="https://cdnjs.cloudflare.com/ajax/libs/mocha/6.0.2/mocha.css" rel="stylesheet" style="text/css">
+</head>
+<body>
+  <div id="mocha"><p><a href=".">Index</a></p></div>
+  <div id="messages"></div>
+  <div id="fixtures"></div>
+  <script src="https://unpkg.com/chai/chai.js"></script> 
+  <script src="https://unpkg.com/mocha/mocha.js"></script>
+  <!-- dependencies -->
+  <script defer
+  src="https://code.jquery.com/jquery-3.3.1.min.js"
+  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+  crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
+  <script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDEiuvLqK8LTYSqLbEdaIzUKqq_pG1bnGc&callback=initMap"
+  type="text/javascript"></script>
+  <script src="../Map.js"></script>
+  <script src="../Toggle.js"></script>
+  <script src="../Shelter.js"></script>
+  <script src="../Hospital.js"></script>
+  <script src="../DengueKML.js"></script>
+  <script>mocha.setup('bdd')</script>
+  <script src="MapTest.js"></script>
+  <script>mocha.run();</script>
+</body>
+</html>

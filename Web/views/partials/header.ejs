@@ -1,0 +1,29 @@
+<div class="topnav">
+    <a href="./"><i class="fas fa-home"></i></a>
+    <a href=./map><i class="far fa-map"></i> Map</a>
+
+    <div class="dropdown">
+        <button class="dropbtn"><i class="far fa-newspaper"></i> Feed</button>
+        <div class="dropdown-content">
+            <a href="https://twitter.com/Pineapp04967829"><i class="fab fa-twitter-square"></i> Twitter</a>
+            <a href="https://www.facebook.com/Pineapplepoptartscms-262765314600132/"><i class="fab fa-facebook-square"></i> Facebook</a>
+        </div>
+    </div>
+
+    <% if (isLoggedIn) { %>
+    <div class="dropdown">
+        <button class="dropbtn topnav-active"><i class="fas fa-exclamation-circle"></i> Incident Reporting</button>
+        <div class="dropdown-content">
+            <a href="./reportForm">Create New Incident</a>
+            <a href="./updateForm">Update Incident</a>
+        </div>
+    </div>
+    <% } %>
+    
+    <% if (!isLoggedIn) { %>
+        <a href="./login" class="right login">Log In</a>
+    <% } else { %>
+        <a href="./accountView" class="right"><i class="far fa-user-circle"></i></a>
+    <% } %>
+    <a href="./youDunnoCanGoAndDie" class="right"><i class="fas fa-ellipsis-h"></i></a>
+</div>
