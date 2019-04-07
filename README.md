@@ -1,6 +1,3 @@
-# PineapplePopTarts
+To run the server, open this repository in the terminal and run `node MainScript.js`
 
-Please refer to the Serverified folder for the deployable system. The other folders here are just for archive purposes.
-
-Known problems:
-1. Incident does not show up on map if the postal code provided is invalid
+On first run, remember to run `install_dependencies.sh`. If on a Windows computer, run it using a shell which supports Unix commands, such as `bash`.
