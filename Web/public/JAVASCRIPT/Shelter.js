@@ -1,5 +1,5 @@
 /**
- * Manual input of bomb shelters for the map
+ * manual input of bomb shelters for the map
  */
 function addShelters() {
   inputs["shelter"][0] = {

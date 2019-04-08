@@ -5,10 +5,6 @@
 const dbConfig = require('./dbConfig');
 const sql = require('mssql');
 
-/**
- * Runs a database query provided. Returns a Promise with the results as an array.
- * @param {string} query 
- */
 function runQuery(query) {
     return new Promise(function(resolve, reject) {
         // Connect to DB

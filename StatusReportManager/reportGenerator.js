@@ -10,14 +10,7 @@ const docx = require("docx");
 const fs = require("fs");
 const { WidthType } = docx;
 
-/** 
- * Report generator class
- */
 module.exports = {
-	/**
-	 * Generate the status report and send to the prime minister office via email
-	 * @returns {boolean} indicates whether the report is successfully sent to the prime minister office
-	 */
     generateReport: function () {
         return new Promise(function (resolve, reject) {
             //fetch incidents

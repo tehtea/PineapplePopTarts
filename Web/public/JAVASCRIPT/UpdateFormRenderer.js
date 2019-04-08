@@ -7,9 +7,6 @@
 */
 displayIncidentOption();
 
-/** 
- * Display all unresolved incident to update
- */
 function displayIncidentOption() {
 	// Get all unresolved incidents
 	var asyncGetUnresolvedIncidents = getUnresolvedIncidents();
@@ -25,9 +22,6 @@ function displayIncidentOption() {
 	});
 }
 
-/**
- * Display update form after selecting incident to update
- */
 function confirmRecordID() {
 	// If no incident is selected
 	var recordID = document.getElementById("incidentList").value;
@@ -65,11 +59,7 @@ function confirmRecordID() {
 	});
 }
 
-/** 
- * Submission of update incident form
- * @returns {boolean} refresh page
- */
-function formSubmission() {
+function formSubmission(btn) {
 	var respondentReporting = document.forms["updateIncidentForm"]["respondentReporting"].value;
 	var respondentRequest = [];
 	var j = 0;
@@ -116,11 +106,6 @@ function formSubmission() {
 	return true;
 }
 
-/**
- * Check whether the form inputs are in the valid format for update incident
- * @param {string} description
- * @returns {boolean} has error
- */
 function hasError(description) {
 	var err = false; 
 	if (description == "" | description.length > 200) {
@@ -137,62 +122,6 @@ function hasError(description) {
 	return err;	
 }
 
-/**
- * Resolve incident 
- * @returns {boolean} refresh page
- */
-function resolveSubmission() {
-	var respondentReporting = document.forms["updateIncidentForm"]["respondentReporting"].value;
-	var respondentRequest = [];
-	var j = 0;
-	for (var i = 0; i < document.forms["updateIncidentForm"]["respondent"].length; i ++) {
-		var tempR = document.forms["updateIncidentForm"]["respondent"][i];
-		if (tempR.checked) {
-			respondentRequest[j] = tempR.value;
-			j ++;
-		}
-	}
-	var descr = document.forms["updateIncidentForm"]["description"].value; 
-	
-	// Ensure correctness of input
-	var error = hasErrorResolve(respondentRequest);
-	if (error == true) {
-			return false;
-	}
-	
-	 // Adjustment on description
-	for (var c=0;c < descr.length; c ++) {
-		if (descr.charAt(c) == '\'') {
-			descr = descr.substr(0,c) + '"' + descr.substr(c+1);
-			console.log("change");
-		}
-	}
-	
-	// IF CORRECT, Save to database
-	var sessionKey = localStorage.getItem("sessionKey");
-	var temp = {
-		respondentReporting: respondentReporting,
-		descr: "[RESOLVED]" + descr,
-		sessionKey: sessionKey,
-		recordID: document.getElementById("textRecord").innerHTML
-	}; 
-	
- 	let done = resolveIncident(temp);
-	
-	// Prompt use the successful submission
-	done.then(() => {
-		document.getElementById("content").style.display = "none";
-		document.getElementById("complete").style.display = "block";
-	});
-	
-	return false;
-}
-
-/**
- * Check whether the form inputs are in the valid format for resolve incident
- * @param {string[]} respondentRequest
- * @returns {boolean} has error
- */
 function hasErrorResolve(respondentRequest) {
 	if (respondentRequest.length > 0) {
 		document.getElementById("e-respondent").innerHTML = "*";
@@ -204,9 +133,6 @@ function hasErrorResolve(respondentRequest) {
 	}
 }
 
-/**
- * Change the UI from update incident form back to choosing incident to update
- */
 function returnSection1() {
 	var dropdown = document.getElementById("respondentReportingList");
 	var length = dropdown.options.length;

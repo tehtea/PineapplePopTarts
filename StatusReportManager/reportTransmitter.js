@@ -6,13 +6,7 @@ const senderEmail = "pineapplepoptartscms@gmail.com";
 const senderName = "CMS";
 const recipientEmail = "CLIM094@e.ntu.edu.sg";
 
-/**
- * Report transmitter class
- */
 module.exports = {
-	/**
-	 * Send email to the prime minister office
-	 */
   sendEmail: function () {
     let transporter = nodemailer.createTransport({
       service: 'gmail',

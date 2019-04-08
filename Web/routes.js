@@ -179,7 +179,6 @@ router.post('/submitUpdate', function(req, res) {
     }
 });
 
-// the post endpoint for logging out
 router.post('/logout', function(req, res) {
     req.logout();
     res.redirect('./');

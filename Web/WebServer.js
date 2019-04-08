@@ -1,5 +1,5 @@
 /**
- * WebServer controller class
+ * The script to execute the web server using.
  */
 
 const routes = require("./routes");

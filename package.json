@@ -18,14 +18,18 @@
   "homepage": "https://github.com/tehtea/PineapplePopTarts#readme",
   "dependencies": {
     "connect-flash": "^0.1.1",
+    "docx": "^4.7.1",
     "ejs": "^2.6.1",
     "express": "^4.16.4",
     "express-session": "^1.15.6",
     "mssql": "^5.0.5",
+    "node-cron": "^2.0.3",
+    "nodemailer": "^6.1.0",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
     "socket.io": "^2.2.0",
     "socket.io-client": "^2.2.0",
-    "twilio": "^3.30.0"
+    "twilio": "^3.30.0",
+    "twit": "^2.2.11"
   }
 }

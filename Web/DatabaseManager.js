@@ -1,16 +1,10 @@
-/**
- * Database manager control class
- */
-
+// Control class - Database Manager
 var DatabaseRetriever = require("./DatabaseRetriever");
 
 // Initiate socket.io server
 var io = require('socket.io').listen(5000);
 
 module.exports = {
-	/**
-	 * Run database server and parse data between subsystems
-	 */
 	runDatabase: async function() {
 		io.sockets.on('connection', function (socket) {
 			// 1. Add new incident
@@ -120,7 +114,7 @@ module.exports = {
 			
 
 			/**
-			 * 4. Resolve incident
+			 * 6. Resolve incident
 			 * 
 			 * Should resolve the incident in the database, then send this resolved incident over
 			 * to the Map subsystem, the Status Report Manager subsystem and the Social Media 
@@ -144,7 +138,7 @@ module.exports = {
 				);
 			});
 			
-			// 5. Get respondents
+			// 7. Get respondents
 			socket.on('getRespondents', function (recordID) {
 				// Get values from database 
 				let retrievedData = DatabaseRetriever.getRespondents(recordID);
@@ -154,7 +148,7 @@ module.exports = {
 				}); 
 			});
 			
-			// 6. Get all unresolved incidents. Used by the call center operator update form.
+			// 8. Get all unresolved incidents. Used by the call center operator update form.
 			socket.on('getUnresolvedIncidents', function () {
 				// Get values from database 
 				let retrievedData = DatabaseRetriever.getUnresolvedIncidents();
@@ -164,7 +158,7 @@ module.exports = {
 				}); 
 			});
 			
-			// 7. STATUS REPORT SUBSYSTEM request for all recent incident events
+			// STATUS REPORT SUBSYSTEM
 			socket.on('srRequest', function () {
 				// Get values from database 
 				Promise.all([DatabaseRetriever.getRecentNewIncident(),DatabaseRetriever.getRecentUpdateIncident(),DatabaseRetriever.getRecentRespondentRequested()]).then((result) => {
@@ -173,7 +167,7 @@ module.exports = {
 				}); 
 			});
 			
-			// 8. for emitting all incidents and all incident updates to the crisis map
+			// for emitting all incidents and all incident updates to the crisis map
 			socket.on('cmRequest', function () {
 				// Get values from database
 				Promise.all([DatabaseRetriever.getAllNewIncident(),DatabaseRetriever.getAllUpdateIncident()]).then((result) => {

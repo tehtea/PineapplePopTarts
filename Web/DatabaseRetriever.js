@@ -1,14 +1,14 @@
 /**
- * Database Retriever. Contains all the method for retrieving from database.
+ * Database Retriever. Contains 
  */
 
 const dbQuery = require('./dbQuery').runQuery;
 
 /**
  * Stores a new respondent into the RespondentRequest table, given a respondent, a record ID and the incident time. 
- * @param {string} respondent - can be any of the 10 respondents in the form. 
- * @param {number} recordID - the recordID of the incident in question.
- * @param {string} insTime - the time of insertion.
+ * @param {*} respondent 
+ * @param {*} recordID 
+ * @param {*} insTime 
  */
 function storeRespondent (respondent, recordID, insTime) {
 	return dbQuery("INSERT INTO RespondentRequest(RecordID, Respondent, InsTime) VALUES \
@@ -24,7 +24,7 @@ function storeRespondent (respondent, recordID, insTime) {
  * - unitNum - unit number of location (if any)
  * - descr - description of incident
  * - insName - name of operator who handled this incident
- * @param {Object} obj - the new incident to be storing
+ * @param {*} obj - the new incident to be storing
  */
 function storeNewIncident(obj) {
 	return dbQuery("INSERT INTO NewIncident(Name, Contact, Location, UnitNum, Descr, InsName) VALUES \
@@ -34,7 +34,7 @@ function storeNewIncident(obj) {
 /**
  * Get the record ID for a newly made incident. 
  * The object must contain insName, which is the name of the call center operator.
- * @param {Object} obj - the new incident without the incident ID 
+ * @param {*} obj 
  */
 function getRecordIDIncident(obj) {
 	return dbQuery("SELECT RecordID, InsTime FROM NewIncident \
@@ -45,7 +45,7 @@ function getRecordIDIncident(obj) {
 
 /**
  * Find a new incident using its record id.
- * @param {number} recordID 
+ * @param {*} recordID 
  */
 function getFormViaRecordID(recordID) {
 	return dbQuery("SELECT * FROM NewIncident WHERE \
@@ -54,7 +54,7 @@ function getFormViaRecordID(recordID) {
 
 /**
  * Store an update incident.
- * @param {Object} obj - an update incident object 
+ * @param {*} obj 
  */
 function storeUpdateIncident (obj) {
 	return dbQuery("INSERT INTO UpdateIncident(RecordID, Respondent, UpdName, Descr) VALUES \
@@ -63,7 +63,7 @@ function storeUpdateIncident (obj) {
 
 /**
  * Get time for respondent table from update table
- * @param {Object} obj an update incident object with recordID and updateName, which is the name of the reporter. 
+ * @param {*} obj 
  */
 function getTimeUpdateIncident(obj) {
 	return dbQuery("SELECT MAX(UpdTime) as Time FROM UpdateIncident \
@@ -73,7 +73,7 @@ function getTimeUpdateIncident(obj) {
 
 /**
  * Resolve an incident based on its recordID.
- * @param {number} recordID 
+ * @param {*} recordID 
  */
 function resolveIncident (recordID) {
 	return dbQuery("UPDATE NewIncident SET Resolved=1 WHERE RecordID = "+recordID);
@@ -81,7 +81,7 @@ function resolveIncident (recordID) {
 
 /**
  * Get the array of respondents associated with an incident.
- * @param {number} recordID 
+ * @param {*} recordID 
  */
 function getRespondents(recordID) {
 	return dbQuery("SELECT Respondent FROM RespondentRequest WHERE RecordID =" + recordID);

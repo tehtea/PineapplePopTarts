@@ -1,6 +1,7 @@
 /**
- * Manual input information of hospitals
+ * manual input of hospitals for the map
  */
+
 function addHospitals() {
   (inputs["hospital"][0] = {
     name: "Khoo Teck Puat",

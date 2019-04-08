@@ -1,12 +1,11 @@
-/**
- * API data fetcher class
- */
-
 const request = require('request');
 
+module.exports = {
+  fetchData: fetchData
+}
+
 /**
- * Fetch the data from the weather API for the status report
- * @returns {Object} data on Singapore's weather information
+ * fetch weather data from data.gov.sg api
  */
 function fetchData() {
   return new Promise(function(resolve, reject) {
@@ -21,7 +20,3 @@ function fetchData() {
     });
   });
 };
-
-module.exports = {
-  fetchData: fetchData
-}
